@@ -6,10 +6,7 @@
 
 int main() {
     struct menuSelection selection = menuWrapper();
-    if (selection.main == 1) {
-        //neues Spiel mit der Schwierigkeit selection.difficulty starten
-    }
     setCursor(1,8);
-    printf("%i", selection);
+    printf("%i", selection.main);
     return 0;
 }
