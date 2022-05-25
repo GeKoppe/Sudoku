@@ -4,6 +4,13 @@
 #include <conio.h>
 #include "menubase.h"
 
+/**
+ * @brief Setzt den Cursor an Position X,Y
+ * 
+ * @param x X-Koordinate
+ * @param y Y-Koordinate
+ * @return int 0
+ */
 int setCursor(int x, int y) {
     COORD koordinaten;
     koordinaten.X= x;
@@ -12,7 +19,15 @@ int setCursor(int x, int y) {
     return 0;
 }
 
+/**
+ * @brief Überprüft, ob die aktuelle Cursor-Y Position in den Bounds des Menüs sind
+ * 
+ * @param playerY {Pointer} auf die Y-Koordinate des Players
+ * @param lowerY Obere Y-Koordinate des Menüs (kleinstes Y)
+ * @param upperY Untere Y-Koordinate des Menüs (größtes Y)
+ */
 void checkBounds (int *playerY, int lowerY, int upperY) {
+    //Da Menü in Zweierschritten: Falls out of Bounds, rechne zwei rauf / runter
     if (*playerY > upperY) {
         *playerY -=2;
     }
@@ -22,6 +37,15 @@ void checkBounds (int *playerY, int lowerY, int upperY) {
     }
 }
 
+
+/**
+ * @brief 
+ * 
+ * @param y 
+ * @param playerY 
+ * @param upperY 
+ * @param lowerY 
+ */
 void cursorCallback(int y, int *playerY, int upperY, int lowerY) {
     setCursor(1, *playerY);
     printf(" ");
@@ -84,20 +108,24 @@ int showDifficultyMenu(int menuStart) {
     return returnValue;
 }
 
-int menuWrapper() {
-    int mainSelection = showMainMenu(3);
+struct menuSelection menuWrapper() {
+    struct menuSelection selection;
+    selection.main = showMainMenu(3);
+    int finishedSelecting = 0;
     do {
-        int difficulty;
-        switch(mainSelection) {
-            case 1: difficulty = showDifficultyMenu(3); break;
-            case 4: return 0;
-            default: return 0;
+        switch(selection.main) {
+            case 1: selection.difficulty = showDifficultyMenu(3); break;
+            case 4: finishedSelecting = 1; break;
+            default: finishedSelecting = 1;
         }
 
-        switch (difficulty) {
-            case 4: mainSelection = showMainMenu(3); break;
-            default: mainSelection = showMainMenu(3); break;
+        if (finishedSelecting == 1) {
+            continue;
         }
-    } while (mainSelection != 4);
-    return mainSelection;
+        switch (selection.difficulty) {
+            case 4: selection.main = showMainMenu(3); break;
+            default: selection.main = showMainMenu(3); break;
+        }
+    } while (finishedSelecting == 0);
+    return selection;
 }

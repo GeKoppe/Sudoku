@@ -5,7 +5,10 @@
 #include "menubase.h"
 
 int main() {
-    int selection = menuWrapper();
+    struct menuSelection selection = menuWrapper();
+    if (selection.main == 1) {
+        //neues Spiel mit der Schwierigkeit selection.difficulty starten
+    }
     setCursor(1,8);
     printf("%i", selection);
     return 0;
