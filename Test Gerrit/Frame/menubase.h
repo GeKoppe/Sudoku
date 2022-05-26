@@ -1,3 +1,4 @@
+/**
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -5,14 +6,14 @@
 #include <math.h>
 #include "frame.h"
 #include "common.h"
-
+*/
 struct menuSelection {
     int main;
     int difficulty;
 };
 
 int selectMenu(int lowerY, int upperY);
-int showMainMenu(struct FrameTest menuFrame);
+int showMainMenu(struct Frame menuFrame);
 void checkBounds (int *playerY, int upperY, int upperX);
 void cursorCallback(int y, int *playerY, int upperY, int lowerY);
 struct menuSelection menuWrapper();
