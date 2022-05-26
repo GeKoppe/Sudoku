@@ -1,3 +1,4 @@
+/**
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -5,6 +6,7 @@
 #include <math.h>
 #include "frame.h"
 #include "common.h"
+*/
 
 struct menuSelection {
     int main;

@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <conio.h>
+#include <math.h>
+#include "frame.h"
+#include "common.h"
 #include "menubase.h"
 
 /**
@@ -75,7 +78,8 @@ int selectMenu(int lowerY, int upperY) {
 }
 
 int showMainMenu(int menuStart) {
-    printf("\e[1;1H\e[2J");
+    system("cls");
+    //printf("\e[1;1H\e[2J");
     setCursor(5,menuStart);
     printf("Neues Spiel");
     setCursor(5,menuStart + 2);
@@ -92,7 +96,8 @@ int showMainMenu(int menuStart) {
 }
 
 int showDifficultyMenu(int menuStart) {
-    printf("\e[1;1H\e[2J");
+    system("cls");
+    //printf("\e[1;1H\e[2J");
     setCursor(5,menuStart);
     printf("Leicht");
     setCursor(5,menuStart + 2);

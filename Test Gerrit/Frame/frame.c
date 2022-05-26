@@ -32,7 +32,7 @@ struct Frame newFrame(int upper, int lower, int left, int right) {
     return frame;
 }
 
-int outLineFrame(struct Frame frame) {
+int outlineFrame(struct Frame frame) {
     clearScreen();
     for (int i = frame.upperBound; i < frame.lowerBound; i++) {
         for (int j = frame.leftBound; j < frame.rightBound; j++) {
@@ -53,6 +53,8 @@ int outLineFrame(struct Frame frame) {
         }
         printf("\n");
     }
+
+    return 0;
 }
 
 struct Frame newPanel(struct Frame frame, int upper, int lower, int left, int right, char identifier) {
@@ -127,6 +129,12 @@ struct absPanelPos getAbsPanelPos(struct Frame frame, char identifier) {
 
     leftUp.X = frame.leftBound + frame.panels[i].leftPos;
     leftUp.Y = frame.upperBound + frame.panels[i].upperPos;
-    //TODO hier weiter machen.
+    rightLow.X = frame.rightBound - frame.panels[i].rightPos;
+    rightLow.Y = frame.lowerBound - frame.panels[i].lowerPos;
     
+    struct absPanelPos positions;
+    positions.leftUp = leftUp;
+    positions.rightLow = rightLow;
+
+    return positions;
 }

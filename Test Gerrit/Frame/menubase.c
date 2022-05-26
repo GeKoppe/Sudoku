@@ -63,8 +63,8 @@ int selectMenu(int lowerY, int upperY) {
 }
 
 int showMainMenu(struct Frame menuFrame) {
-    int frameHeight = floor(menuFrame.lowerBound - menuFrame.upperBound);
-    int frameWidth = floor(menuFrame.rightBound - menuFrame.leftBound);
+    //int frameHeight = floor(menuFrame.lowerBound - menuFrame.upperBound);
+    //int frameWidth = floor(menuFrame.rightBound - menuFrame.leftBound);
 
     setCursor((menuFrame.leftBound + 4), menuFrame.upperBound + 4);
     printf("Neues Spiel");
@@ -110,7 +110,7 @@ void showHeader(struct Frame frame) {
 
 struct menuSelection menuWrapper() {
     struct Frame menuFrame = newFrame(5,25,5,25);
-    outlineFrame();
+    outlineFrame(menuFrame);
     int frameWidth = getFrameWidth(menuFrame);
     int frameHeight = getFrameHeight(menuFrame);
     menuFrame = newPanel(menuFrame, 2, 4, 2, menuFrame.rightBound - 2, 'h');
