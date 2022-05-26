@@ -62,9 +62,9 @@ int selectMenu(int lowerY, int upperY) {
     return playerY;
 }
 
-int showMainMenu(struct FrameTest menuFrame) {
-    //int frameHeight = floor(menuFrame.lowerBound - menuFrame.upperBound);
-    //int frameWidth = floor(menuFrame.rightBound - menuFrame.leftBound);
+int showMainMenu(struct Frame menuFrame) {
+    int frameHeight = floor(menuFrame.lowerBound - menuFrame.upperBound);
+    int frameWidth = floor(menuFrame.rightBound - menuFrame.leftBound);
 
     setCursor((menuFrame.leftBound + 4), menuFrame.upperBound + 4);
     printf("Neues Spiel");
@@ -98,7 +98,7 @@ int showDifficultyMenu(int menuStart) {
     return returnValue;
 }
 
-void showHeader(struct FrameTest frame) {
+void showHeader(struct Frame frame) {
     int i = 0;
     while (frame.panels[i].identifier != 'h') {
         i++;
@@ -109,8 +109,8 @@ void showHeader(struct FrameTest frame) {
 }
 
 struct menuSelection menuWrapper() {
-    struct FrameTest menuFrame = newFrame(5,25,5,25);
-    outlineFrame(menuFrame);
+    struct Frame menuFrame = newFrame(5,25,5,25);
+    outlineFrame();
     int frameWidth = getFrameWidth(menuFrame);
     int frameHeight = getFrameHeight(menuFrame);
     menuFrame = newPanel(menuFrame, 2, 4, 2, menuFrame.rightBound - 2, 'h');

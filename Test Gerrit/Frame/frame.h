@@ -1,10 +1,9 @@
-/**
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
 #include <windows.h>
 #include "common.h"
-*/
+
 struct Panel {
     char identifier;
     int leftPos;
@@ -13,7 +12,7 @@ struct Panel {
     int lowerPos;
 };
 
-struct FrameTest {
+struct Frame {
     int leftBound;
     int rightBound;
     int upperBound;
@@ -26,12 +25,11 @@ struct absPanelPos {
     COORD rightLow;
 };
 
-struct FrameTest newFrame(int upper, int lower, int left, int right);
-int outlineFrame(struct FrameTest frame);
-struct FrameTest newPanel(struct FrameTest frame, int upper, int lower, int left, int right, char identifier);
-COORD getPanelCoordinates(struct FrameTest frame, char identifier);
-int getFrameHeight(struct FrameTest frame);
-int getFrameWidth(struct FrameTest frame);
-int getPanelHeight(struct FrameTest frame, char identifier);
-int getPanelWidth(struct FrameTest frame, char identifier);
-struct absPanelPos getAbsPanelPos(struct FrameTest frame, char identifier);
+struct Frame newFrame(int upper, int lower, int left, int right);
+int outLineFrame(struct Frame frame);
+struct Frame newPanel(struct Frame frame, int upper, int lower, int left, int right, char identifier);
+COORD getPanelCoordinates(struct Frame frame, char identifier);
+int getFrameHeight(struct Frame frame);
+int getFrameWidth(struct Frame frame);
+int getPanelHeight(struct Frame frame, char identifier);
+int getPanelWidth(struct Frame frame, char identifier);

@@ -6,16 +6,16 @@
 #include "common.h"
 
 /**
- * @brief Generiert den FrameTest, für das Programm
+ * @brief Generiert den Frame, für das Programm
  * 
  * @param upper Obere Y Koordinate für den frame
  * @param lower Untere Y Koordinate für den frame
  * @param left 
  * @param right 
- * @return struct FrameTest 
+ * @return struct Frame 
  */
-struct FrameTest newFrame(int upper, int lower, int left, int right) {
-    struct FrameTest frame;
+struct Frame newFrame(int upper, int lower, int left, int right) {
+    struct Frame frame;
     frame.upperBound = upper;
     frame.lowerBound = lower;
     frame.rightBound = right;
@@ -32,7 +32,7 @@ struct FrameTest newFrame(int upper, int lower, int left, int right) {
     return frame;
 }
 
-int outlineFrame(struct FrameTest frame) {
+int outLineFrame(struct Frame frame) {
     clearScreen();
     for (int i = frame.upperBound; i < frame.lowerBound; i++) {
         for (int j = frame.leftBound; j < frame.rightBound; j++) {
@@ -53,15 +53,13 @@ int outlineFrame(struct FrameTest frame) {
         }
         printf("\n");
     }
-
-    return 0;
 }
 
-struct FrameTest newPanel(struct FrameTest frame, int upper, int lower, int left, int right, char identifier) {
+struct Frame newPanel(struct Frame frame, int upper, int lower, int left, int right, char identifier) {
     int frameWidth = frame.rightBound - frame.leftBound;
     int frameHeight = frame.lowerBound - frame.upperBound;
 
-    //Sollte das gewünschte Panel nicht in den FrameTest passen, returne das Original
+    //Sollte das gewünschte Panel nicht in den Frame passen, returne das Original
     if (upper < 0 || left < 0 || right > frameWidth || lower > frameHeight) {
         return frame;
     }
@@ -72,7 +70,7 @@ struct FrameTest newPanel(struct FrameTest frame, int upper, int lower, int left
         i++;
     }
 
-    struct FrameTest newFrame = frame;
+    struct Frame newFrame = frame;
     newFrame.panels[i].identifier = identifier;
     newFrame.panels[i].upperPos = upper;
     newFrame.panels[i].lowerPos = lower;
@@ -82,7 +80,7 @@ struct FrameTest newPanel(struct FrameTest frame, int upper, int lower, int left
     return newFrame;
 }
 
-COORD getPanelCoordinates(struct FrameTest frame, char identifier) {
+COORD getPanelCoordinates(struct Frame frame, char identifier) {
     int i = 0;
     while (frame.panels[i].identifier != identifier) {
         i++;
@@ -95,15 +93,15 @@ COORD getPanelCoordinates(struct FrameTest frame, char identifier) {
     return coordinates;
 }
 
-int getFrameHeight(struct FrameTest frame) {
+int getFrameHeight(struct Frame frame) {
     return frame.lowerBound - frame.upperBound;
 }
 
-int getFrameWidth(struct FrameTest frame) {
+int getFrameWidth(struct Frame frame) {
     return frame.rightBound - frame.leftBound;
 }
 
-int getPanelHeight(struct FrameTest frame, char identifier) {
+int getPanelHeight(struct Frame frame, char identifier) {
     int i = 0;
     while (frame.panels[i].identifier != identifier) {
         i++;
@@ -111,7 +109,7 @@ int getPanelHeight(struct FrameTest frame, char identifier) {
     return frame.panels[i].lowerPos - frame.panels[i].upperPos;
 }
 
-int getPanelWidth(struct FrameTest frame, char identifier) {
+int getPanelWidth(struct Frame frame, char identifier) {
     int i = 0;
     while (frame.panels[i].identifier != identifier) {
         i++;
@@ -119,7 +117,7 @@ int getPanelWidth(struct FrameTest frame, char identifier) {
     return frame.panels[i].rightPos - frame.panels[i].leftPos;
 }
 
-struct absPanelPos getAbsPanelPos(struct FrameTest frame, char identifier) {
+struct absPanelPos getAbsPanelPos(struct Frame frame, char identifier) {
     COORD leftUp;
     COORD rightLow;
     int i = 0;
@@ -129,12 +127,6 @@ struct absPanelPos getAbsPanelPos(struct FrameTest frame, char identifier) {
 
     leftUp.X = frame.leftBound + frame.panels[i].leftPos;
     leftUp.Y = frame.upperBound + frame.panels[i].upperPos;
-    rightLow.X = frame.rightBound - frame.panels[i].rightPos;
-    rightLow.Y = frame.lowerBound - frame.panels[i].lowerPos;
+    //TODO hier weiter machen.
     
-    struct absPanelPos positions;
-    positions.leftUp = leftUp;
-    positions.rightLow = rightLow;
-
-    return positions;
 }
