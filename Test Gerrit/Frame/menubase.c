@@ -62,7 +62,7 @@ int selectMenu(int lowerY, int upperY) {
     return playerY;
 }
 
-int showMainMenu(struct Frame menuFrame) {
+int showMainMenu(struct FrameTest menuFrame) {
     //int frameHeight = floor(menuFrame.lowerBound - menuFrame.upperBound);
     //int frameWidth = floor(menuFrame.rightBound - menuFrame.leftBound);
 
@@ -98,7 +98,7 @@ int showDifficultyMenu(int menuStart) {
     return returnValue;
 }
 
-void showHeader(struct Frame frame) {
+void showHeader(struct FrameTest frame) {
     int i = 0;
     while (frame.panels[i].identifier != 'h') {
         i++;
@@ -109,7 +109,7 @@ void showHeader(struct Frame frame) {
 }
 
 struct menuSelection menuWrapper() {
-    struct Frame menuFrame = newFrame(5,25,5,25);
+    struct FrameTest menuFrame = newFrame(5,25,5,25);
     outlineFrame(menuFrame);
     int frameWidth = getFrameWidth(menuFrame);
     int frameHeight = getFrameHeight(menuFrame);

@@ -6,16 +6,16 @@
 #include "common.h"
 
 /**
- * @brief Generiert den Frame, für das Programm
+ * @brief Generiert den FrameTest, für das Programm
  * 
  * @param upper Obere Y Koordinate für den frame
  * @param lower Untere Y Koordinate für den frame
  * @param left 
  * @param right 
- * @return struct Frame 
+ * @return struct FrameTest 
  */
-struct Frame newFrame(int upper, int lower, int left, int right) {
-    struct Frame frame;
+struct FrameTest newFrame(int upper, int lower, int left, int right) {
+    struct FrameTest frame;
     frame.upperBound = upper;
     frame.lowerBound = lower;
     frame.rightBound = right;
@@ -32,7 +32,7 @@ struct Frame newFrame(int upper, int lower, int left, int right) {
     return frame;
 }
 
-int outlineFrame(struct Frame frame) {
+int outlineFrame(struct FrameTest frame) {
     clearScreen();
     for (int i = frame.upperBound; i < frame.lowerBound; i++) {
         for (int j = frame.leftBound; j < frame.rightBound; j++) {
@@ -57,11 +57,11 @@ int outlineFrame(struct Frame frame) {
     return 0;
 }
 
-struct Frame newPanel(struct Frame frame, int upper, int lower, int left, int right, char identifier) {
+struct FrameTest newPanel(struct FrameTest frame, int upper, int lower, int left, int right, char identifier) {
     int frameWidth = frame.rightBound - frame.leftBound;
     int frameHeight = frame.lowerBound - frame.upperBound;
 
-    //Sollte das gewünschte Panel nicht in den Frame passen, returne das Original
+    //Sollte das gewünschte Panel nicht in den FrameTest passen, returne das Original
     if (upper < 0 || left < 0 || right > frameWidth || lower > frameHeight) {
         return frame;
     }
@@ -72,7 +72,7 @@ struct Frame newPanel(struct Frame frame, int upper, int lower, int left, int ri
         i++;
     }
 
-    struct Frame newFrame = frame;
+    struct FrameTest newFrame = frame;
     newFrame.panels[i].identifier = identifier;
     newFrame.panels[i].upperPos = upper;
     newFrame.panels[i].lowerPos = lower;
@@ -82,7 +82,7 @@ struct Frame newPanel(struct Frame frame, int upper, int lower, int left, int ri
     return newFrame;
 }
 
-COORD getPanelCoordinates(struct Frame frame, char identifier) {
+COORD getPanelCoordinates(struct FrameTest frame, char identifier) {
     int i = 0;
     while (frame.panels[i].identifier != identifier) {
         i++;
@@ -95,15 +95,15 @@ COORD getPanelCoordinates(struct Frame frame, char identifier) {
     return coordinates;
 }
 
-int getFrameHeight(struct Frame frame) {
+int getFrameHeight(struct FrameTest frame) {
     return frame.lowerBound - frame.upperBound;
 }
 
-int getFrameWidth(struct Frame frame) {
+int getFrameWidth(struct FrameTest frame) {
     return frame.rightBound - frame.leftBound;
 }
 
-int getPanelHeight(struct Frame frame, char identifier) {
+int getPanelHeight(struct FrameTest frame, char identifier) {
     int i = 0;
     while (frame.panels[i].identifier != identifier) {
         i++;
@@ -111,7 +111,7 @@ int getPanelHeight(struct Frame frame, char identifier) {
     return frame.panels[i].lowerPos - frame.panels[i].upperPos;
 }
 
-int getPanelWidth(struct Frame frame, char identifier) {
+int getPanelWidth(struct FrameTest frame, char identifier) {
     int i = 0;
     while (frame.panels[i].identifier != identifier) {
         i++;
@@ -119,7 +119,7 @@ int getPanelWidth(struct Frame frame, char identifier) {
     return frame.panels[i].rightPos - frame.panels[i].leftPos;
 }
 
-struct absPanelPos getAbsPanelPos(struct Frame frame, char identifier) {
+struct absPanelPos getAbsPanelPos(struct FrameTest frame, char identifier) {
     COORD leftUp;
     COORD rightLow;
     int i = 0;

@@ -14,7 +14,7 @@ struct menuSelection {
 };
 
 int selectMenu(int lowerY, int upperY);
-int showMainMenu(struct Frame menuFrame);
+int showMainMenu(struct FrameTest menuFrame);
 void checkBounds (int *playerY, int upperY, int upperX);
 void cursorCallback(int y, int *playerY, int upperY, int lowerY);
 struct menuSelection menuWrapper();

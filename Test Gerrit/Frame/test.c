@@ -4,7 +4,7 @@
 #include "common.h"
 
 int main() {
-    struct Frame frame = newFrame(5,50,5,50);
+    struct FrameTest frame = newFrame(5,50,5,50);
     outlineFrame(frame);
 
 }
