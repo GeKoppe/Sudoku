@@ -121,7 +121,16 @@ int showHeader(GameLayout layout) {
     return 0;
 }
 
+int askForFullscreen() {
+    char selection;
+    printf("Bitte schalten sie den Vollbildmodus ein, die Darstellung ist sonst... Schlecht.\n");
+    printf("OK:");
+    scanf("%c", &selection);
+    return 0;
+}
+
 int initializeFrame(GameLayout layout) {
+    askForFullscreen();
     outlineFrame(layout);
     showHeader(layout);
     showFooter(layout);

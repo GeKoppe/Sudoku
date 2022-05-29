@@ -23,6 +23,8 @@ int clearScreen(int y, int height, int x, int width);
 
 void setColor(char color);
 
+int askForFullscreen();
+
 int outlineFrame(GameLayout layout);
 
 int showFooter(GameLayout layout);
