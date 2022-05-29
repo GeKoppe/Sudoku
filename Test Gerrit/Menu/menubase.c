@@ -2,22 +2,9 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <conio.h>
+#include <string.h>
 #include "menubase.h"
-
-/**
- * @brief Setzt den Cursor an Position X,Y
- * 
- * @param x X-Koordinate
- * @param y Y-Koordinate
- * @return int 0
- */
-int setCursor(int x, int y) {
-    COORD koordinaten;
-    koordinaten.X= x;
-    koordinaten.Y= y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), koordinaten);
-    return 0;
-}
+#include "common.h"
 
 /**
  * @brief Überprüft, ob die aktuelle Cursor-Y Position in den Bounds des Menüs sind
@@ -46,23 +33,22 @@ void checkBounds (int *playerY, int lowerY, int upperY) {
  * @param upperY 
  * @param lowerY 
  */
-void cursorCallback(int y, int *playerY, int upperY, int lowerY) {
-    setCursor(1, *playerY);
+void cursorCallback(int y, int *playerY, int upperY, int lowerY, int menuX) {
+    setCursor(menuX - 4, *playerY);
     printf(" ");
     *playerY += y;
     checkBounds(playerY, upperY, lowerY);
-    setCursor(1, *playerY);
-    //printf("\e[1;1H\e[2J");
+    setCursor(menuX - 4, *playerY);
     printf("x");
 }
 
-int selectMenu(int lowerY, int upperY) {
-    int playerY = 1;
+int selectMenu(int lowerY, int upperY, int menuX, int skip) {
+    int playerY = lowerY;
     int selection = 0;
     while (1) {
         switch(getch()) {
-            case 72: cursorCallback(-2, &playerY, lowerY, upperY); break;
-            case 80: cursorCallback(2, &playerY, lowerY, upperY); break;
+            case 72: (playerY - 2 == skip) ? cursorCallback(-4, &playerY, lowerY, upperY, menuX) : cursorCallback(-2, &playerY, lowerY, upperY, menuX); break;
+            case 80: (playerY + 2 == skip) ? cursorCallback(+4, &playerY, lowerY, upperY, menuX) : cursorCallback(+2, &playerY, lowerY, upperY, menuX); break;
             case 13: selection = 1; break;
             default: break;
         }
@@ -74,58 +60,161 @@ int selectMenu(int lowerY, int upperY) {
     return playerY;
 }
 
-int showMainMenu(int menuStart) {
-    printf("\e[1;1H\e[2J");
-    setCursor(5,menuStart);
+int showMainMenu(int menuStart, int menuX) {
+    clearScreen();
+    int skip = -1;
+    //printf("\e[1;1H\e[2J");
+    setCursor(menuX,menuStart);
     printf("Neues Spiel");
-    setCursor(5,menuStart + 2);
+    setCursor(menuX,menuStart + 2);
     printf("Spiel fortsetzen");
-    setCursor(5, menuStart + 4);
+    setCursor(menuX, menuStart + 4);
     printf("Datei laden");
-    setCursor(5, menuStart + 6);
+    setCursor(menuX, menuStart + 6);
     printf("Beenden");
-    setCursor(1,menuStart);
+    setCursor(menuX - 4,menuStart);
     printf("x");
-    int selection = selectMenu(menuStart, menuStart + 6);
+    int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
     int returnValue = ((selection - menuStart)/2) + 1;
     return returnValue;
 }
 
-int showDifficultyMenu(int menuStart) {
-    printf("\e[1;1H\e[2J");
-    setCursor(5,menuStart);
+int showDifficultyMenu(int menuStart, int menuX) {
+    clearScreen();
+    int skip = 0;
+
+    setCursor(menuX,menuStart);
     printf("Leicht");
-    setCursor(5,menuStart + 2);
+    setCursor(menuX,menuStart + 2);
     printf("Mittel");
-    setCursor(5,menuStart + 4);
+    setCursor(menuX,menuStart + 4);
     printf("Schwierig");
-    setCursor(5,menuStart + 6);
+    setCursor(menuX,menuStart + 6);
     printf("Abbrechen");
-    setCursor(1,menuStart);
+    setCursor(menuX - 4,menuStart);
     printf("x");
-    int selection = selectMenu(menuStart, menuStart + 6);
+    int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
     int returnValue = ((selection - menuStart)/2) + 1;
     return returnValue;
 }
 
-struct menuSelection menuWrapper() {
-    struct menuSelection selection;
-    selection.main = showMainMenu(3);
+int displayGames(int currentPage) {
+    return 0;
+}
+
+
+int showLoadMenu(int menuStart, int menuX) {
+    clearScreen();
+    //TODO: Alle gespeicherten Spiele laden
+    int currentPage = 1;
+    int skipNumber = menuStart + 12;
+
+    setCursor(menuX ,menuStart - 2);
+    printf("Bitte waehlen sie ein gespeichertes Spiel aus:");
+    //TODO: alle gespeicherten Spiele anzeigen
+
+
+
+    //Menü Optionen
+
+    if (currentPage == 10) {
+        skipNumber = menuStart + 10;
+    } else if (currentPage == 1) {
+        skipNumber = menuStart + 12;
+    }
+    setCursor(menuX,menuStart + 14);
+    printf("Abbrechen");
+    setCursor(menuX - 4,menuStart);
+    printf("x");
+    
+    int selection;
+    int returnValue;
+    do {
+        displayGames(currentPage);
+
+        if (currentPage == 10) {
+            setCursor(menuX,menuStart + 10);
+            printf("\r                                                                    ");
+            skipNumber = menuStart + 10;
+        } else {
+            setCursor(menuX,menuStart + 10);
+            printf("Naechste Seite");
+            skipNumber = -1;
+        }
+        
+        if (currentPage == 1) {  
+            setCursor(menuX,menuStart + 12);
+            printf("\r                                                                    ");
+            skipNumber = menuStart + 12;
+        } else {
+            setCursor(menuX,menuStart + 12);
+            printf("Vorherige Seite");
+            skipNumber = -1;
+        }
+
+        setCursor(menuX - 4,menuStart);
+        printf("x");
+
+        selection = selectMenu(menuStart, menuStart + 14, menuX, skipNumber);
+        returnValue = ((selection - menuStart)/2) + 1;
+
+        if (returnValue == 6) {
+            currentPage++;
+            setCursor(menuX - 4,menuStart + 12);
+            printf(" ");
+        } else if (returnValue == 7) {
+            currentPage--;
+            setCursor(menuX - 4,menuStart + 12);
+            printf(" ");
+        }
+        if (returnValue != 8 && returnValue != 7 && returnValue != 6) {
+            break;
+        }
+    } while (returnValue != 8);
+
+    if (returnValue != 8) {
+        returnValue = returnValue + (currentPage * 5);
+    }
+    return returnValue;
+}
+
+
+MenuSelection menuWrapper() {
+    MenuSelection selection;
+    int menuX = 5;
+    int menuStart = 5;
+    //_setcursortype(_NOCURSOR);
+    selection.main = showMainMenu(menuStart, menuX);
+    selection.difficulty = 0;
     int finishedSelecting = 0;
     do {
         switch(selection.main) {
-            case 1: selection.difficulty = showDifficultyMenu(3); break;
+            case 1: selection.difficulty = showDifficultyMenu(menuStart, menuX); break;
+            case 3: selection.load = showLoadMenu(menuStart, menuX); break;
             case 4: finishedSelecting = 1; break;
             default: finishedSelecting = 1;
         }
 
+        if (selection.difficulty == 4) {
+            selection.difficulty = 0;
+            selection.main = showMainMenu(menuStart, menuX);
+        }
+
+        if (selection.load == 8 ) {
+            selection.load = 0;
+            selection.main = showMainMenu(menuStart, menuX);
+        }
         if (finishedSelecting == 1) {
             continue;
         }
+
+
+        /**
         switch (selection.difficulty) {
             case 4: selection.main = showMainMenu(3); break;
             default: selection.main = showMainMenu(3); break;
         }
+        */
     } while (finishedSelecting == 0);
     return selection;
 }

@@ -5,7 +5,7 @@
 #include "menubase.h"
 
 int main() {
-    struct menuSelection selection = menuWrapper();
+    MenuSelection selection = menuWrapper();
     setCursor(1,8);
     printf("%i", selection.main);
     return 0;
