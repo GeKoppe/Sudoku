@@ -8,7 +8,9 @@
 
 int main() {
     GameLayout game = newGameLayout(10,5,150,40);
-    initializeFrame(game);
+    if (initializeFrame(game) == 0) {
+        return 0;
+    }
     MenuSelection selection = menuWrapper(game);
 
     return 0;

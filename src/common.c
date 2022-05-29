@@ -113,7 +113,7 @@ int showFooter(GameLayout layout) {
 int showHeader(GameLayout layout) {
     //TODO Schriftzug Sudoku anzeigen
     int width = layout.bottomRightCorner.X - layout.topLeftCorner.X;
-    int startX = floor(width / 2) - 4;
+    int startX = floor(width / 2) - 2;
     setCursor(startX, layout.topLeftCorner.Y + 4);
     //setColor('5');
     printf("\xb0\xb1\xb2 Sudoku \xb2\xb1\xb0");
@@ -124,15 +124,23 @@ int showHeader(GameLayout layout) {
 int askForFullscreen() {
     char selection;
     printf("Bitte schalten sie den Vollbildmodus ein, die Darstellung ist sonst... Schlecht.\n");
-    printf("OK:");
-    scanf("%c", &selection);
+    printf("Mit ENTER bestaetigen, mit ESCAPE abbrechen...");
+    while (1) {
+        switch (getch()) {
+            case 13: return 1;
+            case 27: return 0;
+        }
+    }
     return 0;
 }
 
 int initializeFrame(GameLayout layout) {
-    askForFullscreen();
+    int returnValue = askForFullscreen();
+    if (returnValue == 0) {
+        return 0;
+    }
     outlineFrame(layout);
     showHeader(layout);
     showFooter(layout);
-    return 0;
+    return 1;
 }
