@@ -7,8 +7,9 @@
 #include "menulist.h"
 
 int main() {
-    MenuSelection selection = menuWrapper();
-    setCursor(1,8);
-    printf("%i", selection.main);
+    GameLayout game = newGameLayout(10,5,150,40);
+    initializeFrame(game);
+    MenuSelection selection = menuWrapper(game);
+
     return 0;
 }
