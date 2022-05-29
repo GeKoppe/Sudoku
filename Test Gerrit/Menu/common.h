@@ -1,9 +1,5 @@
-/**
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <windows.h>
-*/
+
+
 /**
  * @brief Setzt den Cursor an Position X,Y
  * 
@@ -13,6 +9,6 @@
  */
 void setCursor(int x, int y);
 
-int clearScreen();
+int clearScreen(int y, int height);
 
 void setColor(char color);
