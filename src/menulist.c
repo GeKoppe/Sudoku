@@ -7,10 +7,6 @@
 #include "menulist.h"
 #include "menubase.h"
 
-int showHeader() {
-    //TODO Schriftzug Sudoku anzeigen
-    return 0;
-}
 
 /**
  * @brief Zeigt das Hauptmenü des Spiels an und 
@@ -22,7 +18,7 @@ int showHeader() {
 int showMainMenu(int menuStart, int menuX) {
     clearScreen(menuStart - 2,30);
     int skip = -1;
-    //printf("\e[1;1H\e[2J");
+
     setCursor(menuX,menuStart);
     printf("Neues Spiel");
     setCursor(menuX,menuStart + 2);
@@ -33,6 +29,8 @@ int showMainMenu(int menuStart, int menuX) {
     printf("Beenden");
     setCursor(menuX - 4,menuStart);
     printf("x");
+
+    
     int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
     int returnValue = ((selection - menuStart)/2) + 1;
     return returnValue;
@@ -82,7 +80,7 @@ int showLoadMenu(int menuStart, int menuX) {
 
         if (currentPage == 10) {
             setCursor(menuX,menuStart + 10);
-            printf("\r                                                                    ");
+            clearScreen(menuStart + 10, 1);
             skipNumber = menuStart + 10;
         } else {
             setCursor(menuX,menuStart + 10);
@@ -92,7 +90,7 @@ int showLoadMenu(int menuStart, int menuX) {
         
         if (currentPage == 1) {  
             setCursor(menuX,menuStart + 12);
-            printf("\r                                                                    ");
+            clearScreen(menuStart + 12, 1);
             skipNumber = menuStart + 12;
         } else {
             setCursor(menuX,menuStart + 12);
@@ -105,7 +103,7 @@ int showLoadMenu(int menuStart, int menuX) {
 
         selection = selectMenu(menuStart, menuStart + 14, menuX, skipNumber);
         returnValue = ((selection - menuStart)/2) + 1;
-
+        //TODO x löschen, dass da noch rumlungert
         if (returnValue == 6) {
             currentPage++;
             setCursor(menuX - 4,menuStart + 12);

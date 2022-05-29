@@ -4,6 +4,15 @@
 #include <windows.h>
 #include "common.h"
 
+typedef struct coordinates {
+    int X;
+    int Y;
+} Coordinates;
+typedef struct layout {
+    Coordinates topLeftCorner;
+    Coordinates bottomRightCorner;
+} GameLayout;
+
 
 /**
  * @brief Setzt den Cursor an Position X,Y
@@ -65,4 +74,33 @@ int clearScreen(int y, int height) {
         }
         return 0;
     }
+}
+
+int outlineFrame(GameLayout layout) {
+    for (int i = layout.topLeftCorner.Y; i < layout.bottomRightCorner.Y; i++) {
+        for (int j = layout.topLeftCorner.X; j < layout.bottomRightCorner.X; j++) {
+            setCursor(i,j);
+            if (i == 0 && j == 0)
+                printf("\xC9");
+            else if (i == 0 && j == layout.bottomRightCorner.X-1)
+                printf("\xBB");
+            else if (i == layout.bottomRightCorner.Y-1 && j == 0)
+                printf("\xC8");
+            else if (i == layout.bottomRightCorner.Y-1 && j == layout.bottomRightCorner.X-1)
+                printf("\xBC");
+            else if (i == 0 || i == layout.bottomRightCorner.Y-1)
+                printf("\xCD");
+            else if (j == 0 || j == layout.bottomRightCorner.X-1)
+                printf("\xBA");
+            else
+                printf(" ");
+        }
+    }
+}
+int showHeader() {
+    //TODO Schriftzug Sudoku anzeigen
+    setColor('5');
+    printf("\xb0\xb1\xb2 Sudoku \xb2\xb1\xb0");
+    setColor('0');
+    return 0;
 }
