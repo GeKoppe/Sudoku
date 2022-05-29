@@ -8,4 +8,4 @@ int showMainMenu(int menuStart, int menuX);
 int showDifficultyMenu(int menuStart, int menuX);
 int displayGames(int currentPage);
 int showLoadMenu(int menuStart, int menuX);
-MenuSelection menuWrapper();
+MenuSelection menuWrapper(GameLayout layout);

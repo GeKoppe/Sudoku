@@ -2,18 +2,18 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <windows.h>
+#include <math.h>
 #include "common.h"
 
-typedef struct coordinates {
-    int X;
-    int Y;
-} Coordinates;
-typedef struct layout {
-    Coordinates topLeftCorner;
-    Coordinates bottomRightCorner;
-} GameLayout;
+GameLayout newGameLayout(int startX, int startY, int width, int height) {
+    GameLayout layout;
+    layout.topLeftCorner.X = startX;
+    layout.topLeftCorner.Y = startY;
+    layout.bottomRightCorner.X = startX + width;
+    layout.bottomRightCorner.Y = startY + height;
 
-
+    return layout;
+}
 /**
  * @brief Setzt den Cursor an Position X,Y
  * 
@@ -63,44 +63,67 @@ void setColor(char color) {
  * @param height 
  * @return int 
  */
-int clearScreen(int y, int height) {
+int clearScreen(int y, int height, int x, int width) {
     if (y == 0 && height == 0) {
         system("cls");
         return 0;
     } else {
         for (int i = y; i < y + height; i++) {
-            setCursor(0, i);
-            printf("\r\33[2K\r");
+            for (int j = x; j < x + width; j++) {
+                setCursor(j, i);
+                printf(" ");
+            }
         }
         return 0;
     }
 }
 
 int outlineFrame(GameLayout layout) {
-    for (int i = layout.topLeftCorner.Y; i < layout.bottomRightCorner.Y; i++) {
-        for (int j = layout.topLeftCorner.X; j < layout.bottomRightCorner.X; j++) {
-            setCursor(i,j);
-            if (i == 0 && j == 0)
+    clearScreen(0,0,0,0);
+    for (int i = layout.topLeftCorner.Y; i <= layout.bottomRightCorner.Y; i++) {
+        for (int j = layout.topLeftCorner.X; j <= layout.bottomRightCorner.X; j++) {
+            setCursor(j,i);
+            if (i == layout.topLeftCorner.Y && j == layout.topLeftCorner.X)
                 printf("\xC9");
-            else if (i == 0 && j == layout.bottomRightCorner.X-1)
+            else if (i == layout.topLeftCorner.Y && j == layout.bottomRightCorner.X)
                 printf("\xBB");
-            else if (i == layout.bottomRightCorner.Y-1 && j == 0)
+            else if (i == layout.bottomRightCorner.Y && j == layout.topLeftCorner.X)
                 printf("\xC8");
-            else if (i == layout.bottomRightCorner.Y-1 && j == layout.bottomRightCorner.X-1)
+            else if (i == layout.bottomRightCorner.Y && j == layout.bottomRightCorner.X)
                 printf("\xBC");
-            else if (i == 0 || i == layout.bottomRightCorner.Y-1)
+            else if (i == layout.topLeftCorner.Y || i == layout.bottomRightCorner.Y)
                 printf("\xCD");
-            else if (j == 0 || j == layout.bottomRightCorner.X-1)
+            else if (j == layout.topLeftCorner.X || j == layout.bottomRightCorner.X)
                 printf("\xBA");
-            else
-                printf(" ");
         }
     }
+    return 0;
 }
-int showHeader() {
+
+
+int showFooter(GameLayout layout) {
+    setCursor(layout.topLeftCorner.X + 2, layout.bottomRightCorner.Y + -2);
+    //setColor('0');
+    printf("Jannik Glane, Thilo Drehlmann, Gerrit Koppe.");
+    setCursor(layout.bottomRightCorner.X - 13, layout.bottomRightCorner.Y + -2);
+    printf("Konami Code.");
+    return 0;
+}
+
+int showHeader(GameLayout layout) {
     //TODO Schriftzug Sudoku anzeigen
-    setColor('5');
+    int width = layout.bottomRightCorner.X - layout.topLeftCorner.X;
+    int startX = floor(width / 2) - 4;
+    setCursor(startX, layout.topLeftCorner.Y + 4);
+    //setColor('5');
     printf("\xb0\xb1\xb2 Sudoku \xb2\xb1\xb0");
-    setColor('0');
+    //setColor('0');
+    return 0;
+}
+
+int initializeFrame(GameLayout layout) {
+    outlineFrame(layout);
+    showHeader(layout);
+    showFooter(layout);
     return 0;
 }

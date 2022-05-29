@@ -16,7 +16,7 @@
  * @return int Auswahl
  */
 int showMainMenu(int menuStart, int menuX) {
-    clearScreen(menuStart - 2,30);
+    clearScreen(menuStart - 2,30, menuX, 90);
     int skip = -1;
 
     setCursor(menuX,menuStart);
@@ -30,15 +30,25 @@ int showMainMenu(int menuStart, int menuX) {
     setCursor(menuX - 4,menuStart);
     printf("x");
 
-    
     int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
-    int returnValue = ((selection - menuStart)/2) + 1;
+    clearScreen(menuStart, 20, menuX- 4, 1);
+    
+    int returnValue;
+    if (selection == -1) {
+        returnValue = 4;
+    } else {
+        returnValue = ((selection - menuStart)/2) + 1;
+    }
+
     return returnValue;
 }
 
 int showDifficultyMenu(int menuStart, int menuX) {
-    clearScreen(menuStart - 2,30);
+    clearScreen(menuStart - 2,30, menuX, 45);
     int skip = 0;
+
+    setCursor(menuX,menuStart - 2);
+    printf("Bitte waehlen sie eine Schwierigkeit aus.");
 
     setCursor(menuX,menuStart);
     printf("Leicht");
@@ -51,7 +61,13 @@ int showDifficultyMenu(int menuStart, int menuX) {
     setCursor(menuX - 4,menuStart);
     printf("x");
     int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
-    int returnValue = ((selection - menuStart)/2) + 1;
+    clearScreen(menuStart, 20, menuX- 4, 1);
+    int returnValue;
+    if (selection == -1) {
+        returnValue = 4;
+    } else {
+        returnValue = ((selection - menuStart)/2) + 1;
+    } 
     return returnValue;
 }
 
@@ -61,7 +77,7 @@ int displayGames(int currentPage) {
 
 
 int showLoadMenu(int menuStart, int menuX) {
-    clearScreen(menuStart - 2,30);
+    clearScreen(menuStart - 2,30, menuX, 45);
     int currentPage = 1;
     int skipNumber = menuStart + 12;
 
@@ -80,7 +96,7 @@ int showLoadMenu(int menuStart, int menuX) {
 
         if (currentPage == 10) {
             setCursor(menuX,menuStart + 10);
-            clearScreen(menuStart + 10, 1);
+            clearScreen(menuStart + 10, 1, menuX, 20);
             skipNumber = menuStart + 10;
         } else {
             setCursor(menuX,menuStart + 10);
@@ -90,7 +106,7 @@ int showLoadMenu(int menuStart, int menuX) {
         
         if (currentPage == 1) {  
             setCursor(menuX,menuStart + 12);
-            clearScreen(menuStart + 12, 1);
+            clearScreen(menuStart + 12, 1, menuX, 20);
             skipNumber = menuStart + 12;
         } else {
             setCursor(menuX,menuStart + 12);
@@ -102,7 +118,13 @@ int showLoadMenu(int menuStart, int menuX) {
         printf("x");
 
         selection = selectMenu(menuStart, menuStart + 14, menuX, skipNumber);
-        returnValue = ((selection - menuStart)/2) + 1;
+        clearScreen(menuStart, 20, menuX- 4, 1);
+        if (selection == -1) {
+            returnValue = 8;
+        } else {
+            returnValue = ((selection - menuStart)/2) + 1;
+        }
+
         //TODO x löschen, dass da noch rumlungert
         if (returnValue == 6) {
             currentPage++;
@@ -124,30 +146,33 @@ int showLoadMenu(int menuStart, int menuX) {
     return returnValue;
 }
 
-MenuSelection menuWrapper() {
+MenuSelection menuWrapper(GameLayout layout) {
     MenuSelection selection;
-    int menuX = 10;
-    int menuStart = 10;
+    int firstLevelX = layout.topLeftCorner.X + 6;
+    int firstLevelY = layout.topLeftCorner.Y + 10;
+
+    int secondLevelX = layout.topLeftCorner.X + 45;
+    int secondLevelY = layout.topLeftCorner.Y + 10;
     //_setcursortype(_NOCURSOR);
-    selection.main = showMainMenu(menuStart, menuX);
+    selection.main = showMainMenu(firstLevelY, firstLevelX);
     selection.difficulty = 0;
     int finishedSelecting = 0;
     do {
         switch(selection.main) {
-            case 1: selection.difficulty = showDifficultyMenu(menuStart, menuX); break;
-            case 3: selection.load = showLoadMenu(menuStart, menuX); break;
+            case 1: selection.difficulty = showDifficultyMenu(secondLevelY, secondLevelX); break;
+            case 3: selection.load = showLoadMenu(secondLevelY, secondLevelX); break;
             case 4: finishedSelecting = 1; break;
             default: finishedSelecting = 1;
         }
 
         if (selection.difficulty == 4) {
             selection.difficulty = 0;
-            selection.main = showMainMenu(menuStart, menuX);
+            selection.main = showMainMenu(firstLevelY, firstLevelX);
         }
 
         if (selection.load == 8 ) {
             selection.load = 0;
-            selection.main = showMainMenu(menuStart, menuX);
+            selection.main = showMainMenu(firstLevelY, firstLevelX);
         }
         if (finishedSelecting == 1) {
             continue;
