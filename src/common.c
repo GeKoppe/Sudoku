@@ -4,6 +4,7 @@
 #include <windows.h>
 #include "common.h"
 
+
 /**
  * @brief Setzt den Cursor an Position X,Y
  * 
@@ -47,10 +48,21 @@ void setColor(char color) {
 }
 
 /**
- * @brief Clears the screen
+ * @brief Leert alle Zeilen, angefangen bei der Zeile y, bishin zur Zeile y + height
  * 
+ * @param y 
+ * @param height 
+ * @return int 
  */
-int clearScreen() {
-    system("cls");
-    return 0;
+int clearScreen(int y, int height) {
+    if (y == 0 && height == 0) {
+        system("cls");
+        return 0;
+    } else {
+        for (int i = y; i < y + height; i++) {
+            setCursor(0, i);
+            printf("\r\33[2K\r");
+        }
+        return 0;
+    }
 }
