@@ -3,7 +3,14 @@
 #include <conio.h>
 #include <windows.h>
 #include <math.h>
+#include <pthread.h>
 #include "common.h"
+
+typedef struct clearArea {
+    int y;
+    int x;
+    int width;
+} ClearArea;
 
 GameLayout newGameLayout(int startX, int startY, int width, int height) {
     GameLayout layout;
@@ -56,12 +63,22 @@ void setColor(char color) {
     SetConsoleTextAttribute( hstdout, color );
 }
 
+// void *clearArea(void *area) {
+//     ClearArea *myArea = (ClearArea*)area;
+//     for (int j = myArea->x; j < myArea->x + myArea->width; j++) {
+//         setCursor(j, myArea->y);
+//         printf(" ");
+//     }
+// }
+
 /**
- * @brief Leert alle Zeilen, angefangen bei der Zeile y, bishin zur Zeile y + height
+ * @brief Leert das angegebene Rechteck.
  * 
  * @param y 
  * @param height 
- * @return int 
+ * @param x 
+ * @param width
+ * @return int 0
  */
 int clearScreen(int y, int height, int x, int width) {
     if (y == 0 && height == 0) {
@@ -69,6 +86,12 @@ int clearScreen(int y, int height, int x, int width) {
         return 0;
     } else {
         for (int i = y; i < y + height; i++) {
+            // ClearArea area;
+            // area.x = x;
+            // area.y = i;
+            // area.width = width;
+            // pthread_t threadId;
+            // pthread_create(&threadId, NULL, clearArea, (void *)&area);
             for (int j = x; j < x + width; j++) {
                 setCursor(j, i);
                 printf(" ");
