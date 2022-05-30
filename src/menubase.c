@@ -43,16 +43,22 @@ int checkBounds (int *playerY, int lowerY, int upperY) {
 int cursorCallback(int y, int *playerY, int upperY, int lowerY, int menuX) {
     setCursor(menuX - 4, *playerY);
     printf(" ");
-    *playerY += y;
-    if (checkBounds(playerY, upperY, lowerY) == 1) {
-        //*playerY += y;
-    }
 
+    *playerY += y;
+    checkBounds(playerY, upperY, lowerY);
     setCursor(menuX - 4, *playerY);
     printf("x");
+    
     return 0;
 }
 
+/**
+ * @brief Es lässt sich schon erschließen, was das hier kann aber es ist ein Easter Egg, entsprechend werde ich es nicht kommentieren
+ * 
+ * @param supriseCounter Pointer auf eine Int Variable. Diese muss mit 0 initialisiert worden sein.
+ * @param input ASCII Nummer des Inputs
+ * @return int 0
+ */
 int surprise(int *supriseCounter, int input) {
     if (*supriseCounter == 0 && input == 72) {
         *supriseCounter += 1;
@@ -81,6 +87,8 @@ int surprise(int *supriseCounter, int input) {
     if (*supriseCounter == 10) {
         system("start https://shattereddisk.github.io/rickroll/rickroll.mp4");
     }
+
+    return 0;
 }
 
 /**
