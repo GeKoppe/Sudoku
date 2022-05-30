@@ -41,6 +41,13 @@ int displayGames(int currentPage);
  */
 int showLoadMenu(int menuStart, int menuX);
 
+/**
+ * @brief Zeigt das Hilfemenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Hilfe" gedrückt wurde. Lässt Auswahl über Enter und Escape zu.
+ * 
+ * @param menuStart Y-Wert des ersten Eintrags des Menüs
+ * @param menuX X-Wert des ersten Eintrags des Menüs
+ * @return int Auswahl
+ */
 int showHelpMenu(int menuY, int menuX);
 
 MenuSelection menuWrapper(GameLayout layout);
