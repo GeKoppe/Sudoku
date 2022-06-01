@@ -1,3 +1,5 @@
 int checkInsertionValid(int field[9][9], int num, int posY, int posX);
-void generateSolution(int field[9][9]);
-void printSolution(int field[9][9]);
+int generateSolution(int field[9][9], int solution[9][9], int numberOfSolutionsAskedFor);
+void printSudoku(int field[9][9]);
+typedef enum {EASY, MEDIUM, HARD} difficulty;
+void generateSudoku(int field[9][9], difficulty diff);

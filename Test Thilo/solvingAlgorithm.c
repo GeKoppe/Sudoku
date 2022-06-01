@@ -1,5 +1,7 @@
 #include "solvingAlgorithm.h"
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 int checkInsertionValid(int field[9][9], int num, int posY, int posX){
     int lowerBoundRow = 0;
@@ -51,14 +53,14 @@ int checkInsertionValid(int field[9][9], int num, int posY, int posX){
     return 1;
 }
 
-void generateSolution(int field[9][9]){
-    int sudokuSolution[9][9];    
+int generateSolution(int field[9][9], int solution[9][9], int numberOfSolutionsAskedFor){
+    int tmpSolution[9][9];
     int insertedPositionsX[81];
     int insertedPositionsY[81];
 
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
-            sudokuSolution[i][j] = field[i][j];
+            tmpSolution[i][j] = field[i][j];
         }
     }
 
@@ -69,49 +71,177 @@ void generateSolution(int field[9][9]){
 
     int nextArrayPos = 0;
     int backTrack = 0;
+    int foundSolutions = 0;
+    int noMoreSolutions = 0;
 
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j++){
-            if(sudokuSolution[i][j] == 0 || backTrack == 1){
-                if(sudokuSolution[i][j] == 9){
-                        sudokuSolution[i][j] = 0;
-                        nextArrayPos--;
-                        i = insertedPositionsY[nextArrayPos];
-                        j = insertedPositionsX[nextArrayPos]-1;
-                        continue;
+    for(int i = 0; i < 9 && !noMoreSolutions; i++){
+        for(int j = 0; j < 9 && !noMoreSolutions; j++){
+            if(tmpSolution[i][j] == 0 || backTrack == 1){
+                if(tmpSolution[i][j] == 9){
+                    //If we backtracked onto a nine, we backtrack again.
+                    tmpSolution[i][j] = 0;
+                    nextArrayPos--;
+                    if(nextArrayPos < 0){
+                        //If the first ever edited cell has no valid input options
+                        noMoreSolutions = 1;
+                        break;
+                    }
+                    i = insertedPositionsY[nextArrayPos];
+                    j = insertedPositionsX[nextArrayPos]-1;
+                    continue;
                 }
                 for(int k = 1; k <= 9; k++){
-                    if(k <= sudokuSolution[i][j]){
+                    if(k <= tmpSolution[i][j]){
+                        k = tmpSolution[i][j];
                         continue;
                     }
-                    if(checkInsertionValid(sudokuSolution, k, i, j)){
-                        sudokuSolution[i][j] = k;
+                    if(checkInsertionValid(tmpSolution, k, i, j)){
+                        tmpSolution[i][j] = k;
                         insertedPositionsY[nextArrayPos] = i;
                         insertedPositionsX[nextArrayPos] = j;
                         nextArrayPos++;
-                        backTrack = 0;
+                        backTrack = 0;  //Reset the backtrack marker, to avoid checking pre-filled numbers.
                         break;
-
                     } else if (k == 9){
-                        sudokuSolution[i][j] = 0;
+                        tmpSolution[i][j] = 0;
                         nextArrayPos--;
+                        if(nextArrayPos < 0){
+                            //If the first ever edited cell has no valid input options
+                            noMoreSolutions = 1;
+                            break;
+                        }
                         i = insertedPositionsY[nextArrayPos];
                         j = insertedPositionsX[nextArrayPos]-1;
                         backTrack = 1;
                     }
                 }
             }
+            if(i == 8 && j == 8 && !noMoreSolutions){
+                foundSolutions++;
+                if(foundSolutions == 1 && solution != NULL){
+                    for(int i = 0; i < 9; i++){
+                        for(int j = 0; j < 9; j++){
+                            solution[i][j] = tmpSolution[i][j];
+                        }
+                    }
+                }
+                if(foundSolutions == numberOfSolutionsAskedFor){
+                    return foundSolutions;
+                }
+                nextArrayPos--;
+                i = insertedPositionsY[nextArrayPos];
+                j = insertedPositionsX[nextArrayPos]-1;
+                backTrack = 1;
+            }
         }
     }
 
-    printSolution(sudokuSolution);
+    return foundSolutions;
 }
 
-void printSolution(int field[9][9]){
+void printSudoku(int field[9][9]){
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
             printf("%i ", field[i][j]);
         }
         printf("\n");
+    }
+}
+
+void generateSudoku(int field[9][9], difficulty diff){
+    srand(time(NULL));
+    int tmpSudoku[9][9];
+    int startingGrid[9][9];
+
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            field[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            int r = rand() % 9 + 1;
+            startingGrid[i][j] = r;
+        }
+    }
+
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            if(checkInsertionValid(field, startingGrid[i][j], i, j) && field[i][j] == 0){
+                field[i][j] = startingGrid[i][j];
+            } else {
+                int reverseNumToInsert = 0;
+                if(field[i][j] - startingGrid[i][j] < 0 && field[i][j] != 0){
+                    reverseNumToInsert = field[i][j] - startingGrid[i][j] + 9;
+                } else if(field[i][j] != 0) {
+                    reverseNumToInsert = field[i][j] - startingGrid[i][j];
+                }
+                if(reverseNumToInsert == 8){
+                    field[i][j] = 0;
+                    if(j == 0){
+                        i--;
+                        j = 9;
+                    }
+                    j -= 2;
+                }
+                for(int k = reverseNumToInsert; k < 8; k++){
+                    int numToInsert = (k + startingGrid[i][j]) % 9 + 1;
+                    if(checkInsertionValid(field, numToInsert, i, j)){
+                        field[i][j] = numToInsert;
+                        break;
+                    } else if(k == 7){
+                        field[i][j] = 0;
+                        if(j == 0){
+                            i--;
+                            j = 9;
+                        }
+                        j -= 2;
+                    }
+                }
+            }
+        }
+    }
+
+    
+
+    int cellsToDelete = 0;
+
+    switch(diff){
+        case EASY:
+            cellsToDelete = 20;
+            break;
+        
+        case MEDIUM:
+            cellsToDelete = 35;
+            break;
+
+        case HARD:
+            cellsToDelete = 50;
+            break;
+    }
+
+    do{
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                tmpSudoku[i][j] = field[i][j];
+            }
+        }
+        
+        for(int i = 0; i < cellsToDelete; i++){
+            int y = rand() % 9;
+            int x = rand() % 9;
+            while(tmpSudoku[y][x] == 0){
+                y = rand() % 9;
+                x = rand() % 9;
+            }
+            tmpSudoku[y][x] = 0;
+        }
+    } while(generateSolution(tmpSudoku, NULL, 2) != 1);
+
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            field[i][j] = tmpSudoku[i][j];
+        }
     }
 }
