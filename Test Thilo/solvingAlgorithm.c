@@ -245,3 +245,31 @@ void generateSudoku(int field[9][9], difficulty diff){
         }
     }
 }
+
+void generateHint(int field[9][9], int solution[9][9], int* hintsUsed){
+    int posXOfZeroCell[81];
+    int posYOfZeroCell[81];
+    int nextArrayPos = 0;
+    if(*hintsUsed < 3){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                if(field[i][j] == 0){
+                    posXOfZeroCell[nextArrayPos] = j;
+                    posYOfZeroCell[nextArrayPos] = i;
+                    nextArrayPos++;
+                }
+            }
+        }
+        if(nextArrayPos == 0){
+            printf("The sudoku is already solved.");
+        } else {
+            srand(time(NULL));
+            int randomCellPosition = rand() % nextArrayPos;
+            field[posYOfZeroCell[randomCellPosition]][posXOfZeroCell[randomCellPosition]] = solution[posYOfZeroCell[randomCellPosition]][posXOfZeroCell[randomCellPosition]];
+            ++*hintsUsed;
+            int check = 0;
+        }
+    } else {
+        printf("Your hints are all used up, buckaroo.");
+    }
+}

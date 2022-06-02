@@ -24,17 +24,12 @@ int main(){
 
     int sudokuSolution[9][9];
 
-    generateSudoku(sudokuField, EASY);
-    // int fS = generateSolution(sudokuField, sudokuSolution);
-    // printf("%i ", fS);
-    // if(generateSolution(sudokuField, sudokuSolution)){
-    //     printSudoku(sudokuSolution);
-    // } else {
-    //     printf("Sudoku not solvable");
-    // }
+    int hintsUsed = 0;
 
-    //printSudoku(sudokuField);
-    // printf("\n");
+    generateSudoku(sudokuField, EASY);
+    generateSolution(sudokuField, sudokuSolution, 1);
     printSudoku(sudokuField);
-    //printf("\n %i", fS);
+    printf("\n");
+    generateHint(sudokuField, sudokuSolution, &hintsUsed);
+    printSudoku(sudokuField);
 }
