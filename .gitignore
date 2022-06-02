@@ -53,3 +53,4 @@ dkms.conf
 
 # Compiler Stuff
 *.json
+*.zip
