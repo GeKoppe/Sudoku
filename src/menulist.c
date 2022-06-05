@@ -236,13 +236,13 @@ int showHelpMenu(int menuY, int menuX) {
     //Auswahl
     while (1) {
         switch (getch()) {
-            case 13: return 1; break;
-            case 27: return 1; break;
+            case 13: clearScreen(menuY + 10, 4, menuX - 2, 2); return 1; break;
+            case 27: clearScreen(menuY + 10, 4, menuX - 2, 2); return 1; break;
         }
     }
 
     //x-Spalte löschen
-    clearScreen(menuY + 12, 2, menuX - 2, 2);
+    // clearScreen(menuY + 10, 4, menuX - 2, 2);
 }
 
 MenuSelection menuWrapper(GameLayout layout) {
