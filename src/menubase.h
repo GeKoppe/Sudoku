@@ -1,3 +1,10 @@
+typedef struct menuSelection {
+    int main;
+    int difficulty;
+    int cont;
+    int load;
+    int help;
+} MenuSelection;
 
 /**
  * @brief Die Auswahl des aktuellen Menüs.

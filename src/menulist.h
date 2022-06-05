@@ -1,10 +1,3 @@
-typedef struct menuSelection {
-    int main;
-    int difficulty;
-    int load;
-    int help;
-} MenuSelection;
-
 /**
  * @brief Zeigt das Hauptmenü des Spiels an. Lässt Auswahl über Pfeiltasten, Enter und Escape zu. 
  * 
@@ -13,6 +6,9 @@ typedef struct menuSelection {
  * @return int Auswahl
  */
 int showMainMenu(int menuStart, int menuX);
+
+
+int showContinuationMenu(int menuStart, int menuX);
 
 /**
  * @brief Zeigt das Schwierigkeitsmenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Neues Spiel" gedrückt wurde. Lässt Auswahl über Pfeiltasten, Enter und Escape zu.
