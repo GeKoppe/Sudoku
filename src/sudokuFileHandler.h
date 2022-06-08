@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  * 
  */
-const char *SUDOKU_DIR = "./sudokus/";
+const char *SUDOKU_DIR;
 
 int saveSudokuToFile(int sudoku[9][9], char *fileName);
 int** loadSudokuFromFile(char *fileName);

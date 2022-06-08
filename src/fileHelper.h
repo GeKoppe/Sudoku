@@ -8,7 +8,9 @@
  * @copyright Copyright (c) 2022
  * 
  */
-const char *FILE_EXTENSION = ".txt";
+const char *FILE_EXTENSION;
 
-int sudokuDirExists(char *dir);
+int checkDirExists(char *dir);
 void buildFilePath(char *fileName, char *pathVariable, char *directory);
+char** getFilesInFolder(char *directory);
+int checkForFileExtension(char *name);

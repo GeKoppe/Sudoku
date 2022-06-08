@@ -12,9 +12,12 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <dirent.h>
 
 #include "sudokuFileHandler.h"
 #include "fileHelper.h"
+
+const char *SUDOKU_DIR = "./sudokus/";
 
 /**
  * @brief Saves passed sudoku to a file. Returns 1 if saving was successfull, returns 0 if an error occured.
@@ -24,13 +27,14 @@
  */
 int saveSudokuToFile(int sudoku[9][9], char *fileName)
 {
-    if (!sudokuDirExists(SUDOKU_DIR))
+    if (!checkDirExists((char *)SUDOKU_DIR))
     {
-        mkdir(SUDOKU_DIR, S_IRWXU);
+        // S_IRWXU allows read and write to the owner; UNIX ONLY
+        mkdir(SUDOKU_DIR);
     }
 
     char filePath[128] = "";
-    buildFilePath(fileName, filePath, SUDOKU_DIR);
+    buildFilePath(fileName, filePath, (char *)SUDOKU_DIR);
 
     FILE *file;
     file = fopen(filePath, "w");
@@ -77,7 +81,7 @@ int** loadSudokuFromFile(char *fileName)
     }
 
     char filePath[128] = "";
-    buildFilePath(fileName, filePath, SUDOKU_DIR);
+    buildFilePath(fileName, filePath, (char *)SUDOKU_DIR);
 
     FILE *file;
     file = fopen(filePath, "r");
