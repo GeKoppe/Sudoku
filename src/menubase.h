@@ -2,7 +2,7 @@ typedef struct menuSelection {
     int main;
     int difficulty;
     int cont;
-    int load;
+    int load; //TODO Index des Spiels im Array reinspieichern
     int help;
 } MenuSelection;
 
