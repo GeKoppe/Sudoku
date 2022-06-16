@@ -102,7 +102,7 @@ int clearScreen(int y, int height, int x, int width) {
 }
 
 /**
- * @brief Setzt den Rahmen für das Spiel
+ * @brief Setzt den Rahmen für das Spiel. Abstrahiert aus der Konsolendemo von Herrn Wichmann.
  * 
  * @param layout GameLayout Objekt. Die Dimensionen des Spielfensters.
  * @return int 0

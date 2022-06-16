@@ -32,5 +32,7 @@ int saveToFile(SaveFile save, char *fileName)
  */
 SaveFile loadFromFile(char *fileName)
 {
-    return NULL;
+    SaveFile file;
+    //return NULL;
+    return file;
 }
