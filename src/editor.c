@@ -4,7 +4,7 @@
 #include "editor.h"
 #include <conio.h>
 
-void saveIntoFile(int generatedSudoku[9][9])
+//void saveIntoFile(int generatedSudoku[9][9], )
 
 int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], int playerPosition[2]) {
 
@@ -15,7 +15,7 @@ int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], in
     }
     generatedSudoku[sudokuPosition[0]][sudokuPosition[1]] = number;
     setCursor(playerPosition[0], playerPosition[1]);
-    saveIntoFile(generatedSudoku);
+    //saveIntoFile(generatedSudoku);
     return 0;
 }
 
@@ -36,6 +36,7 @@ int buildEditor(GameLayout layout){
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
+
 
 
     while (1) {

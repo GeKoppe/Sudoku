@@ -6,7 +6,7 @@
 #include "common.h"
 #include "menulist.h"
 #include "sudokubase.h"
-#include "editor.h" 
+#include "editor.h"
 
 int main() {
     // SMALL_RECT windowSize = {0 , 0 , 500 , 500}; //change the values
@@ -17,14 +17,16 @@ int main() {
     if (initializeFrame(game) == 0) {
          return 0;
     }
-    // //MenuSelection selection = menuWrapper(game);
-    // MenuSelection menu;
-    // do {
-    //     menu = menuWrapper(game);
-    //     if (menu.difficulty != -1) {
-    //         sudokuWrapper(game,menu.difficulty-1); 
-    //     }
-    // } while (menu.main != 5);
+    //MenuSelection selection = menuWrapper(game);
+    MenuSelection menu;
+    do {
+        menu = menuWrapper(game);
+        if (menu.difficulty != -1) {
+            sudokuWrapper(game,menu.difficulty-1); 
+        } else if (menu.editor != -1) {
+            buildEditor(game);
+        }
+    } while (menu.main != 6);
 
     buildEditor(game);
 
