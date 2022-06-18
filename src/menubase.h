@@ -5,6 +5,7 @@ typedef struct menuSelection {
     int difficulty;
     int cont;
     int load; //TODO Index des Spiels im Array reinspieichern
+    int editor;
     int help;
 } MenuSelection;
 

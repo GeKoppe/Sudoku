@@ -148,7 +148,7 @@ int crossedLine(int x, int y, int sudokuPosition[2]) {
             sudokuPosition[1] += x;
         }
         //Überprüfung bei X
-        if (((tempPosition[1] == 2 || tempPosition[1] == 3) && (sudokuPosition[1] == 2 || sudokuPosition[1] == 3)) || ((tempPosition[1] == 5 || tempPosition[1]== 6) && (sudokuPosition[1] == 5 || sudokuPosition[1] == 6)))  {
+        if (((tempPosition[1] == 2 || tempPosition[1] == 3) && (sudokuPosition[1] == 2 || sudokuPosition[1] == 3)) || ((tempPosition[1] == 5 || tempPosition[1]== 6) && (sudokuPosition[1] == 5 || sudokuPosition[1] == 6))) {
             return 1;
         } else {
             return 0;

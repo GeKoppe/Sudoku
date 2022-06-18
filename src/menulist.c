@@ -32,8 +32,10 @@ int showMainMenu(int menuStart, int menuX) {
     setCursor(menuX, menuStart + 4);
     printf("Datei laden");
     setCursor(menuX, menuStart + 6);
-    printf("Hilfe");
+    printf("Sudoku Editor");
     setCursor(menuX, menuStart + 8);
+    printf("Hilfe");
+    setCursor(menuX, menuStart + 10);
     printf("Beenden");
     setCursor(menuX - 4,menuStart);
     printf("x");
@@ -47,7 +49,7 @@ int showMainMenu(int menuStart, int menuX) {
     //Berechne die Auswahl anhand der Koordinaten.
     int returnValue;
     if (selection == -1) {
-        returnValue = 5;
+        returnValue = 6;
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
     }
@@ -291,7 +293,8 @@ MenuSelection menuWrapper(GameLayout layout) {
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX); break;
             case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX); break;
             case 4: selection.help = 1; showHelpMenu(floor(firstLevelY), firstLevelX); break;
-            case 5: finishedSelecting = 1; break;
+            case 5: selection.editor = 1; finishedSelecting = 1; break;
+            case 6: finishedSelecting = 1; break;
             default: finishedSelecting = 1;
         }
 
@@ -300,6 +303,7 @@ MenuSelection menuWrapper(GameLayout layout) {
             selection.help = -1;
             selection.load = -1;
             selection.cont = -1;
+            selection.editor = -1;
             selection.main = showMainMenu(floor(firstLevelY), firstLevelX);
         } else {
             finishedSelecting = 1;
