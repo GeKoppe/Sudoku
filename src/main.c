@@ -26,6 +26,15 @@ int main() {
         } else if (menu.editor != -1) {
             buildEditor(game);
         }
+
+        if (menu.main != 6) {
+            menu.main = -1;
+            menu.editor = -1;
+            menu.difficulty = -1;
+            menu.cont = -1;
+            menu.help = -1;
+            menu.load = -1;
+        }
     } while (menu.main != 6);
 
     buildEditor(game);

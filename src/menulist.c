@@ -41,7 +41,7 @@ int showMainMenu(int menuStart, int menuX) {
     printf("x");
 
     //Starte die Auswahl.
-    int selection = selectMenu(menuStart, menuStart + 8, menuX, skip);
+    int selection = selectMenu(menuStart, menuStart + 10, menuX, skip);
 
     //Lösche die gesamte X-Spalte
     clearScreen(menuStart, 20, menuX- 4, 1);
@@ -277,6 +277,12 @@ int showHelpMenu(int menuY, int menuX) {
 
 MenuSelection menuWrapper(GameLayout layout) {
     MenuSelection selection;
+    selection.main = -1;
+    selection.difficulty = -1;
+    selection.cont= -1;
+    selection.load = -1;
+    selection.editor= -1; 
+    selection.help = -1;
     
     int firstLevelX = layout.topLeftCorner.X + 15;
     int firstLevelY = layout.topLeftCorner.Y + 10;
@@ -285,7 +291,6 @@ MenuSelection menuWrapper(GameLayout layout) {
     int secondLevelY = firstLevelY;
     //_setcursortype(_NOCURSOR);
     selection.main = showMainMenu(floor(firstLevelY), firstLevelX);
-    selection.difficulty = 0;
     int finishedSelecting = 0;
     do {
         switch(selection.main) {
