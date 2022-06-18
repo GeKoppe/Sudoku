@@ -4,6 +4,16 @@
 #include "editor.h"
 #include <conio.h>
 #include "sudokuFileHandler.h"
+#include <string.h>
+
+char* inputFileName(SudokuField sudoku) {
+    setCursor(sudoku.lowerX, sudoku.lowerY + 25);
+    printf("Wie soll die Datei heißen? ");
+    char* name;
+    scanf("%s", name);
+    clearScreen(sudoku.lowerY + 25, 2, sudoku.lowerX, 80);
+    return name;
+}
 
 int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], int playerPosition[2]) {
 
@@ -58,7 +68,7 @@ int buildEditor(GameLayout layout){
 
             case 8: printNumber(0, sudokuPosition, generatedSudoku, playerPosition); break; //DELETE
             case 27: 
-                saveSudokuToFile(generatedSudoku, "test");
+                saveSudokuToFile(generatedSudoku, "test2");
                 return -1; //ESCAPE
             default: break;
         }
