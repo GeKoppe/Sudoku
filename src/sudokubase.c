@@ -123,6 +123,7 @@ int editablePosition(int generatedSudoku[9][9], int sudokuPosition[2]){
 
 int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9], SudokuField sudoku, int sudokuPosition[2], int userSolution[9][9]) {
     if(editablePosition(generatedSudoku, sudokuPosition)){
+        userSolution[sudokuPosition[0]][sudokuPosition[1]] = number;
         wprintf(L"%i", number);
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         wprintf(L"                                          ");
@@ -135,7 +136,7 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
     return 0;
 }
 
-int playGame(SudokuField sudoku, int generatedSudoku[9][9]) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9]) {
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
@@ -169,6 +170,12 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9]) {
             case 8: wprintf(L"."); setCursor(playerPosition[0], playerPosition[1]); break; //DELETE
             case 27: return -1; //ESCAPE
             default: break;
+        }
+
+        if(compareSudokuToSolution(userSolution, sudokuSolution)){
+            setCursor(sudoku.lowerX, sudoku.lowerY + 20);
+            wprintf(L"Das Sudoku wurde geloest.");
+            break;
         }
         // printf("%i", k);
     }
@@ -209,10 +216,12 @@ int sudokuWrapper(GameLayout layout, difficulty diff) {
     printSudoku(sudoku.lowerX, sudoku.lowerY);
 
     int generatedSudoku[9][9];
+    int sudokuSolution[9][9];
     generateSudoku(generatedSudoku, diff);
+    generateSolution(generatedSudoku, sudokuSolution, 1);
     fillSudoku(sudoku, generatedSudoku);
 
-    int returnVal = playGame(sudoku, generatedSudoku);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution);
 
     return 0;
 }

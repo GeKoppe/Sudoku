@@ -273,3 +273,14 @@ void generateHint(int field[9][9], int solution[9][9], int* hintsUsed){
         printf("Your hints are all used up, buckaroo. \n");
     }
 }
+
+int compareSudokuToSolution(int generatedSudoku[9][9], int sudokuSolution[9][9]){
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            if(generatedSudoku[i][j] != sudokuSolution[i][j]){
+                return 0;
+            } 
+        }
+    }
+    return 1;
+}
