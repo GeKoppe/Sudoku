@@ -257,7 +257,7 @@ Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUse
     if(hintsUsed < maxHints){
         for(int i = 0; i < 9; i++){
             for(int j = 0; j < 9; j++){
-                if(generatedSudoku[i][j] == 0 && (userSolution[i][j] != sudokuSolution[i][j])){
+                if(userSolution[i][j] != sudokuSolution[i][j]){
                     posXOfUnsolvedCell[nextArrayPos] = j;
                     posYOfUnsolvedCell[nextArrayPos] = i;
                     nextArrayPos++;
@@ -271,8 +271,8 @@ Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUse
         hint.sudokuY = posYOfUnsolvedCell[randomCellPosition];
         hint.value = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
 
-        userSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
-        generatedSudoku[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
+        userSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = hint.value;
+        generatedSudoku[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = hint.value;
     } else {
         hint.value = -1;
     }

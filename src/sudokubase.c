@@ -159,9 +159,6 @@ int crossedLine(int x, int y, int sudokuPosition[2]) {
             sudokuPosition[0] += y;
         }
     }
-
-    setCursor(61, 15 + 22);
-    printf("Y:%i X:%i", sudokuPosition[0], sudokuPosition[1]);
     return 0;
 }
 
@@ -175,7 +172,9 @@ int crossedLine(int x, int y, int sudokuPosition[2]) {
  */
 int editablePosition(int generatedSudoku[9][9], int sudokuPosition[2]){
     if(generatedSudoku[sudokuPosition[0]][sudokuPosition[1]] != 0){
-        return 0;   } else { 
+        return 0;
+    } 
+        else { 
         return 1;
     }
 }
@@ -235,9 +234,9 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
 
         hint.sudokuX = sudoku.lowerX + 4 + hint.sudokuX*4;
         hint.sudokuY = sudoku.lowerY + 1 + hint.sudokuY*2;
-        if(hint.sudokuX >= 3){
+        if(xCoordinateInSolution >= 3){
             hint.sudokuX += 4;
-            if(hint.sudokuX >= 6){
+            if(xCoordinateInSolution >= 6){
                 hint.sudokuX += 4;
             }
         }
