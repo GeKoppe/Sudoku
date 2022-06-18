@@ -7,8 +7,8 @@
 #include <string.h>
 
 char* inputFileName(SudokuField sudoku) {
-    setCursor(sudoku.lowerX, sudoku.lowerY + 25);
-    printf("Wie soll die Datei heißen? ");
+    setCursor(sudoku.lowerX, sudoku.lowerY + 22);
+    printf("Wie soll die Datei heissen? ");
     char* name;
     scanf("%s", name);
     clearScreen(sudoku.lowerY + 25, 2, sudoku.lowerX, 80);
