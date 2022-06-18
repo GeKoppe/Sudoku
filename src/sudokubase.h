@@ -3,10 +3,10 @@
 #include "common.h"
 
 typedef struct sudokuField {
-    int lowerX;
-    int upperX;
-    int lowerY;
-    int upperY;
+    int lowerX; //LINKE SCHRANKE
+    int upperX; //RECHTE SCHRANKE
+    int lowerY; //OBERE SCHRANKE
+    int upperY; //RECHTE SCHRANKE
 } SudokuField;
 
 int printSudoku(int sudokuX, int sudokuY);
