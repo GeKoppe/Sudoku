@@ -133,7 +133,7 @@ int displayGames(int currentPage) {
 
     // char** files = getFilesInFolder("C:\\Users\\gkoppe\\Desktop\\King of Ordners\\Temp\\Test");
     // for (int i = 5 * currentPage; i < ((currentPage + 1) * 5); i++) {
-    //     printf("%s", files[i]);
+    //     printf("%s", files[i]); 
     // }
 }
 
