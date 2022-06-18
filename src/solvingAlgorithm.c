@@ -139,14 +139,14 @@ int generateSolution(int field[9][9], int solution[9][9], int numberOfSolutionsA
     return foundSolutions;
 }
 
-void printSudoku(int field[9][9]){
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j++){
-            printf("%i ", field[i][j]);
-        }
-        printf("\n");
-    }
-}
+// void printSudoku(int field[9][9]){
+//     for(int i = 0; i < 9; i++){
+//         for(int j = 0; j < 9; j++){
+//             printf("%i ", field[i][j]);
+//         }
+//         printf("\n");
+//     }
+// }
 
 void generateSudoku(int field[9][9], difficulty diff){
     srand(time(NULL));

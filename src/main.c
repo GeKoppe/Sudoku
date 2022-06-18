@@ -1,14 +1,29 @@
-/**
- * @file main.c
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-05-24
- * 
- * @copyright Copyright (c) 2022
- * 
- */
+#include <stdio.h>
+#include <stdlib.h>
+#include <windows.h>
+// #include <conio.h>
+#include "menubase.h"
+#include "common.h"
+#include "menulist.h"
+#include "sudokubase.h"
 
 int main() {
+    SMALL_RECT windowSize = {0 , 0 , 500 , 500}; //change the values
+    SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &windowSize);
+    MenuSelection (*selection[1])() = {menuWrapper};
+    
+    GameLayout game = newGameLayout(10,5,150,40);
+    if (initializeFrame(game) == 0) {
+        return 0;
+    }
+    //MenuSelection selection = menuWrapper(game);
+    
+    MenuSelection menu = (*selection[0])(game);
 
+    sudokuWrapper(game);
+
+    setCursor(0,180);
+
+
+    return 0;
 }
