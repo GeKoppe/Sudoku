@@ -1,3 +1,5 @@
+#ifndef menulist_h
+#define menulist_h
 /**
  * @brief Zeigt das Hauptmenü des Spiels an. Lässt Auswahl über Pfeiltasten, Enter und Escape zu. 
  * 
@@ -47,3 +49,4 @@ int showLoadMenu(int menuStart, int menuX);
 int showHelpMenu(int menuY, int menuX);
 
 MenuSelection menuWrapper(GameLayout layout);
+#endif

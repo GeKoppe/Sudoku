@@ -1,3 +1,5 @@
+#ifndef common_h
+#define common_h
 typedef struct coordinates {
     int X;
     int Y;
@@ -84,3 +86,4 @@ int showHeader(GameLayout layout);
  * @return int 1, falls der initiale Prompt angenommen wurde, 0 falls abgebrochen.
  */
 int initializeFrame(GameLayout layout);
+#endif

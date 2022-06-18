@@ -1,3 +1,5 @@
+#ifndef menubase_h
+#define menubase_h
 typedef struct menuSelection {
     int main;
     int difficulty;
@@ -49,3 +51,4 @@ int cursorCallback(int y, int *playerY, int upperY, int lowerY, int menuX);
  * @return int 0
  */
 int surprise(int *supriseCounter, int input);
+#endif
