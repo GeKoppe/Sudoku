@@ -21,11 +21,9 @@ int main() {
     do {
         menu = menuWrapper(game);
         if (menu.difficulty != -1) {
-            sudokuWrapper(game,menu.difficulty-1);
+            sudokuWrapper(game,menu.difficulty-1); 
         }
-    } while (menu.main != 4);
-
-    setCursor(0,180);
+    } while (menu.main != 5);
 
 
     return 0;
