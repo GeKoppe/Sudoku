@@ -196,15 +196,9 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
         userSolution[sudokuPosition[0]][sudokuPosition[1]] = number;
         //Falls 0 heißt das, das gelöscht werden soll.
         if(number == 0){
-<<<<<<< HEAD
             printf(".");
         } else{
             printf("%i", number);
-=======
-            wprintf(L"."); //TODO potenziell die Zahl aus dem Sudoku rauslöschen
-        } else{ //Ansonsten Printe die Nummer
-            wprintf(L"%i", number);
->>>>>>> c0f6ae71c388504936b0c7c4e2dc3eb388781ee9
         }
         //Leere den Hinweis, dass die Zelle nicht editiert werden kann.
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
