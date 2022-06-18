@@ -8,6 +8,8 @@
 #include "sudokubase.h"
 
 int main() {
+    SMALL_RECT windowSize = {0 , 0 , 500 , 500}; //change the values
+    SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &windowSize);
     MenuSelection (*selection[1])() = {menuWrapper};
     
     GameLayout game = newGameLayout(10,5,150,40);
@@ -19,6 +21,8 @@ int main() {
     MenuSelection menu = (*selection[0])(game);
 
     sudokuWrapper(game);
+
+    setCursor(0,180);
 
 
     return 0;

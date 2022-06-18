@@ -128,13 +128,13 @@ int showContinuationMenu(int menuStart, int menuX) {
 
 int displayGames(int currentPage) {
     //DEBUGGING PURPOSES
-    // srand(time(NULL));
-    // return ((rand() % 5) + 1);
+    srand(time(NULL));
+    return ((rand() % 5) + 1);
 
-    char** files = getFilesInFolder("C:\\Users\\gkoppe\\Desktop\\King of Ordners\\Temp\\Test");
-    for (int i = 5 * currentPage; i < ((currentPage + 1) * 5); i++) {
-        printf("%s", files[i]);
-    }
+    // char** files = getFilesInFolder("C:\\Users\\gkoppe\\Desktop\\King of Ordners\\Temp\\Test");
+    // for (int i = 5 * currentPage; i < ((currentPage + 1) * 5); i++) {
+    //     printf("%s", files[i]);
+    // }
 }
 
 /**
@@ -256,19 +256,17 @@ int showHelpMenu(int menuY, int menuX) {
     printf("Spiel fortsetzen: Das letzte gespielte Spiel wird wieder aufgenommen");
     setCursor(menuX, menuY + 6);
     printf("Datei laden: Die ersten 50 Spiele im Ordner werden angezeigt, nach Auswahl wird das entsprechende Spiel gestartet."); //TODO: Den Ordnerpfad angeben
-    setCursor(menuX, menuY + 8);
-    printf("Und nicht vergessen: It's dangerous to go alone.");
-    setCursor(menuX, menuY + 12);
+    setCursor(menuX, menuY + 10);
     printf("Ok");
 
-    setCursor(menuX - 2, menuY + 12);
+    setCursor(menuX - 2, menuY + 10);
     printf("x");
 
     //Auswahl
     while (1) {
         switch (getch()) {
-            case 13: clearScreen(menuY - 2,25, menuX-4, 120);; return 1; break;
-            case 27: clearScreen(menuY - 2,25, menuX-4, 120);; return 1; break;
+            case 13: clearScreen(menuY - 2,25, menuX-4, 120); return 1; break;
+            case 27: clearScreen(menuY - 2,25, menuX-4, 120); return 1; break;
         }
     }
     //x-Spalte löschen
@@ -278,7 +276,7 @@ int showHelpMenu(int menuY, int menuX) {
 MenuSelection menuWrapper(GameLayout layout) {
     MenuSelection selection;
     
-    int firstLevelX = layout.topLeftCorner.X + 25;
+    int firstLevelX = layout.topLeftCorner.X + 15;
     int firstLevelY = layout.topLeftCorner.Y + 10;
 
     int secondLevelX = firstLevelX + 40;
@@ -306,11 +304,6 @@ MenuSelection menuWrapper(GameLayout layout) {
         } else {
             finishedSelecting = 1;
         }
-
-        //Literally no idea, what I wrote that for.
-        // if (finishedSelecting == 1) {
-        //     continue;
-        // }
 
     } while (finishedSelecting == 0);
 

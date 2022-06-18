@@ -154,7 +154,7 @@ int showFooter(GameLayout layout) {
  */
 int showHeader(GameLayout layout) {
     int width = layout.bottomRightCorner.X - layout.topLeftCorner.X;
-    int startX = floor(width / 2) - 2;
+    int startX = floor(width / 2);
     setCursor(startX, layout.topLeftCorner.Y + 4);
     printf("\xb0\xb1\xb2 Sudoku \xb2\xb1\xb0");
     return 0;
