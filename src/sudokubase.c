@@ -52,7 +52,7 @@ int printSudoku(int sudokuX, int sudokuY) {
     wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
     setCursor(sudokuX, sudokuY + 18);
     wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
-    _setmode(_fileno(stdout), _O_BINARY);
+    _setmode(_fileno(stdout), _O_TEXT);
     return 0;
 }
 
