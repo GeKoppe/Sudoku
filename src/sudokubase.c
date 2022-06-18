@@ -175,8 +175,7 @@ int crossedLine(int x, int y, int sudokuPosition[2]) {
  */
 int editablePosition(int generatedSudoku[9][9], int sudokuPosition[2]){
     if(generatedSudoku[sudokuPosition[0]][sudokuPosition[1]] != 0){
-        return 0;
-    } else { 
+        return 0;   } else { 
         return 1;
     }
 }
