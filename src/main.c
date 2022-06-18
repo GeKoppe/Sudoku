@@ -20,7 +20,7 @@ int main() {
     
     MenuSelection menu = (*selection[0])(game);
 
-    sudokuWrapper(game);
+    sudokuWrapper(game,menu.difficulty-1);
 
     setCursor(0,180);
 

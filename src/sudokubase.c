@@ -9,6 +9,7 @@
 #include "timeHelper.h"
 // #include <windows.h>
 #include <conio.h>
+#include "solvingAlgorithm.h"
 
 int printSudoku(int sudokuX, int sudokuY) {
     _setmode(_fileno(stdout), _O_U16TEXT);
@@ -112,16 +113,40 @@ int crossedLine(int x, int y, int sudokuPosition[2]) {
     return 0;
 }
 
-int numberCallback(int number, int playerPosition[2]) {
-    wprintf(L"%i", number);
-    setCursor(playerPosition[0], playerPosition[1]);
+int editablePosition(int generatedSudoku[9][9], int sudokuPosition[2]){
+    if(generatedSudoku[sudokuPosition[0]][sudokuPosition[1]] != 0){
+        return 0;
+    } else { 
+        return 1;
+    }
+}
+
+int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9], SudokuField sudoku, int sudokuPosition[2], int userSolution[9][9]) {
+    if(editablePosition(generatedSudoku, sudokuPosition)){
+        wprintf(L"%i", number);
+        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
+        wprintf(L"                                          ");
+        setCursor(playerPosition[0], playerPosition[1]);
+    } else {
+        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
+        wprintf(L"Diese Zelle kann nicht bearbeitet werden.");
+        setCursor(playerPosition[0], playerPosition[1]);
+    }
     return 0;
 }
 
-int playGame(SudokuField sudoku) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9]) {
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
+
+    int userSolution[9][9];
+
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            userSolution[i][j] = generatedSudoku[i][j];
+        }
+    }
 
     while (1) {
         switch (getch()) {
@@ -130,15 +155,16 @@ int playGame(SudokuField sudoku) {
             case 75: sudokuCursorCallback(-4, 0, playerPosition, sudoku, crossedLine(-1,0,sudokuPosition)); break;//LEFT
             case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition)); break;//RIGHT
             
-            case 49: numberCallback(1, playerPosition); break;
-            case 50: numberCallback(2, playerPosition); break;
-            case 51: numberCallback(3, playerPosition); break;
-            case 52: numberCallback(4, playerPosition); break;
-            case 53: numberCallback(5, playerPosition); break;
-            case 54: numberCallback(6, playerPosition); break;
-            case 55: numberCallback(7, playerPosition); break;
-            case 56: numberCallback(8, playerPosition); break;
-            case 57: numberCallback(9, playerPosition); break;
+
+            case 49: numberCallback(1, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 50: numberCallback(2, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 51: numberCallback(3, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 52: numberCallback(4, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 53: numberCallback(5, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 54: numberCallback(6, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 55: numberCallback(7, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 56: numberCallback(8, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
+            case 57: numberCallback(9, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break;
 
             case 8: wprintf(L"."); setCursor(playerPosition[0], playerPosition[1]); break; //DELETE
             case 27: return -1; //ESCAPE
@@ -148,14 +174,45 @@ int playGame(SudokuField sudoku) {
     }
 }
 
+//HIER BEGINNT DER GUTE CODE
 
-int sudokuWrapper(GameLayout layout) {
+void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
+    int cursorX = sudoku.lowerX;
+    int cursorY = sudoku.lowerY + 1;
+
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            if(j == 3 || j == 6){
+                cursorX += 8;
+            } else{
+                cursorX += 4;
+            }
+            setCursor(cursorX, cursorY);
+            if(generatedSudoku[i][j] == 0){
+                wprintf(L".");
+            } else{
+                wprintf(L"%i", generatedSudoku[i][j]);
+            }
+        }
+        cursorX = sudoku.lowerX;
+        cursorY += 2;
+    }
+}
+
+//HIER ENDET DER GUTE CODE
+
+int sudokuWrapper(GameLayout layout, difficulty diff) {
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
     clearScreen(sudokuY,15, sudokuX-36, 40);
     printSudoku(sudoku.lowerX, sudoku.lowerY);
-    int returnVal = playGame(sudoku);
+
+    int generatedSudoku[9][9];
+    generateSudoku(generatedSudoku, diff);
+    fillSudoku(sudoku, generatedSudoku);
+
+    int returnVal = playGame(sudoku, generatedSudoku);
 
     return 0;
 }
