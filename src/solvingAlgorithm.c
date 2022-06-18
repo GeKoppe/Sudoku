@@ -246,32 +246,39 @@ void generateSudoku(int field[9][9], difficulty diff){
     }
 }
 
-void generateHint(int field[9][9], int solution[9][9], int* hintsUsed){
-    int posXOfZeroCell[81];
-    int posYOfZeroCell[81];
+Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9]){
+    int posXOfUnsolvedCell[81];
+    int posYOfUnsolvedCell[81];
+    Hint hint;
     int nextArrayPos = 0;
-    if(*hintsUsed < 3){
+    if(hintsUsed < maxHints){
         for(int i = 0; i < 9; i++){
             for(int j = 0; j < 9; j++){
-                if(field[i][j] == 0){
-                    posXOfZeroCell[nextArrayPos] = j;
-                    posYOfZeroCell[nextArrayPos] = i;
+                if(generatedSudoku[i][j] == 0 && (userSolution[i][j] != sudokuSolution[i][j])){
+                    posXOfUnsolvedCell[nextArrayPos] = j;
+                    posYOfUnsolvedCell[nextArrayPos] = i;
                     nextArrayPos++;
                 }
             }
         }
         if(nextArrayPos == 0){
-            printf("The sudoku is already solved. \n");
+            printf("The sudoku is already solved.\n");
         } else {
             srand(time(NULL));
             int randomCellPosition = rand() % nextArrayPos;
-            field[posYOfZeroCell[randomCellPosition]][posXOfZeroCell[randomCellPosition]] = solution[posYOfZeroCell[randomCellPosition]][posXOfZeroCell[randomCellPosition]];
-            ++*hintsUsed;
-            int check = 0;
+
+            hint.sudokuX = posXOfUnsolvedCell[randomCellPosition];
+            hint.sudokuY = posYOfUnsolvedCell[randomCellPosition];
+            hint.value = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
+
+            userSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
+            generatedSudoku[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
         }
     } else {
         printf("Your hints are all used up, buckaroo. \n");
+        hint.value = -1;
     }
+    return hint;
 }
 
 int compareSudokuToSolution(int generatedSudoku[9][9], int sudokuSolution[9][9]){
