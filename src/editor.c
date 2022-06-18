@@ -5,13 +5,15 @@
 #include <conio.h>
 #include "sudokuFileHandler.h"
 #include <string.h>
+#include <stdlib.h>
 
 char* inputFileName(SudokuField sudoku) {
     setCursor(sudoku.lowerX, sudoku.lowerY + 22);
-    printf("Wie soll die Datei heissen? ");
-    char* name;
-    scanf("%s", name);
-    clearScreen(sudoku.lowerY + 25, 2, sudoku.lowerX, 80);
+    printf("Wie soll die Datei heissen? (Ohne Dateiendung bitte und max. 30 Zeichen))");
+    setCursor(sudoku.lowerX, sudoku.lowerY + 24);
+    char* name = (char*) malloc(30);
+    scanf("%30s", name);
+    clearScreen(sudoku.lowerY + 20, 10, sudoku.lowerX, 75);
     return name;
 }
 
@@ -29,6 +31,7 @@ int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], in
 }
 
 int buildEditor(GameLayout layout){
+    int firstSave = 1;
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
@@ -67,8 +70,11 @@ int buildEditor(GameLayout layout){
             case 57: printNumber(9, sudokuPosition, generatedSudoku, playerPosition); break; //9
 
             case 8: printNumber(0, sudokuPosition, generatedSudoku, playerPosition); break; //DELETE
-            case 27: 
-                saveSudokuToFile(generatedSudoku, "test2");
+            case 27:
+                if(firstSave){
+                    saveSudokuToFile(generatedSudoku, inputFileName(sudoku));
+                    firstSave = 0;
+                }
                 return -1; //ESCAPE
             default: break;
         }
