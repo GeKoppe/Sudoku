@@ -8,7 +8,10 @@
  * @copyright Copyright (c) 2022
  * 
  */
-const char *SUDOKU_DIR;
+
+#ifndef sudokuFileHandler_h
+#define sudokuFileHandler_h
 
 int saveSudokuToFile(int sudoku[9][9], char *fileName);
 int** loadSudokuFromFile(char *fileName);
+#endif

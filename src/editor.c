@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include "editor.h"
 #include <conio.h>
-
-//void saveIntoFile(int generatedSudoku[9][9], )
+#include "sudokuFileHandler.h"
 
 int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], int playerPosition[2]) {
 
@@ -15,7 +14,7 @@ int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], in
     }
     generatedSudoku[sudokuPosition[0]][sudokuPosition[1]] = number;
     setCursor(playerPosition[0], playerPosition[1]);
-    //saveIntoFile(generatedSudoku);
+
     return 0;
 }
 
@@ -58,7 +57,9 @@ int buildEditor(GameLayout layout){
             case 57: printNumber(9, sudokuPosition, generatedSudoku, playerPosition); break; //9
 
             case 8: printNumber(0, sudokuPosition, generatedSudoku, playerPosition); break; //DELETE
-            case 27: return -1; //ESCAPE
+            case 27: 
+                saveSudokuToFile(generatedSudoku, "test");
+                return -1; //ESCAPE
             default: break;
         }
     }

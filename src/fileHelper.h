@@ -8,9 +8,11 @@
  * @copyright Copyright (c) 2022
  * 
  */
-const char *FILE_EXTENSION;
+#ifndef fileHelper_h
+#define fileHelper_h
 
 int checkDirExists(char *dir);
 void buildFilePath(char *fileName, char *pathVariable, char *directory);
 char** getFilesInFolder(char *directory);
 int checkForFileExtension(char *name);
+#endif

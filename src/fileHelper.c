@@ -14,8 +14,6 @@
 #include <errno.h>
 #include "fileHelper.h"
 
-const char *FILE_EXTENSION = ".txt";
-
 /**
  * @brief Checks if a dir exists. Return 1 if it exists, 0 if it doesn't;
  * Code from: https://stackoverflow.com/a/12510903
@@ -46,7 +44,7 @@ void buildFilePath(char *fileName, char *pathVariable, char *directory)
 {
     strcat(pathVariable, directory);
     strcat(pathVariable, fileName);
-    strcat(pathVariable, FILE_EXTENSION);
+    strcat(pathVariable, ".txt");
 }
 
 /**
@@ -57,14 +55,14 @@ void buildFilePath(char *fileName, char *pathVariable, char *directory)
  */
 int checkForFileExtension(char *name)
 {
-    int lenExtension = strlen(FILE_EXTENSION);
+    int lenExtension = strlen(".txt");
     char buffer[lenExtension];
     for (int i = 1; i <= lenExtension; i++)
     {
         buffer[lenExtension-i] = name[strlen(name)-i];
     }
 
-    if (strcmp(buffer, FILE_EXTENSION))
+    if (strcmp(buffer, ".txt"))
     {
         return 0;
     }

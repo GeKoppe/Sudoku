@@ -8,6 +8,9 @@
  * @copyright Copyright (c) 2022
  * 
  */
+
+#ifndef saveFileHandler_h
+#define saveFileHandler_h
 #include "timeHelper.h"
 
 const char *SAVES_DIR;
@@ -21,3 +24,4 @@ typedef struct {
 
 int saveToFile(SaveFile save, char *fileName);
 SaveFile loadFromFile(char *fileName);
+#endif
