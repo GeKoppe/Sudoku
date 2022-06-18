@@ -1,5 +1,3 @@
-typedef struct sudokuInput {
-    int cellRow;
-    int cellColumn;
-    int number;
-} Input;
+// #include "common.h"
+int printSudoku(int sudokuX, int sudokuY);
+int sudokuWrapper(GameLayout layout);

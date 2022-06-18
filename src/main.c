@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include <conio.h>
+// #include <conio.h>
 #include "menubase.h"
 #include "common.h"
 #include "menulist.h"
+#include "sudokubase.h"
 
 int main() {
     MenuSelection (*selection[1])() = {menuWrapper};
@@ -17,6 +18,7 @@ int main() {
     
     MenuSelection menu = (*selection[0])(game);
 
+    sudokuWrapper(game);
 
 
     return 0;

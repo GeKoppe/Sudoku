@@ -125,7 +125,7 @@ char** getFilesInFolder(char *directory)
                 continue;
             }
 
-            printf("Position: %d, %s\n", position, dir->d_name);
+            // printf("Position: %d, %s\n", position, dir->d_name);
 
             fileNameList[position] = dir->d_name;
 
@@ -136,7 +136,7 @@ char** getFilesInFolder(char *directory)
     // DEBUG ONLY
     for (int i = 0; i < fileAmount; i++)
     {
-        printf("Position: %d, %s\n", i, fileNameList[i]);
+        // printf("Position: %d, %s\n", i, fileNameList[i]);
     }
 
     return fileNameList;

@@ -8,6 +8,7 @@
 #include "common.h"
 #include "menubase.h"
 #include "menulist.h"
+#include "fileHelper.h"
 
 
 /**
@@ -127,8 +128,13 @@ int showContinuationMenu(int menuStart, int menuX) {
 
 int displayGames(int currentPage) {
     //DEBUGGING PURPOSES
-    srand(time(NULL));
-    return ((rand() % 5) + 1);
+    // srand(time(NULL));
+    // return ((rand() % 5) + 1);
+
+    char** files = getFilesInFolder("C:\\Users\\gkoppe\\Desktop\\King of Ordners\\Temp\\Test");
+    for (int i = 5 * currentPage; i < ((currentPage + 1) * 5); i++) {
+        printf("%s", files[i]);
+    }
 }
 
 /**
