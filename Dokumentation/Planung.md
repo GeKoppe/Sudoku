@@ -3,10 +3,10 @@
 
 # Aufteilung Aufgaben
 ## Thilo
-- Backend
-- Sichere Bearbeitung von Benutzereingaben (Anforderung 4)
-- Generator / Lösungsalgorithmus
-- Lösungshinweis
+- Backend (x)
+- Sichere Bearbeitung von Benutzereingaben (Anforderung 4) (x)
+- Generator / Lösungsalgorithmus (x)
+- Lösungshinweis (x)
 
 
 ## Jannik

@@ -261,7 +261,7 @@ void generateHint(int field[9][9], int solution[9][9], int* hintsUsed){
             }
         }
         if(nextArrayPos == 0){
-            printf("The sudoku is already solved.");
+            printf("The sudoku is already solved. \n");
         } else {
             srand(time(NULL));
             int randomCellPosition = rand() % nextArrayPos;
@@ -270,6 +270,6 @@ void generateHint(int field[9][9], int solution[9][9], int* hintsUsed){
             int check = 0;
         }
     } else {
-        printf("Your hints are all used up, buckaroo.");
+        printf("Your hints are all used up, buckaroo. \n");
     }
 }
