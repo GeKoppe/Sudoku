@@ -199,7 +199,9 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
         if(number == 0){
             printf(".");
         } else{
+            setColor(0x09);
             printf("%i", number);
+            setColor(0x0F);
         }
         //Leere den Hinweis, dass die Zelle nicht editiert werden kann.
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
