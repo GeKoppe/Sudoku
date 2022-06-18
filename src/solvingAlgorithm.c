@@ -264,19 +264,15 @@ Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUse
                 }
             }
         }
-        if(nextArrayPos == 0){
-            printf("The sudoku is already solved.\n");
-        } else {
-            srand(time(NULL));
-            int randomCellPosition = rand() % nextArrayPos;
+        srand(time(NULL));
+        int randomCellPosition = rand() % nextArrayPos;
 
-            hint.sudokuX = posXOfUnsolvedCell[randomCellPosition];
-            hint.sudokuY = posYOfUnsolvedCell[randomCellPosition];
-            hint.value = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
+        hint.sudokuX = posXOfUnsolvedCell[randomCellPosition];
+        hint.sudokuY = posYOfUnsolvedCell[randomCellPosition];
+        hint.value = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
 
-            userSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
-            generatedSudoku[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
-        }
+        userSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
+        generatedSudoku[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
     } else {
         hint.value = -1;
     }
