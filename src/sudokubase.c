@@ -173,7 +173,8 @@ int crossedLine(int x, int y, int sudokuPosition[2]) {
 int editablePosition(int generatedSudoku[9][9], int sudokuPosition[2]){
     if(generatedSudoku[sudokuPosition[0]][sudokuPosition[1]] != 0){
         return 0;
-    } else { 
+    } 
+        else { 
         return 1;
     }
 }
@@ -202,14 +203,13 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
         }
         //Leere den Hinweis, dass die Zelle nicht editiert werden kann.
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        clearScreen(sudoku.lowerY + 20, 20, sudoku.lowerX, 45);
-        setCursor(playerPosition[0], playerPosition[1]);
+        clearScreen(sudoku.lowerY + 20, 5, sudoku.lowerX, 45);
     } else {
         //Hinweis, dass die Zelle nicht editiert werden kann.
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         wprintf(L"Diese Zelle kann nicht bearbeitet werden.");
-        setCursor(playerPosition[0], playerPosition[1]);
     }
+    setCursor(playerPosition[0], playerPosition[1]);
     return 0;
 }
 
@@ -229,18 +229,23 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
     //Generiere den Hint
     Hint hint = generateHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku);
     if(hint.value != -1){
-        if(hint.sudokuX >= 3){
+        int xCoordinateInSolution = hint.sudokuX;
+        int yCoordinateInSolution = hint.sudokuY;
+
+        hint.sudokuX = sudoku.lowerX + 4 + hint.sudokuX*4;
+        hint.sudokuY = sudoku.lowerY + 1 + hint.sudokuY*2;
+        if(xCoordinateInSolution >= 3){
             hint.sudokuX += 4;
-            if(hint.sudokuX >= 6){
+            if(xCoordinateInSolution >= 6){
                 hint.sudokuX += 4;
             }
         }
-        setCursor(sudoku.lowerX + 4 + hint.sudokuX*4, sudoku.lowerY + 1 + hint.sudokuY*2);
-        printf("%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
+        setCursor(hint.sudokuX, hint.sudokuY);
+        printf("%i", sudokuSolution[yCoordinateInSolution][xCoordinateInSolution]);
+        setCursor(sudoku.lowerX, sudoku.lowerY + 22);
         printf("Tipp generiert.");
     } else {
-        setCursor(sudoku.lowerX, sudoku.lowerY + 23);
+        setCursor(sudoku.lowerX, sudoku.lowerY + 22);
         printf("Your hints are all used up, buckaroo.");
     }
     setCursor(playerPosition[0], playerPosition[1]);
