@@ -125,12 +125,12 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
     if(editablePosition(generatedSudoku, sudokuPosition)){
         userSolution[sudokuPosition[0]][sudokuPosition[1]] = number;
         if(number == 0){
-            wprintf(L".");
+            printf(".");
         } else{
-            wprintf(L"%i", number);
+            printf("%i", number);
         }
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        wprintf(L"                                          ");
+        clearScreen(sudoku.lowerY + 20, 20, sudoku.lowerX, 45);
         setCursor(playerPosition[0], playerPosition[1]);
     } else {
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
@@ -150,11 +150,14 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
             }
         }
         setCursor(sudoku.lowerX + 4 + hint.sudokuX*4, sudoku.lowerY + 1 + hint.sudokuY*2);
-        wprintf(L"%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
-        setCursor(sudoku.lowerX, sudoku.lowerY + 25);
-        wprintf(L"Tipp generiert.");
-        setCursor(playerPosition[0], playerPosition[1]);
+        printf("%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
+        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
+        printf("Tipp generiert.");
+    } else {
+        setCursor(sudoku.lowerX, sudoku.lowerY + 23);
+        printf("Your hints are all used up, buckaroo.");
     }
+    setCursor(playerPosition[0], playerPosition[1]);
 }
 
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9]) {
@@ -203,7 +206,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
         if(compareSudokuToSolution(userSolution, sudokuSolution)){
             setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-            wprintf(L"Das Sudoku wurde geloest.");
+            printf("Das Sudoku wurde geloest.");
             break;
         }
         // printf("%i", k);
@@ -223,9 +226,9 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
             }
             setCursor(cursorX, cursorY);
             if(generatedSudoku[i][j] == 0){
-                wprintf(L".");
+                printf(".");
             } else{
-                wprintf(L"%i", generatedSudoku[i][j]);
+                printf("%i", generatedSudoku[i][j]);
             }
         }
         cursorX = sudoku.lowerX;

@@ -250,6 +250,9 @@ Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUse
     int posXOfUnsolvedCell[81];
     int posYOfUnsolvedCell[81];
     Hint hint;
+    hint.sudokuX = 0;
+    hint.sudokuY = 0;
+    hint.value = 0;
     int nextArrayPos = 0;
     if(hintsUsed < maxHints){
         for(int i = 0; i < 9; i++){
@@ -275,7 +278,6 @@ Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUse
             generatedSudoku[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]] = sudokuSolution[posYOfUnsolvedCell[randomCellPosition]][posXOfUnsolvedCell[randomCellPosition]];
         }
     } else {
-        printf("Your hints are all used up, buckaroo. \n");
         hint.value = -1;
     }
     return hint;
