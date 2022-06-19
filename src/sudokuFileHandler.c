@@ -28,8 +28,7 @@ int saveSudokuToFile(int sudoku[9][9], char *fileName)
 {
     if (!checkDirExists("./sudokus/"))
     {
-        // S_IRWXU allows read and write to the owner; UNIX ONLY
-        mkdir("./sudokus/");
+        createDir("./sudokus/");
     }
 
     char filePath[128] = "";
@@ -67,17 +66,19 @@ int saveSudokuToFile(int sudoku[9][9], char *fileName)
 /**
  * @brief Loads sudoku from file. Returns pointer of 2d array. Returns NULL if file couldn't be loaded.
  * 
- * @return int**
+ * @return SaveFile
  */
-int** loadSudokuFromFile(char *fileName)
+SaveFile loadSudokuFromFile(char *fileName)
 {
+    SaveFile saveFile;
+
     // Manual allocation of the 2d array, so a pointer can be returned from this function
-    int **sudoku;
-    sudoku = malloc(9*sizeof(int *));
-    for (int i = 0; i < 9; i++)
-    {
-        sudoku[i] = malloc(9*sizeof(int));
-    }
+    // int **sudoku;
+    // sudoku = malloc(9*sizeof(int *));
+    // for (int i = 0; i < 9; i++)
+    // {
+    //     sudoku[i] = malloc(9*sizeof(int));
+    // }
 
     char filePath[128] = "";
     buildFilePath(fileName, filePath, "./sudokus/");
@@ -87,7 +88,8 @@ int** loadSudokuFromFile(char *fileName)
 
     if (file == NULL)
     {
-        return NULL;
+        saveFile.errorHandler = 0;
+        return saveFile;
     }
 
     int result = 0;
@@ -98,20 +100,22 @@ int** loadSudokuFromFile(char *fileName)
         {
             if (j == 8)
             {
-                result += fscanf(file, "%d\n", &sudoku[i][j]);
+                result += fscanf(file, "%d\n", saveFile.sudoku[i][j]);
                 continue;
             } 
-            result += fscanf(file, "%d,", &sudoku[i][j]);
+            result += fscanf(file, "%d,", saveFile.sudoku[i][j]);
         }
     }
 
     if (result != 81 || ferror(file))
     {
-        printf("File was not loaded correctly!");
-        return NULL;
+        saveFile.errorHandler = 0;
+        return saveFile;
     }
 
     fclose(file);
     
-    return sudoku;
+    saveFile.errorHandler = 1;
+
+    return saveFile;
 }

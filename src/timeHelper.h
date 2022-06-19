@@ -8,9 +8,12 @@
  * @copyright Copyright (c) 2022
  * 
  */
+#ifndef timeHelper_h
+#define timeHelper_h
+
 #include <time.h>
 
-typedef struct{
+typedef struct stopWatch {
     clock_t startTime;
     clock_t endTime;
     double timeInSeconds;
@@ -21,3 +24,5 @@ StopWatch startTimer();
 void stopTimer(StopWatch *watch);
 
 double getTimeInSeconds(StopWatch *watch);
+
+#endif

@@ -12,6 +12,8 @@
 #ifndef sudokuFileHandler_h
 #define sudokuFileHandler_h
 
+#include "fileHelper.h"
+
 int saveSudokuToFile(int sudoku[9][9], char *fileName);
-int** loadSudokuFromFile(char *fileName);
+SaveFile loadSudokuFromFile(char *fileName);
 #endif

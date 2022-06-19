@@ -11,17 +11,8 @@
 
 #ifndef saveFileHandler_h
 #define saveFileHandler_h
-#include "timeHelper.h"
-
-const char *SAVES_DIR;
-
-typedef struct {
-    int sudoku[9][9];
-    char *name;
-    char *difficulty;
-    StopWatch timer;
-} SaveFile;
+#include "fileHelper.h"
 
 int saveToFile(SaveFile save, char *fileName);
-SaveFile loadFromFile(char *fileName);
+SaveFile loadSaveFromFile(char *fileName);
 #endif

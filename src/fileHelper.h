@@ -11,10 +11,19 @@
 #ifndef fileHelper_h
 #define fileHelper_h
 
+#include "timeHelper.h"
+
 typedef struct {
     char* fileNameList[50];
     int fileAmount;
 } SudokuDir;
+
+typedef struct {
+    int sudoku[9][9];
+    int difficulty;
+    StopWatch timer;
+    int errorHandler;
+} SaveFile;
 
 int checkDirExists(char *dir);
 void createDir(char *directory);
