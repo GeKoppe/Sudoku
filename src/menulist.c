@@ -301,7 +301,7 @@ MenuSelection menuWrapper(GameLayout layout) {
             case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX); break;
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX); break;
             case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX); break;
-            case 5: selection.help = 1; system("start ./Anleitung.html")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
+            case 5: selection.help = 1; system("start ./Misc/Anleitung.pdf")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
             case 4: selection.editor = 1; finishedSelecting = 1; break;
             case 6: finishedSelecting = 1; break;
             default: finishedSelecting = 1;

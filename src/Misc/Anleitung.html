@@ -2,7 +2,7 @@
     <html>
     <head>
         <meta charset="UTF-8">
-        <title>Spielanleitung</title>
+        <title>Men&uuml;</title>
         <style>
 /* From extension vscode.github */
 /*---------------------------------------------------------------------------------------------
@@ -44,14 +44,13 @@
         
     </head>
     <body class="vscode-body vscode-light">
-        <h1 id="spielanleitung">Spielanleitung</h1>
-<h1 id="menü">Menü</h1>
+        <h1 id="menü">Menü</h1>
 <p>Im Menü gibt es verschiedene Optionen, die man auswählen kann. Die Navigation erfolgt über die Pfeil-Tasten, die Enter-Taste (bestätigen) und die Escape-Taste (Abbrechen / beenden).</p>
 <h2 id="neues-spiel">Neues Spiel</h2>
 <p>Wählt man &quot;Neues Spiel&quot;, erscheint ein Menü mit einer Auswahl von Schwierigkeiten:</p>
-<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\Dokumentation\Bilder\NeuesSpiel.png" alt="NeuesSpiel" style="border:2px solid black" title="NeuesSpiel" /></figure>
+<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\src\Misc\Bilder\NeuesSpiel.png" alt="NeuesSpiel" style="border:2px solid black" title="NeuesSpiel" /></figure>
 Nach Auswahl wird automatisch ein zufälliges Sudoku generiert (im Bild beispielsweise ein leichtes):
-<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\Dokumentation\Bilder\LeichtesSpiel.png" alt="LeichtesSpiel" style="border:2px solid black" title="LeichtesSpiel" /></figure>
+<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\src\Misc\Bilder\LeichtesSpiel.png" alt="LeichtesSpiel" style="border:2px solid black" title="LeichtesSpiel" /></figure>
 Die Schwierigkeitsgrade bedeuten:
 <ul>
 <li><em>Leicht</em>: 20 Zahlen fehlen</li>
@@ -60,19 +59,33 @@ Die Schwierigkeitsgrade bedeuten:
 </ul>
 <h2 id="spiel-fortsetzen">Spiel fortsetzen</h2>
 <p>Zunächst erfolgt eine Abfrage, ob das letzte gespeicherte Spiel geladen werden soll:</p>
-<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\Dokumentation\Bilder\Fortsetzen.png" alt="Fortsetzen" style="border:2px solid black" title="Fortsetzen" /></figure>
+<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\src\Misc\Bilder\Fortsetzen.png" alt="Fortsetzen" style="border:2px solid black" title="Fortsetzen" /></figure>
 Wird diese mit ja bestätigt, wird das letzte Spiel geladen.
-<h2 id="datei-laden">Datei laden</h2>
-<p>Eine Liste von 50 gespeicherten Spielen wird angezeigt. Nach Auswahl wird das entsprechende Spiel geladen.</p>
+## Datei laden
+Eine Liste von 50 gespeicherten Spielen wird angezeigt. Nach Auswahl wird das entsprechende Spiel geladen.
 <h2 id="sudoku-editor">Sudoku Editor</h2>
 <p>Ein leeres Sudoku wird angezeigt, in das der / die SpielerIn ein eigenes Spiel schreiben kann:</p>
-<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\Dokumentation\Bilder\Editor.png" alt="Editor" style="border:2px solid black" title="Editor" /></figure>
+<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\src\Misc\Bilder\Editor.png" alt="Editor" style="border:2px solid black" title="Editor" /></figure>
 Wenn das Spiel eingetragen ist und der / die SpielerIn Escape drückt, muss er / sie noch einen Namen eingeben:
-<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\Dokumentation\Bilder\EditorName.png" alt="EditorName" style="border:2px solid black" title="EditorName" /></figure>
+<figure><img src="file:///c:\Users\gkoppe\Desktop\King of Ordners\Git Repos\Sudoku\Sudoku\src\Misc\Bilder\EditorName.png" alt="EditorName" style="border:2px solid black" title="EditorName" /></figure>
 Das eingegebene Sudoku wird nach Eingabe durch Enter als Datei abgespeichert und man gelangt wieder in das Hauptmenü.
-<h1 id="spielmodi">Spielmodi</h1>
 <h1 id="sudoku-regeln">Sudoku Regeln</h1>
+<p>Das Spielfeld ist korrekt mit Zahlen von 1-9 zu füllen. Folgende Regeln müssen hierfür beachtet werden:</p>
+<ul>
+<li>Jede Zahl (1-9) darf in jeder Zeile nur ein einziges Mal vorkommen.</li>
+<li>Jede Zahl (1-9) darf in jeder Spalte nur ein einziges Mal vorkommen.</li>
+<li>Jede Zahl (1-9) darf in jedem umrandeten 3x3-Block nur einmal vorkommen.</li>
+</ul>
 <h1 id="sudoku-spielen">Sudoku spielen</h1>
+<ul>
+<li>Der Cursor wird mit den Pfeiltasten bewegt.</li>
+<li>Eine Zahl wird über die Eingabe einer der Zahlen von 1-9 getätigt.</li>
+<li>Durch drücken von Escape wird das Spiel beendet.</li>
+<li>Durch drücken von <strong>H</strong> wird ein Hinweis generiert. Es können maximal 3 Hinweise generiert werden.</li>
+<li>Vom System gefüllte Zellen können nicht editiert werden.</li>
+<li>Die eigenen Eingaben sind in blauer Schrift.</li>
+<li>Die Hinweise sind in roter Schrift.</li>
+</ul>
 
         
         
