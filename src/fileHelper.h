@@ -17,6 +17,7 @@ typedef struct {
 } SudokuDir;
 
 int checkDirExists(char *dir);
+void createDir(char *directory);
 void buildFilePath(char *fileName, char *pathVariable, char *directory);
 SudokuDir getFilesInFolder(char *directory);
 int checkForFileExtension(char *name);

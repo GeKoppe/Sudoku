@@ -10,6 +10,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
 #include <string.h>
@@ -32,6 +33,22 @@ int checkDirExists(char *directory)
         /* Directory does not exist. */
         return 0;
     }
+}
+
+/**
+ * @brief Create a directory
+ * 
+ * @param char *directory 
+ */
+void createDir(char *directory)
+{
+    // Check if current system is Windows
+    #if defined(_WIN32)
+    _mkdir("./saves/");
+    #else 
+    // S_IRWXU allows read and write to the owner; UNIX ONLY
+    mkdir("./saves/", S_IRWXU);
+    #endif
 }
 
 /**
