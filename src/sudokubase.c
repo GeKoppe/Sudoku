@@ -249,7 +249,9 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
             }
         }
         setCursor(hint.sudokuX, hint.sudokuY);
+        setColor(0x0C);
         printf("%i", sudokuSolution[yCoordinateInSolution][xCoordinateInSolution]);
+        setColor(0x0F);
         setCursor(sudoku.lowerX, sudoku.lowerY + 22);
         printf("Tipp generiert.");
     } else {
