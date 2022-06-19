@@ -129,6 +129,8 @@ int buildEditor(GameLayout layout){
                 } else {
                     setCursor(playerPosition[0], playerPosition[1]);
                     break;
+                    firstSave = 0;
+                    saveCheck = 0;
                 }; //ESCAPE
             default: break;
         }
