@@ -10,6 +10,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <errno.h>
 #include <string.h>
@@ -32,6 +33,22 @@ int checkDirExists(char *directory)
         /* Directory does not exist. */
         return 0;
     }
+}
+
+/**
+ * @brief Create a directory
+ * 
+ * @param char *directory 
+ */
+void createDir(char *directory)
+{
+    // Check if current system is Windows
+    #if defined(_WIN32)
+    _mkdir("./saves/");
+    #else 
+    // S_IRWXU allows read and write to the owner; UNIX ONLY
+    mkdir("./saves/", S_IRWXU);
+    #endif
 }
 
 /**
@@ -72,16 +89,19 @@ int checkForFileExtension(char *name)
 }
 
 /**
- * @brief Get all files and returns an array of names of the files.
+ * @brief Get all files and returns an array of names of the files. fileAmount is 0 when no files could be read.
  * 
- * @return char** Pointer to an array of char-arrays
+ * @return SudokuDir struct
  */
-// TODO finish function
-char** getFilesInFolder(char *directory)
+
+SudokuDir getFilesInFolder(char *directory)
 {
+    SudokuDir sdir;
+    sdir.fileAmount = 0;
+
     if (!checkDirExists(directory))
     {
-        return NULL;
+        return sdir;
     }
     
     DIR *d;
@@ -104,11 +124,14 @@ char** getFilesInFolder(char *directory)
         closedir(d);
     }
 
-    // Manual allocation of an array of char array, so a pointer can be returned
-    char **fileNameList = malloc(fileAmount * sizeof(char*));
-    for (int i = 0; i < fileAmount; i++)
+    // Only the first 50 files are shown in the menu
+    if (fileAmount > 50)
     {
-        fileNameList[i] = malloc(64 * sizeof(char));
+        sdir.fileAmount = 50;
+    } 
+    else
+    {
+        sdir.fileAmount = fileAmount;
     }
 
     // Write file names into the array
@@ -119,24 +142,17 @@ char** getFilesInFolder(char *directory)
 
         while ((dir = readdir(d)) != NULL)
         {
+            // Checks if the entry in the directory has the correct file extension
             if (!checkForFileExtension(dir->d_name))
             {
                 continue;
             }
 
-            // printf("Position: %d, %s\n", position, dir->d_name);
-
-            fileNameList[position] = dir->d_name;
-
+            sdir.fileNameList[position] = dir->d_name;
             position++;
         }
         closedir(d);
     }
-    // DEBUG ONLY
-    for (int i = 0; i < fileAmount; i++)
-    {
-        // printf("Position: %d, %s\n", i, fileNameList[i]);
-    }
 
-    return fileNameList;
+    return sdir;
 }
