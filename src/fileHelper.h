@@ -11,8 +11,13 @@
 #ifndef fileHelper_h
 #define fileHelper_h
 
+typedef struct {
+    char* fileNameList[50];
+    int fileAmount;
+} SudokuDir;
+
 int checkDirExists(char *dir);
 void buildFilePath(char *fileName, char *pathVariable, char *directory);
-char** getFilesInFolder(char *directory);
+SudokuDir getFilesInFolder(char *directory);
 int checkForFileExtension(char *name);
 #endif
