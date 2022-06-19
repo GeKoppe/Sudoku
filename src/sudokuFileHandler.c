@@ -100,10 +100,10 @@ SaveFile loadSudokuFromFile(char *fileName)
         {
             if (j == 8)
             {
-                result += fscanf(file, "%d\n", saveFile.sudoku[i][j]);
+                result += fscanf(file, "%d\n", &saveFile.sudoku[i][j]);
                 continue;
             } 
-            result += fscanf(file, "%d,", saveFile.sudoku[i][j]);
+            result += fscanf(file, "%d,", &saveFile.sudoku[i][j]);
         }
     }
 
