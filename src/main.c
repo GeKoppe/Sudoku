@@ -37,7 +37,8 @@ int main() {
         }
     } while (menu.main != 6);
 
-    buildEditor(game);
+    system("cls");
+    printf("Buhbye :3");
 
     return 0;
 }

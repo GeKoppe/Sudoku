@@ -96,12 +96,16 @@ SudokuField newSudokuField(int leftX, int rightX, int lowerY, int upperY) {
  * @param lineCross Boolean: Wird eine Linie innerhalb des Sudokus überschritten?
  * @return int 0
  */
-int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku, int lineCross) {
+int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku, int lineCross, int sudokuPosition[2]) {
     //Aktion für X-Bewegung
     if (x != 0) {
         //Überprüfung, ob die Bewegung uns aus dem Sudokufeld rausbewegen würde. Falls ja: Callback beenden.
-        if (playerPosition[0] + x >= sudoku.upperX || playerPosition[0] + x <= sudoku.lowerX) {
-            return 0;
+        if (playerPosition[0] + x >= sudoku.upperX) {
+            playerPosition[0] = sudoku.lowerX + 4;
+            sudokuPosition[1] = 0;
+        } else if ( playerPosition[0] + x <= sudoku.lowerX) {
+            playerPosition[0] = sudoku.upperX - 4;
+            sudokuPosition[1] = 8;
         } else {
             //Falls Linecross: Doppelten Wert in die PlayerPosition schreiben. Ansonsten einfach draufaddieren
             if (lineCross == 1) {
@@ -109,23 +113,25 @@ int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku
             } else {
                 playerPosition[0] += x;
             }
-            //Cursor setzen
-            setCursor(playerPosition[0], playerPosition[1]);
         }
 
     } else if (y != 0) {
         //Aktion für die Y-Bewegung. Effektiv identisch zur X-Bewegun.
-        if (playerPosition[1] + y >= sudoku.upperY || playerPosition[1] + y <= sudoku.lowerY) {
-            return 0;
+        if (playerPosition[1] + y >= sudoku.upperY) {
+            playerPosition[1] = sudoku.lowerY + 1;
+            sudokuPosition[0] = 0;
+        } else if (playerPosition[1] + y <= sudoku.lowerY) {
+            playerPosition[1] = sudoku.upperY - 1;
+            sudokuPosition[0] = 1;
         } else {
             if (lineCross == 1) {
                 playerPosition[1] += 2*y;
             } else {
                 playerPosition[1] += y;
             }
-            setCursor(playerPosition[0], playerPosition[1]);
         }
     }
+    setCursor(playerPosition[0], playerPosition[1]);
     //Return, wenn erfolgreich
     return 1;
 }
@@ -285,10 +291,10 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     //Fange User eingaben ab
     while (1) {
         switch (getch()) {
-            case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition)); break; //UP
-            case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition)); break; //DOWN
-            case 75: sudokuCursorCallback(-4, 0, playerPosition, sudoku, crossedLine(-1,0,sudokuPosition)); break;//LEFT
-            case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition)); break;//RIGHT
+            case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition), sudokuPosition); break; //UP
+            case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition), sudokuPosition); break; //DOWN
+            case 75: sudokuCursorCallback(-4, 0, playerPosition, sudoku, crossedLine(-1,0,sudokuPosition), sudokuPosition); break;//LEFT
+            case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition), sudokuPosition); break;//RIGHT
             
 
             case 49: numberCallback(1, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution); break; //1 

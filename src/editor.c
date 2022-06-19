@@ -6,6 +6,8 @@
 #include "sudokuFileHandler.h"
 #include <string.h>
 #include <stdlib.h>
+#include "menubase.h"
+#include "solvingAlgorithm.h"
 
 char* inputFileName(SudokuField sudoku) {
     setCursor(sudoku.lowerX, sudoku.lowerY + 22);
@@ -30,6 +32,55 @@ int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], in
     return 0;
 }
 
+int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstSave, SudokuField sudoku) {
+    if (generateSolution(editedSudoku, sudokuSolution, 2) != 1) {
+        setCursor(sudoku.lowerX, sudoku.lowerY + 22);
+        printf("Das Sudoku ist nicht eindeutig loesbar, trotzdem speichern?");
+        setCursor(sudoku.lowerX, sudoku.lowerY + 24);
+        printf("Ja");
+        setCursor(sudoku.lowerX, sudoku.lowerY + 26);
+        printf("Nein");
+        setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
+        printf("x");
+        int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, -1);
+        int returnValue = selection -39;
+
+        clearScreen(sudoku.lowerY + 22, 5, sudoku.lowerX - 5, 80);
+        if (returnValue == 2) {
+            setCursor(sudoku.lowerX, sudoku.lowerY + 22);
+            printf("Editor beenden?");
+            setCursor(sudoku.lowerX, sudoku.lowerY + 24);
+            printf("Ja");
+            setCursor(sudoku.lowerX, sudoku.lowerY + 26);
+            printf("Nein");
+            setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
+            printf("x");
+            int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, -1);
+            int secondReturn = selection - 39;
+
+            clearScreen(sudoku.lowerY + 22, 5, sudoku.lowerX - 5, 80);
+            if (secondReturn == 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } else {
+            if(*firstSave){
+                saveSudokuToFile(editedSudoku, inputFileName(sudoku));
+                *firstSave = 0;
+                return 1;
+            }
+        }
+    } else {
+        if(*firstSave){
+            saveSudokuToFile(editedSudoku, inputFileName(sudoku));
+            *firstSave = 0;
+            return 1;
+        }
+    }
+    return 1;
+}
+
 int buildEditor(GameLayout layout){
     int firstSave = 1;
     int sudokuX = layout.topLeftCorner.X + 51;
@@ -48,15 +99,16 @@ int buildEditor(GameLayout layout){
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
-
+    int sudokuSolution[9][9];
+    int saveCheck = -1;
 
 
     while (1) {
         switch (getch()) {
-            case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition)); break; //UP
-            case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition)); break; //DOWN
-            case 75: sudokuCursorCallback(-4, 0, playerPosition, sudoku, crossedLine(-1,0,sudokuPosition)); break;//LEFT
-            case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition)); break;//RIGHT
+            case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition), sudokuPosition); break; //UP
+            case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition), sudokuPosition); break; //DOWN
+            case 75: sudokuCursorCallback(-4, 0, playerPosition, sudoku, crossedLine(-1,0,sudokuPosition), sudokuPosition); break;//LEFT
+            case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition), sudokuPosition); break;//RIGHT
             
 
             case 49: printNumber(1, sudokuPosition, generatedSudoku, playerPosition); break; //1 
@@ -71,13 +123,14 @@ int buildEditor(GameLayout layout){
 
             case 8: printNumber(0, sudokuPosition, generatedSudoku, playerPosition); break; //DELETE
             case 27:
-                if(firstSave){
-                    saveSudokuToFile(generatedSudoku, inputFileName(sudoku));
-                    firstSave = 0;
-                }
-                return -1; //ESCAPE
+                saveCheck = escapeCallback(generatedSudoku, sudokuSolution, &firstSave, sudoku);
+                if (saveCheck == 1) {
+                    return -1;
+                } else {
+                    setCursor(playerPosition[0], playerPosition[1]);
+                    break;
+                }; //ESCAPE
             default: break;
         }
     }
 }
-

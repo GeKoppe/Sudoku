@@ -8,7 +8,7 @@
 #include "common.h"
 #include "menubase.h"
 #include "menulist.h"
-//#include "fileHelper.h"
+#include "fileHelper.h"
 
 
 /**
@@ -128,15 +128,18 @@ int showContinuationMenu(int menuStart, int menuX) {
     return returnValue;
 }
 
-int displayGames(int currentPage) {
+int displayGames(int currentPage, int menuX, int menuY) {
     //DEBUGGING PURPOSES
-    srand(time(NULL));
-    return ((rand() % 5) + 1);
+    // srand(time(NULL));
+    // return ((rand() % 5) + 1);
 
-    // char** files = getFilesInFolder("C:\\Users\\gkoppe\\Desktop\\King of Ordners\\Temp\\Test");
-    // for (int i = 5 * currentPage; i < ((currentPage + 1) * 5); i++) {
-    //     printf("%s", files[i]); 
-    // }
+    char** files = getFilesInFolder("C:\\Users\\gkoppe\\Desktop\\King of Ordners\\Temp\\Test");
+    int j = 0 + (currentPage * 5);
+    for (int i = 5 * currentPage; i < ((currentPage + 1) * 5); i++) {
+        printf("%s\n", files[i]); 
+        j++;
+    }
+    return (int)(((currentPage + 1) * 5) - j);
 }
 
 /**
@@ -161,7 +164,7 @@ int showLoadMenu(int menuStart, int menuX) {
     int skipNumber;
     do {
         //TODO Zeige die gespeicherten Spiele an
-        int numberOfGames = displayGames(currentPage);
+        int numberOfGames = displayGames(currentPage, menuX, menuStart);
 
         //Helper Variable für dynamische Anzeige
         while (numberOfGames > 5) {
@@ -286,6 +289,7 @@ MenuSelection menuWrapper(GameLayout layout) {
     
     int firstLevelX = layout.topLeftCorner.X + 15;
     int firstLevelY = layout.topLeftCorner.Y + 10;
+    clearScreen(layout.topLeftCorner.Y + 8, 25, layout.topLeftCorner.X + 10, 120);
 
     int secondLevelX = firstLevelX + 40;
     int secondLevelY = firstLevelY;
@@ -297,7 +301,7 @@ MenuSelection menuWrapper(GameLayout layout) {
             case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX); break;
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX); break;
             case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX); break;
-            case 5: selection.help = 1; showHelpMenu(floor(firstLevelY), firstLevelX); break;
+            case 5: selection.help = 1; system("start ./Anleitung.html")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
             case 4: selection.editor = 1; finishedSelecting = 1; break;
             case 6: finishedSelecting = 1; break;
             default: finishedSelecting = 1;

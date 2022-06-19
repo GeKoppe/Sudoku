@@ -28,7 +28,7 @@ int showDifficultyMenu(int menuStart, int menuX);
  * @param menuX X-Wert des ersten Eintrags des Menüs
  * @return int Auswahl
  */
-int displayGames(int currentPage);
+int displayGames(int currentPage, int menuX, int menuY);
 
 /**
  * @brief Zeigt das Hilfemenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Hilfe" gedrückt wurde. Lässt Auswahl über Enter und Escape zu.
