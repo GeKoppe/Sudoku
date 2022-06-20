@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <windows.h>
 #include <math.h>
-#include <pthread.h>
+//#include <pthread.h>
 #include "common.h"
 
 

@@ -5,7 +5,7 @@
 #include "common.h"
 #include <fcntl.h>
 #include <io.h>
-#include <pthread.h>
+//#include <pthread.h>
 #include "timeHelper.h"
 // #include <windows.h>
 #include <conio.h>
@@ -21,7 +21,7 @@
  */
 int printSudoku(int sudokuX, int sudokuY) {
     //STDOUT auf Unicode umstellen
-    _setmode(_fileno(stdout), _O_U16TEXT);
+    _setmode(_fileno(stdout), 0x00020000);
     setCursor(sudokuX, sudokuY);
     wprintf(L"\x2554\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2566\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2566\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2557");
     setCursor(sudokuX, sudokuY + 1);
@@ -381,7 +381,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff) {
     int generatedSudoku[9][9];
     int sudokuSolution[9][9];
     generateSudoku(generatedSudoku, diff);
-    generateSolution(generatedSudoku, sudokuSolution, 1);
+    generateSolution(generatedSudoku, sudokuSolution);
     fillSudoku(sudoku, generatedSudoku);
 
     //Spiele das Sudoku
