@@ -235,7 +235,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
             currentPage--;
             setCursor(menuX - 4,menuStart + 12);
             printf(" ");
-        } else if (selection == menuStart + (numberOfGames * 2) + 4) {
+        } else if (selection == menuStart + (numberOfGames * 2) + 4 || selection == -1) {
             returnValue = -2;
         } else {
             int terminateCounter = 0;
@@ -332,7 +332,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
             } else if (returnValue == 2) {
                 clearScreen(menuY - 2,30, menuX - 6, 80);
                 returnValue = showLoadMenu(menuY, menuX, menu);
-                if (returnValue != 8) {
+                if (returnValue != -2) {
                     gameSelected =1;
                 }
             }
@@ -342,7 +342,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
     } while (returnValue != 3 && gameSelected != 1);
     
     if (gameSelected == 1) {
-        return returnValue;
+        return 7;
     } else {
         return -2;
     }
