@@ -370,13 +370,6 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
     }
 }
 
-void copySudoku(int source[9][9], int dest[9][9]) {
-    for (int i = 9; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            dest[i][j] = source[i][j];
-        }
-    }
-}
 
 /**
  * @brief Zusammenfassende und initialisierende Methode des Spiels
@@ -386,7 +379,7 @@ void copySudoku(int source[9][9], int dest[9][9]) {
  * @param diff Schwierigkeit. Kann auch ein INT von 0-2 sein.
  * @return int return der playGame Funktion. Wird aktuell noch nicht genutzt, kann potenziell erweitert werden.
  */
-int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char fileName[256]) {
+int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName) {
     //Definiere das Sudokufeld und initialisiere es
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
@@ -400,7 +393,11 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char fileN
     SaveFile saveFile;
     if (loadSudoku) {
         saveFile = loadSudokuFromFile(fileName);
-        copySudoku(generatedSudoku, saveFile.sudoku);
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                generatedSudoku[i][j] = saveFile.sudoku[i][j];
+            }
+        }
     } else {
         generateSudoku(generatedSudoku, diff);
     }

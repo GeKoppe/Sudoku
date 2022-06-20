@@ -235,10 +235,13 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
             setCursor(menuX - 4,menuStart + 12);
             printf(" ");
         } else {
-            
-            for (int i = 0; i < (int)strlen(dir.fileNameList[returnValue]); i++) {
-                dir.fileNameList[returnValue][i] = menu->fileName[i];
+            int terminateCounter = 0;
+            menu->fileName = malloc((int)(strlen(dir.fileNameList[returnValue - 1]) + 1) * sizeof(char));
+            for (int i = 0; i < (int)strlen(dir.fileNameList[returnValue - 1]); i++) {
+                menu->fileName[i] = dir.fileNameList[returnValue - 1][i];
+                terminateCounter++;
             }
+            menu->fileName[terminateCounter] = '\0';
         }
         //Falls eine Auswahl getroffen wurde: Abbrechen.
         if (returnValue != 8 && returnValue != 7 && returnValue != 6) {
