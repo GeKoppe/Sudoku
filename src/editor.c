@@ -33,7 +33,7 @@ int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], in
 }
 
 int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstSave, SudokuField sudoku) {
-    if (generateSolution(editedSudoku, sudokuSolution, 2) != 1) {
+    if (generateSolution(editedSudoku, sudokuSolution) != 1) {
         setCursor(sudoku.lowerX, sudoku.lowerY + 22);
         printf("Das Sudoku ist nicht eindeutig loesbar, trotzdem speichern?");
         setCursor(sudoku.lowerX, sudoku.lowerY + 24);
