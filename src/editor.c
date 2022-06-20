@@ -43,9 +43,13 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
         setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
         printf("x");
         int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, -1);
-        int returnValue = selection -39;
 
         clearScreen(sudoku.lowerY + 22, 5, sudoku.lowerX - 5, 80);
+        if (selection == -1) {
+            return -1;
+        }        
+        int returnValue = selection -39;
+
         if (returnValue == 2) {
             setCursor(sudoku.lowerX, sudoku.lowerY + 22);
             printf("Editor beenden?");
@@ -59,6 +63,10 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
             int secondReturn = selection - 39;
 
             clearScreen(sudoku.lowerY + 22, 5, sudoku.lowerX - 5, 80);
+            if (selection == -1) {
+                return -1;
+            }
+
             if (secondReturn == 0) {
                 return 1;
             } else {
@@ -129,6 +137,8 @@ int buildEditor(GameLayout layout){
                 } else {
                     setCursor(playerPosition[0], playerPosition[1]);
                     break;
+                    firstSave = 0;
+                    saveCheck = 0;
                 }; //ESCAPE
             default: break;
         }
