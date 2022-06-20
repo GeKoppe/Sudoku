@@ -41,6 +41,7 @@ int checkBounds (int *playerY, int lowerY, int upperY) {
  * @return 0
  */
 int cursorCallback(int y, int *playerY, int upperY, int lowerY, int menuX) {
+    
     setCursor(menuX - 4, *playerY);
     printf(" ");
 
@@ -92,6 +93,50 @@ int surprise(int *supriseCounter, int input) {
 }
 
 /**
+ * @brief Überprüft, wie viele Menüeinträge übersprungen werden müssen.
+ * @author Gerrit
+ * 
+ * @param skipNumbers[5] Array von Integern: Die Koordinaten der zu überpringenden Menüeinträge 
+ * @param playerY Aktuelle Y-Position des Spielers
+ * @param up Bewegungsrichtung. 1, falls hoch, 0, falls runter.
+ * @param lowerBound Obere Schranke des Menüs
+ * @param upperBound Untere Schranke des Menüs
+ * @return int 
+ */
+int howManySkipped(int skipNumbers[5], int playerY, int up, int lowerBound, int upperBound) {
+    //Variable, damit PlayerY nicht bearbeitet werden muss
+    int tempPlayer = playerY;
+
+    //Counter, wie viele übersprungen werden müssen.
+    int skipCounter = 0;
+    
+    //Durch alle Skipnumbers iterieren.
+    for (int i = 0; i < 5; i++) {
+        //Falls -1, steht hier kein notwendiger Eintrag drin
+        if (skipNumbers[i] == -1) {
+            continue;
+        }
+
+        //Überprüfung, ob hoch oder runter
+        if (up) {
+            //tempPlayer anpassen und überprüfen, ob einer der Werte des Arrays getroffen wurde. Falls ja: Counter inkrementieren
+            tempPlayer -= 2;
+            if (tempPlayer == skipNumbers[i] && tempPlayer >= lowerBound) {
+                skipCounter++;
+            }
+        } else {
+            tempPlayer += 2;
+            if (tempPlayer == skipNumbers[i] && tempPlayer <= upperBound) {
+                skipCounter++;
+            }
+        }
+    }
+
+    //Counter returnen
+    return skipCounter;
+}
+
+/**
  * @brief Die Auswahl des aktuellen Menüs.
  * 
  * @param lowerY Oberer Rand des Menüs (größerer Wert)
@@ -100,7 +145,7 @@ int surprise(int *supriseCounter, int input) {
  * @param skip Menüpunkt, der übersprungen werden soll. -1, falls so ein Punkt nicht existiert.
  * @return int 
  */
-int selectMenu(int lowerY, int upperY, int menuX, int skip) {
+int selectMenu(int lowerY, int upperY, int menuX, int skip[5]) {
     //Setze Spielerkoordinate auf den höchsten Y-Wert des Menüs
     int playerY = lowerY;
 
@@ -112,8 +157,8 @@ int selectMenu(int lowerY, int upperY, int menuX, int skip) {
     //jenachdem, ob der nächste Menüpunkt übersprungen werden soll
     while (1) {
         switch(getch()) {
-            case 72: (playerY - 2 == skip) ? cursorCallback(-4, &playerY, lowerY, upperY, menuX) : cursorCallback(-2, &playerY, lowerY, upperY, menuX); surprise(&counter, 72); break; //UP
-            case 80: (playerY + 2 == skip) ? cursorCallback(+4, &playerY, lowerY, upperY, menuX) : cursorCallback(+2, &playerY, lowerY, upperY, menuX); surprise(&counter, 80); break; //DOWN
+            case 72: cursorCallback((-2 * (howManySkipped(skip, playerY, 1, lowerY, upperY) + 1)), &playerY, lowerY, upperY, menuX); surprise(&counter, 72); break; //UP
+            case 80: cursorCallback((2 * (howManySkipped(skip, playerY, 0, lowerY, upperY) + 1)), &playerY, lowerY, upperY, menuX); surprise(&counter, 80); break; //DOWN
             case 13: selection = 1; break; //ENTER
             case 77: surprise(&counter, 77); break;
             case 75: surprise(&counter, 75); break;

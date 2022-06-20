@@ -22,7 +22,7 @@ int showMainMenu(int menuStart, int menuX) {
     clearScreen(menuStart - 2,25, menuX-4, 2);
 
     //Es sollen keine Menüpunkte übersprungen werden.
-    int skip = -1;
+    int skip[5] = {-1,-1,-1,-1,-1};
 
     //Anzeige
     setCursor(menuX,menuStart);
@@ -67,7 +67,7 @@ int showMainMenu(int menuStart, int menuX) {
 int showDifficultyMenu(int menuStart, int menuX) {
     
     //Es soll kein Menüpunkt übersprungen werden.
-    int skip = -1;
+    int skip[5] = {-1,-1,-1,-1,-1};
 
     //Anzeige
     setCursor(menuX,menuStart - 2);
@@ -104,7 +104,7 @@ int showDifficultyMenu(int menuStart, int menuX) {
 
 int showContinuationMenu(int menuStart, int menuX) {
 
-    int skip = -1;
+    int skip[5] = {-1,-1,-1,-1,-1};
     setCursor(menuX,menuStart - 2);
     printf("Moechten sie das letzte Spiel fortsetzen?");
     setCursor(menuX,menuStart);
@@ -163,7 +163,7 @@ int showLoadMenu(int menuStart, int menuX) {
     
     int selection;
     int returnValue;
-    int skipNumber;
+    int skipNumber[5] = {-1,-1,-1,-1,-1};
     do {
         //TODO Zeige die gespeicherten Spiele an
         int numberOfGames = displayGames(currentPage, menuX, menuStart);
@@ -180,22 +180,22 @@ int showLoadMenu(int menuStart, int menuX) {
         if (currentPage == 10) {
             setCursor(menuX,menuStart + 10);
             clearScreen((numberOfGames * 2), 1, menuX, 20);
-            skipNumber = menuStart + (numberOfGames * 2);
+            skipNumber[0] = menuStart + (numberOfGames * 2);
         } else {
             setCursor(menuX,menuStart + (numberOfGames * 2) );
             printf("Naechste Seite");
-            skipNumber = -1;
+            skipNumber[0] = -1;
         }
         
         //Falls aktuelle Seite der Einträge 1, wird kein "vorherige Seite" Knopf benötigt. Setze auch Skip number, damit dieser Eintrag nicht mehr auswählbar ist.
         if (currentPage == 1) {  
             setCursor(menuX,menuStart + 12);
             clearScreen((numberOfGames * 2) + 2, 1, menuX, 20);
-            skipNumber = menuStart + (numberOfGames * 2) + 2;
+            skipNumber[1] = menuStart + (numberOfGames * 2) + 2;
         } else {
             setCursor(menuX,menuStart + (numberOfGames * 2) + 2);
             printf("Vorherige Seite");
-            skipNumber = -1;
+            skipNumber[1] = -1;
         }
 
         setCursor(menuX - 4,menuStart);

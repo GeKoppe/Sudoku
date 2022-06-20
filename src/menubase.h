@@ -18,7 +18,7 @@ typedef struct menuSelection {
  * @param skip Menüpunkt, der übersprungen werden soll. -1, falls so ein Punkt nicht existiert.
  * @return int 
  */
-int selectMenu(int lowerY, int upperY, int menuX, int skip);
+int selectMenu(int lowerY, int upperY, int menuX, int skip[5]);
 
 /**
  * @brief Überprüft, ob die aktuelle Cursor-Y Position in den Bounds des Menüs sind
