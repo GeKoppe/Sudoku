@@ -62,7 +62,6 @@ void buildFilePath(char *fileName, char *pathVariable, char *directory)
 {
     strcat(pathVariable, directory);
     strcat(pathVariable, fileName);
-    strcat(pathVariable, ".txt");
 }
 
 /**
