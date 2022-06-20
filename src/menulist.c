@@ -284,17 +284,19 @@ int showHelpMenu(int menuY, int menuX) {
 }
 
 /**
- * @brief 
+ * @brief Dieses Menü fragt ab, ob ein komplett neues Sudoku erstellt werden soll oder ob ein bereits bestehendes bearbeitet werden soll.
+ * @author Gerrit
  * 
- * @param menuY 
- * @param menuX 
- * @return int 
+ * @param menuStart Y-Wert des ersten Eintrags des Menüs
+ * @param menuX X-Wert des ersten Eintrags des Menüs
+ * @return int Auswahl
  */
 int showEditorMenu(int menuY, int menuX) {
     int skipFirst[5] = {-1,-1,-1,-1,-1};
     int returnValue;
     int gameSelected = 0;
     do {
+        gameSelected = 0;
         setCursor(menuX,menuY - 2);
         printf("Moechten sie ein neues Spiel Sudoku erstellen oder ein altes bearbeiten?");
         setCursor(menuX,menuY);
