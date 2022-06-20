@@ -29,6 +29,7 @@ int main() {
             }
         } else if (menu.load != -1) {
             sudokuWrapper(game,menu.difficulty-1, 1, menu.fileName);
+            free(menu.fileName);
         }
 
         if (menu.main != 6) {
