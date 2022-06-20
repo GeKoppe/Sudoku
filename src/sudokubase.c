@@ -12,6 +12,7 @@
 #include "sudokuFileHandler.h"
 #include "fileHelper.h"
 #include "solvingAlgorithm.h"
+#include "saveFileHandler.h"
 
 /**
  * @brief Druckt das Sudoku Feld an die angegebenen X und Y-Koordinaten
@@ -243,26 +244,26 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
     //Generiere den Hint
     Hint hint = generateHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku);
     if(hint.value != -1){
-        int xCoordinateInSolution = hint.sudokuX;
-        int yCoordinateInSolution = hint.sudokuY;
+        int xPlayerPosition;
+        int yPlayerPosition;
 
-        hint.sudokuX = sudoku.lowerX + 4 + hint.sudokuX*4;
-        hint.sudokuY = sudoku.lowerY + 1 + hint.sudokuY*2;
-        if(xCoordinateInSolution >= 3){
-            hint.sudokuX += 4;
-            if(xCoordinateInSolution >= 6){
-                hint.sudokuX += 4;
+        xPlayerPosition = sudoku.lowerX + 4 + hint.sudokuX*4;
+        yPlayerPosition = sudoku.lowerY + 1 + hint.sudokuY*2;
+        if(hint.sudokuX >= 3){
+            xPlayerPosition += 4;
+            if(hint.sudokuX >= 6){
+                xPlayerPosition += 4;
             }
         }
-        setCursor(hint.sudokuX, hint.sudokuY);
+        setCursor(xPlayerPosition, yPlayerPosition);
         setColor(0x0C);
-        printf("%i", sudokuSolution[yCoordinateInSolution][xCoordinateInSolution]);
+        printf("%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
         setColor(0x0F);
-        setCursor(sudoku.lowerX, sudoku.lowerY + 22);
+        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         printf("Tipp generiert.");
     } else {
-        setCursor(sudoku.lowerX, sudoku.lowerY + 22);
-        printf("Your hints are all used up, buckaroo.");
+        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
+        printf("Deine Tipps sind alle verbraucht.");
     }
     setCursor(playerPosition[0], playerPosition[1]);
 }
@@ -276,7 +277,7 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
  * @param sudokuSolution Die Lösung des Sudokus
  * @return int 0
  */
-int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
     //Variablen deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
@@ -322,7 +323,14 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                 break;
 
             case 8: numberCallback(0, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //DELETE
-            case 27: return -1; //ESCAPE
+            case 27: 
+            for(int i = 0; i < 9; i++){
+                for(int j = 0; j < 9; j++){
+                    save.sudoku[i][j] = userSolution[i][j];
+                }
+            }
+            saveToFile(save);
+            return -1; //ESCAPE
             default: break;
         }
 
@@ -379,7 +387,7 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
  * @param diff Schwierigkeit. Kann auch ein INT von 0-2 sein.
  * @return int return der playGame Funktion. Wird aktuell noch nicht genutzt, kann potenziell erweitert werden.
  */
-int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName) {
+int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName, int continueGame) {
     //Definiere das Sudokufeld und initialisiere es
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
@@ -391,8 +399,16 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int generatedSudoku[9][9];
     int sudokuSolution[9][9];
     SaveFile saveFile;
+    saveFile.difficulty = diff;
     if (loadSudoku) {
         saveFile = loadSudokuFromFile(fileName);
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                generatedSudoku[i][j] = saveFile.sudoku[i][j];
+            }
+        }
+    } else if(continueGame) {
+        saveFile = loadSaveFromFile(fileName);
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 generatedSudoku[i][j] = saveFile.sudoku[i][j];
@@ -407,7 +423,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int bottomText = 0;
 
     //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile);
 
     return returnVal;
 }
