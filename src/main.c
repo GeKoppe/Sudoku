@@ -9,8 +9,8 @@
 #include "editor.h"
 
 int main() {
-    // SMALL_RECT windowSize = {0 , 0 , 500 , 500}; //change the values
-    // SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &windowSize);
+    SMALL_RECT windowSize = {0 , 0 , 500 , 500}; //change the values
+    SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &windowSize);
     // MenuSelection (*selection[1])() = {menuWrapper};
     
     GameLayout game = newGameLayout(10,5,150,40);
@@ -22,7 +22,7 @@ int main() {
     do {
         menu = menuWrapper(game);
         if (menu.difficulty != -1) {
-            sudokuWrapper(game,menu.difficulty-1, 0, NULL); 
+            sudokuWrapper(game,menu.difficulty-1, 0, NULL, 0); 
         } else if (menu.editor != -1) {
             if (menu.editor == 0) {
                 buildEditor(game, 0, menu.fileName);
@@ -31,7 +31,7 @@ int main() {
                 free(menu.fileName);
             }
         } else if (menu.load != -1) {
-            sudokuWrapper(game,menu.difficulty-1, 1, menu.fileName);
+            sudokuWrapper(game,menu.difficulty-1, 1, menu.fileName, 0);
             free(menu.fileName);
         }
 

@@ -21,7 +21,7 @@
  * @param fileName
  * @return int 1 if successfull, 0 if an error occured
  */
-int saveToFile(SaveFile save, char *fileName)
+int saveToFile(SaveFile save)
 {
     if (!checkDirExists("./saves/"))
     {
@@ -29,7 +29,7 @@ int saveToFile(SaveFile save, char *fileName)
     }
 
     char filePath[128] = "";
-    buildFilePath(fileName, filePath, "./saves/");
+    buildFilePath("last_save.txt", filePath, "./saves/");
 
     FILE *file;
     file = fopen(filePath, "w");
