@@ -22,11 +22,13 @@ int main() {
     do {
         menu = menuWrapper(game);
         if (menu.difficulty != -1) {
-            sudokuWrapper(game,menu.difficulty-1); 
+            sudokuWrapper(game,menu.difficulty-1, 0, ""); 
         } else if (menu.editor != -1) {
             if (menu.editor == 0) {
                 buildEditor(game);
             }
+        } else if (menu.load != -1) {
+            sudokuWrapper(game,menu.difficulty-1, 1, menu.fileName);
         }
 
         if (menu.main != 6) {

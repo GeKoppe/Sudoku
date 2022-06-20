@@ -85,7 +85,7 @@ SaveFile loadSudokuFromFile(char fileName[256])
     for (int i = 0; i < (int)strlen(fileName); i++) {
         tempFileName[i] = fileName[i];
     }
-    buildFilePath(fileName, filePath, "./sudokus/");
+    buildFilePath(tempFileName, filePath, "./sudokus/");
 
     FILE *file;
     file = fopen(filePath, "r");

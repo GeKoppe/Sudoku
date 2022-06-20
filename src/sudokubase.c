@@ -276,7 +276,7 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
  * @param sudokuSolution Die Lösung des Sudokus
  * @return int 0
  */
-int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* hintUsed) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText) {
     //Variablen deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
@@ -305,23 +305,23 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition), sudokuPosition); break;//RIGHT
             
 
-            case 49: numberCallback(1, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //1 
-            case 50: numberCallback(2, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //2
-            case 51: numberCallback(3, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //3
-            case 52: numberCallback(4, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //4
-            case 53: numberCallback(5, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //5
-            case 54: numberCallback(6, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //6
-            case 55: numberCallback(7, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //7
-            case 56: numberCallback(8, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //8
-            case 57: numberCallback(9, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //9
+            case 49: numberCallback(1, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //1 
+            case 50: numberCallback(2, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //2
+            case 51: numberCallback(3, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //3
+            case 52: numberCallback(4, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //4
+            case 53: numberCallback(5, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //5
+            case 54: numberCallback(6, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //6
+            case 55: numberCallback(7, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //7
+            case 56: numberCallback(8, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //8
+            case 57: numberCallback(9, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //9
 
             case 104: //H (Hinweis)
                 getHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku, sudoku, playerPosition); 
                 hintsUsed++;
-                *hintUsed = 1;
+                *bottomText = 1;
                 break;
 
-            case 8: numberCallback(0, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, hintUsed); break; //DELETE
+            case 8: numberCallback(0, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //DELETE
             case 27: return -1; //ESCAPE
             default: break;
         }
@@ -407,10 +407,10 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char fileN
     generateSolution(generatedSudoku, sudokuSolution, 1);
     fillSudoku(sudoku, generatedSudoku);
 
-    int hintUsed = 0;
+    int bottomText = 0;
 
     //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &hintUsed);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText);
 
     return returnVal;
 }
