@@ -401,13 +401,13 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     } else {
         generateSudoku(generatedSudoku, diff);
     }
-    // generateSolution(generatedSudoku, sudokuSolution, 1);
-    // fillSudoku(sudoku, generatedSudoku);
+    generateSolution(generatedSudoku, sudokuSolution, 1);
+    fillSudoku(sudoku, generatedSudoku);
 
-    // int bottomText = 0;
+    int bottomText = 0;
 
-    // //Spiele das Sudoku
-    // int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText);
+    //Spiele das Sudoku
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText);
 
-    // return returnVal;
+    return returnVal;
 }
