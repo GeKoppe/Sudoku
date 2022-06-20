@@ -5,7 +5,7 @@ typedef struct menuSelection {
     int difficulty;
     int cont;
     int load; //TODO Index des Spiels im Array reinspieichern
-    int editor;
+    int editor; //TODO Falls 0 bei Übergabe in Main: Neues Sudoku. Falls andere Zahl: Lade entsprechende Datei
     int help;
 } MenuSelection;
 

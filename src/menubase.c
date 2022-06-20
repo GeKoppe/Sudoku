@@ -101,7 +101,7 @@ int surprise(int *supriseCounter, int input) {
  * @param up Bewegungsrichtung. 1, falls hoch, 0, falls runter.
  * @param lowerBound Obere Schranke des Menüs
  * @param upperBound Untere Schranke des Menüs
- * @return int 
+ * @return int Anzahl zu überspringender Positionen
  */
 int howManySkipped(int skipNumbers[5], int playerY, int up) {
     //Variable, damit PlayerY nicht bearbeitet werden muss
@@ -112,7 +112,6 @@ int howManySkipped(int skipNumbers[5], int playerY, int up) {
     int skipCounter = 0;
     int nextSkipped = 0;
 
-
     if (up) {
         //tempPlayer anpassen und überprüfen, ob einer der Werte des Arrays getroffen wurde. Falls ja: Counter inkrementieren
         tempPlayer -= 2;
@@ -120,11 +119,13 @@ int howManySkipped(int skipNumbers[5], int playerY, int up) {
         tempPlayer += 2;
     }
     
+    //Überprüfe, ob der nächste Eintrag geskipped werden muss
     if (tempPlayer == skipNumbers[0] || tempPlayer == skipNumbers[1] || tempPlayer == skipNumbers[2] || tempPlayer == skipNumbers[3] || tempPlayer == skipNumbers[4]) {
         nextSkipped = 1;
     }
     tempPlayer = playerY;
 
+    //Falls ja, überprüfe, wie viele geskipped werden müssen.
     if (nextSkipped) {
         //Durch alle Skipnumbers iterieren.
         for (int i = 0; i < 5; i++) {
@@ -132,6 +133,8 @@ int howManySkipped(int skipNumbers[5], int playerY, int up) {
             if (skipNumbers[i] == -1) {
                 continue;
             }
+
+            //Tempplayer anpassen und gegen das Array checken
             if (up) {
                 tempPlayer -= 2;
             } else {

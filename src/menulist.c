@@ -283,6 +283,57 @@ int showHelpMenu(int menuY, int menuX) {
     // clearScreen(menuY + 10, 4, menuX - 2, 2);
 }
 
+/**
+ * @brief 
+ * 
+ * @param menuY 
+ * @param menuX 
+ * @return int 
+ */
+int showEditorMenu(int menuY, int menuX) {
+    int skipFirst[5] = {-1,-1,-1,-1,-1};
+    int returnValue;
+    int gameSelected = 0;
+    do {
+        setCursor(menuX,menuY - 2);
+        printf("Moechten sie ein neues Spiel Sudoku erstellen oder ein altes bearbeiten?");
+        setCursor(menuX,menuY);
+        printf("Neu");
+        setCursor(menuX,menuY + 2);
+        printf("Bearbeiten");
+        setCursor(menuX,menuY + 4);
+        printf("Abbrechen");
+
+        setCursor(menuX - 4,menuY);
+        printf("x");
+
+        int selection = selectMenu(menuY, menuY + 4, menuX, skipFirst);
+
+        if (selection == - 1) {
+            returnValue = 3;
+        } else {
+            returnValue = ((selection - menuY)/2) + 1;
+            if (returnValue == 1) {
+                returnValue = 0;
+            } else if (returnValue == 2) {
+                clearScreen(menuY - 2,30, menuX - 6, 80);
+                returnValue = showLoadMenu(menuY, menuX);
+                if (returnValue != 8) {
+                    gameSelected =1;
+                }
+            }
+        }
+
+        clearScreen(menuY - 2,30, menuX - 6, 80);
+    } while (returnValue != 3 && gameSelected != 1);
+    
+    if (gameSelected == 1) {
+        return returnValue;
+    } else {
+        return -2;
+    }
+} 
+
 MenuSelection menuWrapper(GameLayout layout) {
     MenuSelection selection;
     selection.main = -1;
@@ -307,12 +358,12 @@ MenuSelection menuWrapper(GameLayout layout) {
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX); break;
             case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX); break;
             case 5: selection.help = 1; system("start ./Misc/Anleitung.pdf")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
-            case 4: selection.editor = 1; finishedSelecting = 1; break;
+            case 4: selection.editor = showEditorMenu(floor(secondLevelY), secondLevelX); break;
             case 6: finishedSelecting = 1; break;
             default: finishedSelecting = 1;
         }
 
-        if (selection.difficulty == 4 || selection.help == 1 || selection.load == 8 || selection.cont == 2) {
+        if (selection.difficulty == 4 || selection.help == 1 || selection.load == 8 || selection.cont == 2 || selection.editor == -2) {
             selection.difficulty = -1;
             selection.help = -1;
             selection.load = -1;
