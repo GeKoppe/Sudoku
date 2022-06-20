@@ -7,7 +7,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include "menubase.h"
+#include "sudokubase.h"
 #include "solvingAlgorithm.h"
+#include "sudokuFileHandler.h"
+#include "fileHelper.h"
 
 char* inputFileName(SudokuField sudoku) {
     setCursor(sudoku.lowerX, sudoku.lowerY + 22);
@@ -90,20 +93,32 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
     return 1;
 }
 
-int buildEditor(GameLayout layout){
+int buildEditor(GameLayout layout, int loadFile, char* fileName) {
     int firstSave = 1;
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
     clearScreen(sudokuY,15, sudokuX-36, 40);
     printSudoku(sudoku.lowerX, sudoku.lowerY);
-
+    
     int generatedSudoku[9][9];
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j++){
-            generatedSudoku[i][j] = 0;
+    SaveFile saveFile;
+    if (loadFile) {
+        saveFile = loadSudokuFromFile(fileName);
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                generatedSudoku[i][j] = saveFile.sudoku[i][j];
+            }
         }
+        fillSudoku(sudoku, generatedSudoku);
+    } else {
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                generatedSudoku[i][j] = 0;
+            }
+        }        
     }
+
 
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);

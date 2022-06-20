@@ -154,6 +154,7 @@ int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[
  * @return int Auswahl
  */
 int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
+    menu->fileName[0] = '\0';
     int currentPage = 1;
 
     //Anzeige
@@ -211,29 +212,31 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
         
         if (selection == -1) {
             //Falls ESCAPE abbrechen
-            returnValue = 8;
+            returnValue = -1;
         } else {
             //Auswahl anhand der Koordinaten berechnen
-            returnValue = ((selection - menuStart)/2) + 1;
+            returnValue = ((selection - menuStart)/2) + 1 + ((currentPage - 1)* 5);
             
             //Falls Auswahl größer als aktuelle Zahl der Spiele, muss ein Funktionsknopf gedrückt worden sein. Dementsprechend etwas
             //umbauen, damit diese vernünftig erkannt werden.
             if (returnValue > numberOfGames) {
                 clearScreen(menuStart,30, menuX, 45);
-                returnValue += (5-numberOfGames);
+                // returnValue += (5-numberOfGames);
             }
         }
 
-        if (returnValue == 6) {
+        if (selection == menuStart + (numberOfGames * 2)) {
             //Falls nächste Seite: Seite++
             currentPage++;
             setCursor(menuX - 4,menuStart + 12);
             printf(" ");
-        } else if (returnValue == 7) {
+        } else if (selection == menuStart + (numberOfGames * 2) + 2) {
             //Falls vorherige Seite: Seite--
             currentPage--;
             setCursor(menuX - 4,menuStart + 12);
             printf(" ");
+        } else if (selection == menuStart + (numberOfGames * 2) + 4 || selection == -1) {
+            returnValue = -2;
         } else {
             int terminateCounter = 0;
             menu->fileName = malloc((int)(strlen(dir.fileNameList[returnValue - 1]) + 1) * sizeof(char));
@@ -247,10 +250,10 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
         if (returnValue != 8 && returnValue != 7 && returnValue != 6) {
             break;
         }
-    } while (returnValue != 8);
+    } while (returnValue != -2 && menu->fileName[0] == '\0');
 
     //Auf den Return die Anzahl der Seiten +5 raufrechnen, damit das richtige Spiel gewählt wird.
-    if (returnValue != 8) {
+    if (returnValue != -2) {
         returnValue = returnValue + (currentPage * 5);
     }
 
@@ -329,7 +332,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
             } else if (returnValue == 2) {
                 clearScreen(menuY - 2,30, menuX - 6, 80);
                 returnValue = showLoadMenu(menuY, menuX, menu);
-                if (returnValue != 8) {
+                if (returnValue != -2) {
                     gameSelected =1;
                 }
             }
@@ -339,7 +342,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
     } while (returnValue != 3 && gameSelected != 1);
     
     if (gameSelected == 1) {
-        return returnValue;
+        return 7;
     } else {
         return -2;
     }
@@ -374,7 +377,10 @@ MenuSelection menuWrapper(GameLayout layout) {
             default: finishedSelecting = 1;
         }
 
-        if (selection.difficulty == 4 || selection.help == 1 || selection.load == 8 || selection.cont == 2 || selection.editor == -2) {
+        if (selection.difficulty == 4 || selection.help == 1 || selection.load == -2 || selection.cont == 2 || selection.editor == -2) {
+            for (int j = 0; j < (int)strlen(selection.fileName); j++) {
+                selection.fileName[j] = '\0';
+            }
             selection.difficulty = -1;
             selection.help = -1;
             selection.load = -1;

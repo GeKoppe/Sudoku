@@ -25,10 +25,14 @@ int main() {
             sudokuWrapper(game,menu.difficulty-1, 0, NULL); 
         } else if (menu.editor != -1) {
             if (menu.editor == 0) {
-                buildEditor(game);
+                buildEditor(game, 0, menu.fileName);
+            } else if (menu.editor == 7) {
+                buildEditor(game, 1, menu.fileName);
+                free(menu.fileName);
             }
         } else if (menu.load != -1) {
             sudokuWrapper(game,menu.difficulty-1, 1, menu.fileName);
+            free(menu.fileName);
         }
 
         if (menu.main != 6) {
