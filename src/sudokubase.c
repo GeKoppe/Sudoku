@@ -386,7 +386,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff) {
     int generatedSudoku[9][9];
     int sudokuSolution[9][9];
     generateSudoku(generatedSudoku, diff);
-    generateSolution(generatedSudoku, sudokuSolution);
+    generateSolution(generatedSudoku, sudokuSolution, 1);
     fillSudoku(sudoku, generatedSudoku);
 
     int hintUsed = 0;
