@@ -34,6 +34,7 @@ int checkDirExists(char *directory)
         /* Directory does not exist. */
         return 0;
     }
+    return 0;
 }
 
 /**
@@ -43,9 +44,12 @@ int checkDirExists(char *directory)
  */
 void createDir(char *directory)
 {
+    if (0) {
+        mkdir(directory);
+    }
     // Check if current system is Windows
     #if defined(_WIN32)
-    _mkdir("./saves/");
+    mkdir("./saves/");
     #else 
     // S_IRWXU allows read and write to the owner; UNIX ONLY
     mkdir("./saves/", S_IRWXU);

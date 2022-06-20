@@ -332,6 +332,8 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
         }
         // printf("%i", k);
     }
+    
+    return 0;
 }
 
 /**
@@ -371,8 +373,8 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
  * @author Gerrit
  * 
  * @param layout Layout des Spiels
- * @param diff Schwierigkeit
- * @return int 0
+ * @param diff Schwierigkeit. Kann auch ein INT von 0-2 sein.
+ * @return int return der playGame Funktion. Wird aktuell noch nicht genutzt, kann potenziell erweitert werden.
  */
 int sudokuWrapper(GameLayout layout, difficulty diff) {
     //Definiere das Sudokufeld und initialisiere es
@@ -394,5 +396,5 @@ int sudokuWrapper(GameLayout layout, difficulty diff) {
     //Spiele das Sudoku
     int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &hintUsed);
 
-    return 0;
+    return returnVal;
 }

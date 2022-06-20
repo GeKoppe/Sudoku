@@ -21,7 +21,7 @@ StopWatch startTimer()
 {
     StopWatch watch = {clock(), clock(), 0};
     return watch;
-};
+}
 
 /**
  * @brief Sets the endTime in the passed StopWatch struct

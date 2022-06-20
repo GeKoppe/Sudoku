@@ -14,7 +14,7 @@
 #include "timeHelper.h"
 
 typedef struct {
-    char* fileNameList[50];
+    char fileNameList[50][256];
     int fileAmount;
 } SudokuDir;
 
