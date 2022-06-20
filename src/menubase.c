@@ -103,32 +103,45 @@ int surprise(int *supriseCounter, int input) {
  * @param upperBound Untere Schranke des Menüs
  * @return int 
  */
-int howManySkipped(int skipNumbers[5], int playerY, int up, int lowerBound, int upperBound) {
+int howManySkipped(int skipNumbers[5], int playerY, int up) {
     //Variable, damit PlayerY nicht bearbeitet werden muss
     int tempPlayer = playerY;
 
+
     //Counter, wie viele übersprungen werden müssen.
     int skipCounter = 0;
-    
-    //Durch alle Skipnumbers iterieren.
-    for (int i = 0; i < 5; i++) {
-        //Falls -1, steht hier kein notwendiger Eintrag drin
-        if (skipNumbers[i] == -1) {
-            continue;
-        }
+    int nextSkipped = 0;
 
-        //Überprüfung, ob hoch oder runter
-        if (up) {
-            //tempPlayer anpassen und überprüfen, ob einer der Werte des Arrays getroffen wurde. Falls ja: Counter inkrementieren
-            tempPlayer -= 2;
-            if (tempPlayer == skipNumbers[i] && tempPlayer >= lowerBound) {
+
+    if (up) {
+        //tempPlayer anpassen und überprüfen, ob einer der Werte des Arrays getroffen wurde. Falls ja: Counter inkrementieren
+        tempPlayer -= 2;
+    } else {
+        tempPlayer += 2;
+    }
+    
+    if (tempPlayer == skipNumbers[0] || tempPlayer == skipNumbers[1] || tempPlayer == skipNumbers[2] || tempPlayer == skipNumbers[3] || tempPlayer == skipNumbers[4]) {
+        nextSkipped = 1;
+    }
+    tempPlayer = playerY;
+
+    if (nextSkipped) {
+        //Durch alle Skipnumbers iterieren.
+        for (int i = 0; i < 5; i++) {
+            //Falls -1, steht hier kein notwendiger Eintrag drin
+            if (skipNumbers[i] == -1) {
+                continue;
+            }
+            if (up) {
+                tempPlayer -= 2;
+            } else {
+                tempPlayer += 2;
+            }
+
+            if (tempPlayer == skipNumbers[0] || tempPlayer == skipNumbers[1] || tempPlayer == skipNumbers[2] || tempPlayer == skipNumbers[3] || tempPlayer == skipNumbers[4]) {
                 skipCounter++;
             }
-        } else {
-            tempPlayer += 2;
-            if (tempPlayer == skipNumbers[i] && tempPlayer <= upperBound) {
-                skipCounter++;
-            }
+            
         }
     }
 
@@ -157,8 +170,8 @@ int selectMenu(int lowerY, int upperY, int menuX, int skip[5]) {
     //jenachdem, ob der nächste Menüpunkt übersprungen werden soll
     while (1) {
         switch(getch()) {
-            case 72: cursorCallback((-2 * (howManySkipped(skip, playerY, 1, lowerY, upperY) + 1)), &playerY, lowerY, upperY, menuX); surprise(&counter, 72); break; //UP
-            case 80: cursorCallback((2 * (howManySkipped(skip, playerY, 0, lowerY, upperY) + 1)), &playerY, lowerY, upperY, menuX); surprise(&counter, 80); break; //DOWN
+            case 72: cursorCallback((-2 * (howManySkipped(skip, playerY, 1) + 1)), &playerY, lowerY, upperY, menuX); surprise(&counter, 72); break; //UP
+            case 80: cursorCallback((2 * (howManySkipped(skip, playerY, 0) + 1)), &playerY, lowerY, upperY, menuX); surprise(&counter, 80); break; //DOWN
             case 13: selection = 1; break; //ENTER
             case 77: surprise(&counter, 77); break;
             case 75: surprise(&counter, 75); break;

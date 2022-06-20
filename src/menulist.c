@@ -128,7 +128,7 @@ int showContinuationMenu(int menuStart, int menuX) {
     return returnValue;
 }
 
-int displayGames(int currentPage, int menuX, int menuY) {
+int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2]) {
     //DEBUGGING PURPOSES
     SudokuDir dir = getFilesInFolder("./sudokus/");
     int i = (5* (currentPage- 1));
@@ -141,6 +141,8 @@ int displayGames(int currentPage, int menuX, int menuY) {
         j++;
     }
 
+    numberAndLeftAmount[0] = j;
+    numberAndLeftAmount[1] = (dir.fileAmount - i);
     return j;
 }
 
@@ -166,7 +168,8 @@ int showLoadMenu(int menuStart, int menuX) {
     int skipNumber[5] = {-1,-1,-1,-1,-1};
     do {
         //TODO Zeige die gespeicherten Spiele an
-        int numberOfGames = displayGames(currentPage, menuX, menuStart);
+        int numberAndLeftAmount[2] = {-1,-1};
+        int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount);
 
         //Helper Variable für dynamische Anzeige
         while (numberOfGames > 5) {
@@ -177,7 +180,7 @@ int showLoadMenu(int menuStart, int menuX) {
         printf("Abbrechen");
 
         //Falls aktuelle Seite der Einträge 10, wird kein "nächste Seite" Knopf mehr benötigt. Setze auch Skip number, damit dieser Eintrag nicht mehr auswählbar ist.
-        if (currentPage == 10) {
+        if (currentPage == 10 || numberAndLeftAmount[1] <= 0) {
             setCursor(menuX,menuStart + 10);
             clearScreen((numberOfGames * 2), 1, menuX, 20);
             skipNumber[0] = menuStart + (numberOfGames * 2);
