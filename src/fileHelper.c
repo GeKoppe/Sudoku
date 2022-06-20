@@ -148,7 +148,12 @@ SudokuDir getFilesInFolder(char *directory)
                 continue;
             }
 
-            sdir.fileNameList[position] = dir->d_name;
+            // Every single character has to be passed individually, otherwise it wouldn't work on windows machines
+            for (int i = 0; i < strlen(dir->d_name); i++)
+            {
+                sdir.fileNameList[position][i] = dir->d_name[i];
+            }
+
             position++;
         }
         closedir(d);
