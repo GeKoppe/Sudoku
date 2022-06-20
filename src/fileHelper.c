@@ -14,6 +14,7 @@
 #include <dirent.h>
 #include <errno.h>
 #include <string.h>
+#include <windows.h>
 #include "fileHelper.h"
 
 /**
@@ -96,6 +97,43 @@ int checkForFileExtension(char *name)
 
 SudokuDir getFilesInFolder(char *directory)
 {
+    // SudokuDir sdir;
+    // sdir.fileAmount = 0;
+    // int position = 0;
+    // WIN32_FIND_DATA fdFile;
+    // HANDLE hFind = NULL;
+
+    // char sPath[2048];
+
+    // //Specify a file mask. *.* = We want everything!
+    // sprintf(sPath, "%s\\*.txt", directory);
+
+    // if((hFind = FindFirstFile(sPath, &fdFile)) == INVALID_HANDLE_VALUE)
+    // {
+    //     return sdir;
+    // }
+
+    // do
+    // {
+    //     //Find first file will always return "."
+    //     //    and ".." as the first two directories.
+    //     if(strcmp(fdFile.cFileName, ".") != 0
+    //             && strcmp(fdFile.cFileName, "..") != 0)
+    //     {
+    //         //Build up our file path using the passed in
+    //         //  [sDir] and the file/foldername we just found:
+    //         sprintf(sPath, "%s\\%s", directory, fdFile.cFileName);
+    //         //Is the entity a File or Folder?
+    //         sdir.fileAmount++;
+    //         position++;
+    //     }
+    // }
+    // while(FindNextFile(hFind, &fdFile)); //Find the next file.
+
+    // FindClose(hFind); //Always, Always, clean things up!
+
+    // return sdir;
+
     SudokuDir sdir;
     sdir.fileAmount = 0;
 
@@ -148,7 +186,13 @@ SudokuDir getFilesInFolder(char *directory)
                 continue;
             }
 
-            sdir.fileNameList[position] = dir->d_name;
+            int i = 0;
+            while (dir->d_name[i] != '\0') {
+                sdir.fileNameList[position][i] = dir->d_name[i];
+                i++;
+            }
+            // char* test = &(sdir.fileNameList[position]);
+            // *test = dir->d_name;
             position++;
         }
         closedir(d);

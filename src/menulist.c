@@ -130,16 +130,18 @@ int showContinuationMenu(int menuStart, int menuX) {
 
 int displayGames(int currentPage, int menuX, int menuY) {
     //DEBUGGING PURPOSES
-    // srand(time(NULL));
-    // return ((rand() % 5) + 1);
-    int files[3];
-    // char** files = getFilesInFolder("C:\\Users\\gkoppe\\Desktop\\King of Ordners\\Temp\\Test");
-    int j = 0 + (currentPage * 5);
-    for (int i = 5 * currentPage; i < ((currentPage + 1) * 5); i++) {
-        printf("%i\n", files[i]); 
+    SudokuDir dir = getFilesInFolder("./sudokus/");
+    int i = (5* (currentPage- 1));
+    int j = 0; 
+
+    while (i < 5* currentPage  && i < dir.fileAmount) {
+        setCursor(menuX, menuY + (2*j));
+        printf("%s", dir.fileNameList[i]);
+        i++;
         j++;
     }
-    return (int)(((currentPage + 1) * 5) - j);
+
+    return j;
 }
 
 /**
