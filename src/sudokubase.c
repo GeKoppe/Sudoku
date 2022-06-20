@@ -9,6 +9,8 @@
 #include "timeHelper.h"
 // #include <windows.h>
 #include <conio.h>
+#include "sudokuFileHandler.h"
+#include "fileHelper.h"
 #include "solvingAlgorithm.h"
 
 /**
@@ -368,6 +370,14 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
     }
 }
 
+void copySudoku(int source[9][9], int dest[9][9]) {
+    for (int i = 9; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            dest[i][j] = source[i][j];
+        }
+    }
+}
+
 /**
  * @brief Zusammenfassende und initialisierende Methode des Spiels
  * @author Gerrit
@@ -376,7 +386,7 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
  * @param diff Schwierigkeit. Kann auch ein INT von 0-2 sein.
  * @return int return der playGame Funktion. Wird aktuell noch nicht genutzt, kann potenziell erweitert werden.
  */
-int sudokuWrapper(GameLayout layout, difficulty diff) {
+int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char fileName[256]) {
     //Definiere das Sudokufeld und initialisiere es
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
@@ -387,7 +397,13 @@ int sudokuWrapper(GameLayout layout, difficulty diff) {
     //Generiere Sudoku und die Lösung dazu
     int generatedSudoku[9][9];
     int sudokuSolution[9][9];
-    generateSudoku(generatedSudoku, diff);
+    SaveFile saveFile;
+    if (loadSudoku) {
+        saveFile = loadSudokuFromFile(fileName);
+        copySudoku(generatedSudoku, saveFile.sudoku);
+    } else {
+        generateSudoku(generatedSudoku, diff);
+    }
     generateSolution(generatedSudoku, sudokuSolution, 1);
     fillSudoku(sudoku, generatedSudoku);
 

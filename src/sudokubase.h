@@ -19,5 +19,5 @@ int editablePosition(int generatedSudoku[9][9], int playerPosition[2]);
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText);
 void getHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku, int playerPosition[2]);
 void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]);
-int sudokuWrapper(GameLayout layout, difficulty diff);
+int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char fileName[256]);
 #endif

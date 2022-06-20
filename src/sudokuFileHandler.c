@@ -68,7 +68,7 @@ int saveSudokuToFile(int sudoku[9][9], char *fileName)
  * 
  * @return SaveFile
  */
-SaveFile loadSudokuFromFile(char *fileName)
+SaveFile loadSudokuFromFile(char fileName[256])
 {
     SaveFile saveFile;
 
@@ -81,6 +81,10 @@ SaveFile loadSudokuFromFile(char *fileName)
     // }
 
     char filePath[128] = "";
+    char tempFileName[256];
+    for (int i = 0; i < (int)strlen(fileName); i++) {
+        tempFileName[i] = fileName[i];
+    }
     buildFilePath(fileName, filePath, "./sudokus/");
 
     FILE *file;

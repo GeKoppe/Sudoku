@@ -15,5 +15,5 @@
 #include "fileHelper.h"
 
 int saveSudokuToFile(int sudoku[9][9], char *fileName);
-SaveFile loadSudokuFromFile(char *fileName);
+SaveFile loadSudokuFromFile(char fileName[256]);
 #endif
