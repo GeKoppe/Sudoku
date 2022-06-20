@@ -24,7 +24,7 @@ int main() {
         if (menu.difficulty != -1) {
             sudokuWrapper(game,menu.difficulty-1, 0, ""); 
         } else if (menu.editor != -1) {
-            if (menu.editor == 0) {
+            if (menu.editor == 1) {
                 buildEditor(game, 0, menu.fileName);
             } else if (menu.editor == 7) {
                 buildEditor(game, 1, menu.fileName);

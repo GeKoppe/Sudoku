@@ -324,12 +324,10 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
         int selection = selectMenu(menuY, menuY + 4, menuX, skipFirst);
 
         if (selection == - 1) {
-            returnValue = 3;
+            returnValue = -2;
         } else {
             returnValue = ((selection - menuY)/2) + 1;
-            if (returnValue == 1) {
-                returnValue = 0;
-            } else if (returnValue == 2) {
+            if (returnValue == 2) {
                 clearScreen(menuY - 2,30, menuX - 6, 80);
                 returnValue = showLoadMenu(menuY, menuX, menu);
                 if (returnValue != -2) {
@@ -339,12 +337,12 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
         }
 
         clearScreen(menuY - 2,30, menuX - 6, 80);
-    } while (returnValue != 3 && gameSelected != 1);
+    } while (returnValue != 3 && returnValue != 1 && gameSelected != 1);
     
     if (gameSelected == 1) {
         return 7;
     } else {
-        return -2;
+        return returnValue;
     }
 } 
 
