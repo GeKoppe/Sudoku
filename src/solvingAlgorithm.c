@@ -53,7 +53,7 @@ int checkInsertionValid(int field[9][9], int num, int posY, int posX){
     return 1;
 }
 
-int generateSolution(int field[9][9], int solution[9][9]){
+int generateSolution(int field[9][9], int solution[9][9], int numberOfSolutionsAskedFor){
     int tmpSolution[9][9];
     int insertedPositionsX[81];
     int insertedPositionsY[81];
@@ -124,6 +124,9 @@ int generateSolution(int field[9][9], int solution[9][9]){
                             solution[i][j] = tmpSolution[i][j];
                         }
                     }
+                }
+                if(foundSolutions == numberOfSolutionsAskedFor){
+                    return foundSolutions;
                 }
                 nextArrayPos--;
                 i = insertedPositionsY[nextArrayPos];
@@ -234,7 +237,7 @@ void generateSudoku(int field[9][9], difficulty diff){
             }
             tmpSudoku[y][x] = 0;
         }
-    } while(generateSolution(tmpSudoku, NULL) != 1);
+    } while(generateSolution(tmpSudoku, NULL, 2) != 1);
 
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
