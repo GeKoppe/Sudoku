@@ -22,7 +22,7 @@ int main() {
     do {
         menu = menuWrapper(game);
         if (menu.difficulty != -1) {
-            sudokuWrapper(game,menu.difficulty-1, 0, ""); 
+            sudokuWrapper(game,menu.difficulty-1, 0, NULL); 
         } else if (menu.editor != -1) {
             if (menu.editor == 0) {
                 buildEditor(game);

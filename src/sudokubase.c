@@ -374,7 +374,9 @@ void copySudoku(int source[9][9], int dest[9][9]) {
     for (int i = 9; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             dest[i][j] = source[i][j];
+            printf("%i", dest[i][j]);
         }
+        printf("\n");
     }
 }
 
@@ -404,13 +406,13 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char fileN
     } else {
         generateSudoku(generatedSudoku, diff);
     }
-    generateSolution(generatedSudoku, sudokuSolution, 1);
-    fillSudoku(sudoku, generatedSudoku);
+    // generateSolution(generatedSudoku, sudokuSolution, 1);
+    // fillSudoku(sudoku, generatedSudoku);
 
-    int bottomText = 0;
+    // int bottomText = 0;
 
-    //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText);
+    // //Spiele das Sudoku
+    // int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText);
 
-    return returnVal;
+    // return returnVal;
 }
