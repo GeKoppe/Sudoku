@@ -77,7 +77,7 @@ int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
         setCursor(111,17);
         printf("Sekunden ");
     } else {
-        
+
     }
     return 0;
 }
@@ -284,7 +284,7 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
 
 void* printTime(void* t){
     ThreadHelper* tH = (ThreadHelper*)t;
-    while(!terminate){
+    while(!terminate){       
         if(getTimeInSeconds(&(tH->timer)) >= tH->lastTime + 1){
             setCursor(150,20);
             printf("%i", tH->lastTime);
@@ -292,6 +292,7 @@ void* printTime(void* t){
             tH->lastTime = getTimeInSeconds(&(tH->timer));
         }
     }
+    return NULL;
 }
 
 /**
@@ -313,7 +314,6 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     t.playerPosition[1] = playerPosition[1];
     t.timer = startTimer();
     t.lastTime = 0;
-
 
     //Usersolution
     int userSolution[9][9];
@@ -365,6 +365,8 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                 }
             }
             saveToFile(save);
+            terminate = 1;
+            pthread_join(thread_id, NULL);
             return -1; //ESCAPE
             default: break;
         }
