@@ -11,7 +11,13 @@ typedef struct sudokuField {
     int upperY; //RECHTE SCHRANKE
 } SudokuField;
 
-int printSudoku(int sudokuX, int sudokuY);
+typedef struct threadHelper {
+    int playerPosition[2];
+    StopWatch timer;
+    int lastTime;
+} ThreadHelper;
+
+int printSudoku(int sudokuX, int sudokuY, int isInEditor);
 SudokuField newSudokuField(int leftX, int rightX, int lowerY, int upperY);
 int crossedLine(int x, int y, int sudokuPosition[2]);
 int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku, int lineCross, int sudokuPosition[2]);
@@ -21,4 +27,5 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 void getHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku, int playerPosition[2]);
 void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]);
 int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName, int continueGame);
+void* printTime(void* t);
 #endif

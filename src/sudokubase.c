@@ -13,7 +13,11 @@
 #include "fileHelper.h"
 #include "solvingAlgorithm.h"
 #include "saveFileHandler.h"
+#include "timeHelper.h"
+#include <pthread.h>
+#include <signal.h>
 
+volatile int terminate = 0;
 /**
  * @brief Druckt das Sudoku Feld an die angegebenen X und Y-Koordinaten
  * @author Gerrit, Thilo
@@ -22,7 +26,7 @@
  * @param sudokuY Y-Koordinate obere linke Ecke
  * @return int 0
  */
-int printSudoku(int sudokuX, int sudokuY) {
+int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
     //STDOUT auf Unicode umstellen
     _setmode(_fileno(stdout), 0x00020000);
     setCursor(sudokuX, sudokuY);
@@ -65,6 +69,16 @@ int printSudoku(int sudokuX, int sudokuY) {
     wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
     //STDOUT zurück auf Standard stellen
     _setmode(_fileno(stdout), _O_TEXT);
+
+    if(!isInEditor){
+        setCursor(111,16);
+        printf("Minuten: ");
+
+        setCursor(111,17);
+        printf("Sekunden ");
+    } else {
+        
+    }
     return 0;
 }
 
@@ -268,6 +282,18 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
     setCursor(playerPosition[0], playerPosition[1]);
 }
 
+void* printTime(void* t){
+    ThreadHelper* tH = (ThreadHelper*)t;
+    while(!terminate){
+        if(getTimeInSeconds(&(tH->timer)) >= tH->lastTime + 1){
+            setCursor(150,20);
+            printf("%i", tH->lastTime);
+            setCursor(tH->playerPosition[0],tH->playerPosition[1]);
+            tH->lastTime = getTimeInSeconds(&(tH->timer));
+        }
+    }
+}
+
 /**
  * @brief Das tatsächliche Spiel
  * @author Gerrit / Thilo
@@ -282,6 +308,12 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
+    ThreadHelper t;
+    t.playerPosition[0] = playerPosition[0];
+    t.playerPosition[1] = playerPosition[1];
+    t.timer = startTimer();
+    t.lastTime = 0;
+
 
     //Usersolution
     int userSolution[9][9];
@@ -299,6 +331,9 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
     //Fange User eingaben ab
     while (1) {
+        terminate = 0;
+        pthread_t thread_id;
+        pthread_create(&thread_id, NULL, printTime, &t);
         switch (getch()) {
             case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition), sudokuPosition); break; //UP
             case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition), sudokuPosition); break; //DOWN
@@ -334,13 +369,18 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             default: break;
         }
 
+        terminate = 1;
+        t.playerPosition[0] = playerPosition[0];
+        t.playerPosition[1] = playerPosition[1];
         //Überprüfe, ob das Sudoku gelöst ist.
         if(compareSudokuToSolution(userSolution, sudokuSolution)){
             setCursor(sudoku.lowerX, sudoku.lowerY + 20);
             printf("Das Sudoku wurde geloest.");
             break;
         }
-        // printf("%i", k);
+
+        pthread_join(thread_id, NULL);
+        
     }
     
     return 0;
@@ -349,7 +389,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 /**
  * @brief Füllt das gedruckte Sudoku mit den generierten Werten
  * @author Thilo
- * 
+ *
  * @param sudoku Koordinaten des Sudokufelds 
  * @param generatedSudoku generiertes Sudoku
  */
@@ -393,7 +433,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
     clearScreen(sudokuY,15, sudokuX-36, 40);
-    printSudoku(sudoku.lowerX, sudoku.lowerY);
+    printSudoku(sudoku.lowerX, sudoku.lowerY, 0);
 
     //Generiere Sudoku und die Lösung dazu
     int generatedSudoku[9][9];
