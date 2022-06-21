@@ -29,7 +29,7 @@ int saveToFile(SaveFile save, char *fileName)
     }
 
     char filePath[128] = "";
-    buildFilePath(fileName, filePath, "./saves/");
+    buildFilePath(filePath, fileName, "./saves/", 1);
 
     FILE *file;
     file = fopen(filePath, "w");
@@ -78,7 +78,7 @@ SaveFile loadSaveFromFile(char *fileName)
     SaveFile saveFile;
 
     char filePath[128] = "";
-    buildFilePath(fileName, filePath, "./saves/");
+    buildFilePath(filePath, "./saves/", fileName, 0);
 
     FILE *file;
     file = fopen(filePath, "r");
