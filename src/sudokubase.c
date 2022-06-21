@@ -70,6 +70,46 @@ int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
     //STDOUT zurück auf Standard stellen
 
     if (!isInEditor) {
+        setCursor(sudokuX - 25, sudokuY);
+        wprintf(L"\x2554\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2557");
+        setCursor(sudokuX - 25, sudokuY + 1);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 2);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 3);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 4);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 5);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 6);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 7);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 8);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 9);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 10);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 11);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 12);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 13);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 14);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 15);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 16);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 17);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX - 25, sudokuY + 18);
+        wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
+
+        //Spieldaten
         setCursor(sudokuX + 50, sudokuY);
         wprintf(L"\x2554\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2557");
         setCursor(sudokuX + 50, sudokuY + 1);
@@ -114,6 +154,13 @@ int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
     _setmode(_fileno(stdout), _O_TEXT);
 
     if(!isInEditor){
+        setCursor(sudokuX - 23, sudokuY + 1);
+        printf("Bewegen: Pfeiltasten");
+        setCursor(sudokuX - 23, sudokuY + 3);
+        printf("Beenden: Escape");
+        setCursor(sudokuX - 23, sudokuY + 5);
+        printf("Hinweis: H");
+
         setCursor(sudokuX + 52, sudokuY + 1);
         printf("Minuten: ");
 
@@ -480,7 +527,7 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
  */
 int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName, int continueGame) {
     //Definiere das Sudokufeld und initialisiere es
-    int sudokuX = layout.topLeftCorner.X + 35;
+    int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
     clearScreen(layout.topLeftCorner.Y + 8,22, layout.topLeftCorner.X + 12, 90);
