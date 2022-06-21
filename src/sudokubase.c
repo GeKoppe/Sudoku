@@ -68,16 +68,60 @@ int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
     setCursor(sudokuX, sudokuY + 18);
     wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
     //STDOUT zurück auf Standard stellen
+
+    if (!isInEditor) {
+        setCursor(sudokuX + 50, sudokuY);
+        wprintf(L"\x2554\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2557");
+        setCursor(sudokuX + 50, sudokuY + 1);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 2);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 3);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 4);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 5);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 6);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 7);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 8);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 9);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 10);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 11);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 12);   
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 13);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 14);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 15);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 16);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 17);
+        wprintf(L"\x2551                      \x2551");
+        setCursor(sudokuX + 50, sudokuY + 18);
+        wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
+    }
+
+    //STDOUT zurück auf Standard stellen
     _setmode(_fileno(stdout), _O_TEXT);
 
     if(!isInEditor){
-        setCursor(111,16);
+        setCursor(sudokuX + 52, sudokuY + 1);
         printf("Minuten: ");
 
-        setCursor(111,17);
-        printf("Sekunden ");
-    } else {
-        
+        setCursor(sudokuX + 52,sudokuY + 3);
+        printf("Sekunden: ");
+
+        setCursor(sudokuX + 52,sudokuY + 5);
+        printf("Hinweise: 3");
     }
     return 0;
 }
@@ -275,6 +319,10 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
         setColor(0x0F);
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         printf("Tipp generiert.");
+        setCursor(sudoku.lowerX + 62,sudoku.lowerY + 6);
+        int hintsLeft = (maxHints - hintsUsed) - 1;
+        printf("%i", hintsLeft);
+
     } else {
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         printf("Deine Tipps sind alle verbraucht.");
@@ -429,10 +477,10 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
  */
 int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName, int continueGame) {
     //Definiere das Sudokufeld und initialisiere es
-    int sudokuX = layout.topLeftCorner.X + 51;
+    int sudokuX = layout.topLeftCorner.X + 35;
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
-    clearScreen(sudokuY,15, sudokuX-36, 40);
+    clearScreen(layout.topLeftCorner.Y + 8,22, layout.topLeftCorner.X + 12, 90);
     printSudoku(sudoku.lowerX, sudoku.lowerY, 0);
 
     //Generiere Sudoku und die Lösung dazu
