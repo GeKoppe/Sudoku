@@ -5,6 +5,7 @@
 #include <math.h>
 //#include <pthread.h>
 #include "common.h"
+#include <stdarg.h>
 
 
 /**
@@ -39,6 +40,23 @@ void setCursor(int x, int y) {
     koordinaten.X= x;
     koordinaten.Y= y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), koordinaten);
+}
+
+void printfToPosition(int posX, int posY, char* format,...){
+    va_list args;
+    va_list argsCopy;
+    va_start(args, format);
+    va_copy(argsCopy, args);
+    int length = vsnprintf(NULL, 0, format, args);
+    char string[length+1];
+    va_end(args);
+    vsprintf(string, format, argsCopy);
+    va_end(argsCopy);
+    COORD coords;
+    coords.X = posX;
+    coords.Y = posY;
+    long unsigned int dummy;
+    WriteConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE), string, length, coords, &dummy);
 }
 
 /**

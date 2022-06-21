@@ -16,8 +16,7 @@
 #include "timeHelper.h"
 #include <pthread.h>
 #include <signal.h>
-
-volatile int terminate = 0;
+#include <math.h>
 /**
  * @brief Druckt das Sudoku Feld an die angegebenen X und Y-Koordinaten
  * @author Gerrit, Thilo
@@ -378,13 +377,13 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
 }
 
 void* printTime(void* t){
+    StopWatch timer = startTimer();
+    int lastTime = 0;
     ThreadHelper* tH = (ThreadHelper*)t;
-    while(!terminate){       
-        if(getTimeInSeconds(&(tH->timer)) >= tH->lastTime + 1){
-            setCursor(tH->sudoku.lowerX + 62,tH->sudoku.lowerY + 3);
-            printf("%i", tH->lastTime);
-            setCursor(tH->playerPosition[0],tH->playerPosition[1]);
-            tH->lastTime = getTimeInSeconds(&(tH->timer));
+    while(1){       
+        if(getTimeInSeconds(&timer) >= lastTime + 1){
+            lastTime = getTimeInSeconds(&timer);
+            printfToPosition(tH->sudoku.lowerX + 62, tH->sudoku.lowerY + 3, "%i", lastTime);
         }
     }
     return NULL;
@@ -405,10 +404,6 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
     ThreadHelper t;
-    t.playerPosition[0] = playerPosition[0];
-    t.playerPosition[1] = playerPosition[1];
-    t.timer = startTimer();
-    t.lastTime = 0;
     t.sudoku = sudoku;
 
     //Usersolution
@@ -425,11 +420,11 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     int hintsUsed = 0;
     int maxHints = 3;
 
+    pthread_t thread_id;
+    pthread_create(&thread_id, NULL, printTime, &t);
     //Fange User eingaben ab
     while (1) {
-        terminate = 0;
-        pthread_t thread_id;
-        pthread_create(&thread_id, NULL, printTime, &t);
+        
         switch (getch()) {
             case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition), sudokuPosition); break; //UP
             case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition), sudokuPosition); break; //DOWN
@@ -460,27 +455,23 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                     save.sudoku[i][j] = userSolution[i][j];
                 }
             }
-            terminate = 1;
-            pthread_join(thread_id, NULL);
+
+            pthread_kill(thread_id, SIGTERM);
             saveToFile(save, fileName);
             return -1; //ESCAPE
             default: break;
         }
 
-        terminate = 1;
-        t.playerPosition[0] = playerPosition[0];
-        t.playerPosition[1] = playerPosition[1];
         //Überprüfe, ob das Sudoku gelöst ist.
         if(compareSudokuToSolution(userSolution, sudokuSolution)){
             setCursor(sudoku.lowerX, sudoku.lowerY + 20);
             printf("Das Sudoku wurde geloest.");
             break;
         }
-
-        pthread_join(thread_id, NULL);
         
     }
     
+    pthread_kill(thread_id, SIGTERM);
     return 0;
 }
 
