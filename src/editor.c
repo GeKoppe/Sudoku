@@ -99,7 +99,7 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
     clearScreen(sudokuY,15, sudokuX-36, 40);
-    printSudoku(sudoku.lowerX, sudoku.lowerY);
+    printSudoku(sudoku.lowerX, sudoku.lowerY, 1);
     
     int generatedSudoku[9][9];
     SaveFile saveFile;

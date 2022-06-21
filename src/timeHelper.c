@@ -43,6 +43,6 @@ void stopTimer(StopWatch *watch)
 double getTimeInSeconds(StopWatch *watch)
 {
     // CLOCKS_PER_SEC needs to be converted to a floating point value for accurate division
-    watch->timeInSeconds = (watch->endTime - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
+    watch->timeInSeconds = (clock() - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
     return watch->timeInSeconds;
 }
