@@ -310,7 +310,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
     do {
         gameSelected = 0;
         setCursor(menuX,menuY - 2);
-        printf("Moechten sie ein neues Spiel Sudoku erstellen oder ein altes bearbeiten?");
+        printf("Moechten Sie ein neues Sudoku erstellen oder ein altes bearbeiten?");
         setCursor(menuX,menuY);
         printf("Neu");
         setCursor(menuX,menuY + 2);

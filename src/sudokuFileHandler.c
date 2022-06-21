@@ -32,7 +32,7 @@ int saveSudokuToFile(int sudoku[9][9], char *fileName)
     }
 
     char filePath[128] = "";
-    buildFilePath(fileName, filePath, "./sudokus/");
+    buildFilePath(filePath, "./sudokus/", fileName, 1);
 
     FILE *file;
     file = fopen(filePath, "w");
@@ -72,20 +72,9 @@ SaveFile loadSudokuFromFile(char* fileName)
 {
     SaveFile saveFile;
 
-    // Manual allocation of the 2d array, so a pointer can be returned from this function
-    // int **sudoku;
-    // sudoku = malloc(9*sizeof(int *));
-    // for (int i = 0; i < 9; i++)
-    // {
-    //     sudoku[i] = malloc(9*sizeof(int));
-    // }
-
     char filePath[128] = "";
-    // char tempFileName[256];
-    // for (int i = 0; i < (int)strlen(fileName); i++) {
-    //     tempFileName[i] = fileName[i];
-    // }
-    buildFilePath(fileName, filePath, "./sudokus/");
+
+    buildFilePath(filePath, "./sudokus/", fileName, 0);
 
     FILE *file;
     file = fopen(filePath, "r");
@@ -106,7 +95,7 @@ SaveFile loadSudokuFromFile(char* fileName)
             {
                 result += fscanf(file, "%d\n", &saveFile.sudoku[i][j]);
                 continue;
-            } 
+            }
             result += fscanf(file, "%d,", &saveFile.sudoku[i][j]);
         }
     }
@@ -118,7 +107,7 @@ SaveFile loadSudokuFromFile(char* fileName)
     }
 
     fclose(file);
-    
+
     saveFile.errorHandler = 1;
 
     return saveFile;
