@@ -123,7 +123,7 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
         returnValue = 2;
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
-        strcpy(menu->fileName, "last_save");
+        strcpy(menu->fileName, "last_save.txt");
     }
 
     clearScreen(menuStart - 2,30, menuX - 4, 60);
