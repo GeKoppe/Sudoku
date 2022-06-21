@@ -64,7 +64,7 @@ int showMainMenu(int menuStart, int menuX) {
  * @param menuX X-Wert des ersten Eintrags des Menüs
  * @return int Auswahl
  */
-int showDifficultyMenu(int menuStart, int menuX) {
+int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
     
     //Es soll kein Menüpunkt übersprungen werden.
     int skip[5] = {-1,-1,-1,-1,-1};
@@ -96,13 +96,14 @@ int showDifficultyMenu(int menuStart, int menuX) {
         returnValue = 4;
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
+        strcpy(menu->fileName, "last_save");
     } 
 
     clearScreen(menuStart - 2,30, menuX - 4, 60);
     return returnValue;
 }
 
-int showContinuationMenu(int menuStart, int menuX) {
+int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     int skip[5] = {-1,-1,-1,-1,-1};
     setCursor(menuX,menuStart - 2);
@@ -122,6 +123,7 @@ int showContinuationMenu(int menuStart, int menuX) {
         returnValue = 2;
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
+        strcpy(menu->fileName, "last_save.txt");
     }
 
     clearScreen(menuStart - 2,30, menuX - 4, 60);
@@ -239,7 +241,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
             returnValue = -2;
         } else {
             int terminateCounter = 0;
-            menu->fileName = malloc((int)(strlen(dir.fileNameList[returnValue - 1]) + 1) * sizeof(char));
+            //menu->fileName = malloc((int)(strlen(dir.fileNameList[returnValue - 1]) + 1) * sizeof(char));
             for (int i = 0; i < (int)strlen(dir.fileNameList[returnValue - 1]); i++) {
                 menu->fileName[i] = dir.fileNameList[returnValue - 1][i];
                 terminateCounter++;
@@ -310,7 +312,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
     do {
         gameSelected = 0;
         setCursor(menuX,menuY - 2);
-        printf("Moechten sie ein neues Spiel Sudoku erstellen oder ein altes bearbeiten?");
+        printf("Moechten Sie ein neues Sudoku erstellen oder ein altes bearbeiten?");
         setCursor(menuX,menuY);
         printf("Neu");
         setCursor(menuX,menuY + 2);
@@ -366,8 +368,8 @@ MenuSelection menuWrapper(GameLayout layout) {
     int finishedSelecting = 0;
     do {
         switch(selection.main) {
-            case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX); break;
-            case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX); break;
+            case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX, &selection); break;
+            case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 5: selection.help = 1; system("start ./Misc/Anleitung.pdf")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
             case 4: selection.editor = showEditorMenu(floor(secondLevelY), secondLevelX, &selection); break;

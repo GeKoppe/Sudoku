@@ -13,6 +13,6 @@
 #define saveFileHandler_h
 #include "fileHelper.h"
 
-int saveToFile(SaveFile save);
+int saveToFile(SaveFile save, char *fileName);
 SaveFile loadSaveFromFile(char *fileName);
 #endif
