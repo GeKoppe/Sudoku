@@ -15,6 +15,7 @@ typedef struct threadHelper {
     int playerPosition[2];
     StopWatch timer;
     int lastTime;
+    SudokuField sudoku;
 } ThreadHelper;
 
 int printSudoku(int sudokuX, int sudokuY, int isInEditor);

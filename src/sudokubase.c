@@ -319,7 +319,7 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
         setColor(0x0F);
         setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         printf("Tipp generiert.");
-        setCursor(sudoku.lowerX + 62,sudoku.lowerY + 6);
+        setCursor(sudoku.lowerX + 62,sudoku.lowerY + 5);
         int hintsLeft = (maxHints - hintsUsed) - 1;
         printf("%i", hintsLeft);
 
@@ -334,7 +334,7 @@ void* printTime(void* t){
     ThreadHelper* tH = (ThreadHelper*)t;
     while(!terminate){       
         if(getTimeInSeconds(&(tH->timer)) >= tH->lastTime + 1){
-            setCursor(150,20);
+            setCursor(tH->sudoku.lowerX + 62,tH->sudoku.lowerY + 3);
             printf("%i", tH->lastTime);
             setCursor(tH->playerPosition[0],tH->playerPosition[1]);
             tH->lastTime = getTimeInSeconds(&(tH->timer));
@@ -362,6 +362,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     t.playerPosition[1] = playerPosition[1];
     t.timer = startTimer();
     t.lastTime = 0;
+    t.sudoku = sudoku;
 
     //Usersolution
     int userSolution[9][9];
