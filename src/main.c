@@ -23,22 +23,17 @@ int main() {
     do {
         menu = menuWrapper(game);
         if (menu.difficulty != -1) {
-            sudokuWrapper(game,menu.difficulty-1, 0, NULL, 0); 
-            // free(menu.fileName);
+            sudokuWrapper(game,menu.difficulty-1, 0, menu.fileName, 0);
         } else if (menu.editor != -1) {
             if (menu.editor == 1) {
                 buildEditor(game, 0, menu.fileName);
-                free(menu.fileName);
             } else if (menu.editor == 7) {
                 buildEditor(game, 1, menu.fileName);
-                free(menu.fileName);
             }
         } else if (menu.load != -1) {
             sudokuWrapper(game,menu.difficulty-1, 1, menu.fileName, 0);
-            free(menu.fileName);
         } else if (menu.cont == 1) {
-            sudokuWrapper(game,menu.difficulty-1, 0, "last_save.txt", 1);
-            free(menu.fileName);
+            sudokuWrapper(game,menu.difficulty-1, 0, menu.fileName, 1);
         }
 
         if (menu.main != 6) {

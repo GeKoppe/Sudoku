@@ -1,7 +1,7 @@
 #ifndef menubase_h
 #define menubase_h
 typedef struct menuSelection {
-    char* fileName;
+    char fileName[50];
     int main;
     int difficulty;
     int cont;

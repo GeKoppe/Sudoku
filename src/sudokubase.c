@@ -277,7 +277,7 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
  * @param sudokuSolution Die Lösung des Sudokus
  * @return int 0
  */
-int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save, char *fileName) {
     //Variablen deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
@@ -329,7 +329,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                     save.sudoku[i][j] = userSolution[i][j];
                 }
             }
-            saveToFile(save);
+            saveToFile(save, fileName);
             return -1; //ESCAPE
             default: break;
         }
@@ -423,7 +423,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int bottomText = 0;
 
     //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile, fileName);
 
     return returnVal;
 }

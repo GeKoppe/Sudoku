@@ -10,7 +10,7 @@
 int showMainMenu(int menuStart, int menuX);
 
 
-int showContinuationMenu(int menuStart, int menuX);
+int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu);
 
 /**
  * @brief Zeigt das Schwierigkeitsmenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Neues Spiel" gedrückt wurde. Lässt Auswahl über Pfeiltasten, Enter und Escape zu.
@@ -19,7 +19,7 @@ int showContinuationMenu(int menuStart, int menuX);
  * @param menuX X-Wert des ersten Eintrags des Menüs
  * @return int Auswahl
  */
-int showDifficultyMenu(int menuStart, int menuX);
+int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu);
 
 /**
  * @brief Zeigt das Lademenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Datei laden" gedrückt wurde. Lässt Auswahl über Pfeiltasten, Enter und Escape zu.
