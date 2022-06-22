@@ -25,21 +25,14 @@ int showMainMenu(int menuStart, int menuX) {
     int skip[5] = {-1,-1,-1,-1,-1};
 
     //Anzeige
-    setCursor(menuX,menuStart);
-    printf("Neues Spiel");
-    setCursor(menuX,menuStart + 2);
-    printf("Spiel fortsetzen");
-    setCursor(menuX, menuStart + 4);
-    printf("Datei laden");
-    setCursor(menuX, menuStart + 6);
-    printf("Sudoku Editor");
-    setCursor(menuX, menuStart + 8);
-    printf("Hilfe");
-    setCursor(menuX, menuStart + 10);
-    printf("Beenden");
-    setCursor(menuX - 4,menuStart);
-    printf("x");
-    setCursor(menuX - 4,menuStart);
+    printfToPosition(menuX, menuStart, "Neues Spiel");
+    printfToPosition(menuX, menuStart + 2, "Spiel fortsetzen");
+    printfToPosition(menuX, menuStart + 4, "Datei laden");
+    printfToPosition(menuX, menuStart + 6, "Sudoku Editor");
+    printfToPosition(menuX, menuStart + 8, "Hilfe");
+    printfToPosition(menuX, menuStart + 10, "Beenden");
+    printfToPosition(menuX - 4, menuStart, "x");
+    setCursor(menuX - 4, menuStart);
 
     //Starte die Auswahl.
     int selection = selectMenu(menuStart, menuStart + 10, menuX, skip);
@@ -71,20 +64,14 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
     int skip[5] = {-1,-1,-1,-1,-1};
 
     //Anzeige
-    setCursor(menuX,menuStart - 2);
-    printf("Bitte waehlen sie eine Schwierigkeit aus.");
+    printfToPosition(menuX, menuStart - 2, "Bitte waehlen sie eine Schwierigkeit aus.");
 
-    setCursor(menuX,menuStart);
-    printf("Leicht");
-    setCursor(menuX,menuStart + 2);
-    printf("Mittel");
-    setCursor(menuX,menuStart + 4);
-    printf("Schwierig");
-    setCursor(menuX,menuStart + 6);
-    printf("Abbrechen");
-    setCursor(menuX - 4,menuStart);
-    printf("x");
-    setCursor(menuX - 4,menuStart);
+    printfToPosition(menuX, menuStart, "Leicht");
+    printfToPosition(menuX, menuStart + 2, "Mittel");
+    printfToPosition(menuX, menuStart + 4, "Schwierig");
+    printfToPosition(menuX, menuStart + 6, "Abbrechen");
+    printfToPosition(menuX - 4, menuStart, "x");
+    setCursor(menuX - 4, menuStart);
     
     //Starte die Auswahl
     int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
@@ -101,23 +88,18 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
         strcpy(menu->fileName, "last_save");
     } 
 
-    clearScreen(menuStart - 2,30, menuX - 4, 60);
+    clearScreen(menuStart - 2, 30, menuX - 4, 60);
     return returnValue;
 }
 
 int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     int skip[5] = {-1,-1,-1,-1,-1};
-    setCursor(menuX,menuStart - 2);
-    printf("Moechten sie das letzte Spiel fortsetzen?");
-    setCursor(menuX,menuStart);
-    printf("Ja");
-    setCursor(menuX,menuStart + 2);
-    printf("Nein");
-
-    setCursor(menuX - 4,menuStart);
-    printf("x");
-    setCursor(menuX - 4,menuStart);
+    printfToPosition(menuX, menuStart - 2, "Moechten sie das letzte Spiel fortsetzen?");
+    printfToPosition(menuX, menuStart, "Ja");
+    printfToPosition(menuX, menuStart + 2, "Nein");
+    printfToPosition(menuX - 4, menuStart, "x");
+    setCursor(menuX - 4, menuStart);
 
     int selection = selectMenu(menuStart, menuStart + 2, menuX, skip);
     int returnValue;
@@ -129,7 +111,7 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
         strcpy(menu->fileName, "last_save.txt");
     }
 
-    clearScreen(menuStart - 2,30, menuX - 4, 60);
+    clearScreen(menuStart - 2, 30, menuX - 4, 60);
     return returnValue;
 }
 
@@ -140,8 +122,7 @@ int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[
     int j = 0; 
 
     while (i < 5* currentPage  && i < dir.fileAmount) {
-        setCursor(menuX, menuY + (2*j));
-        printf("%s", dir.fileNameList[i]);
+        printfToPosition(menuX, menuY + 2 * j, dir.fileNameList[i]);
         i++;
         j++;
     }
@@ -163,12 +144,9 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
     int currentPage = 1;
 
     //Anzeige
-    setCursor(menuX ,menuStart - 2);
-    printf("Bitte waehlen sie ein gespeichertes Spiel aus:");
-
-    setCursor(menuX - 4,menuStart);
-    printf("x");
-    setCursor(menuX - 4,menuStart);
+    printfToPosition(menuX, menuStart - 2, "Bitte waehlen sie ein gespeichertes Spiel aus:");
+    printfToPosition(menuX - 4, menuStart, "x");
+    setCursor(menuX - 4, menuStart);
     
     int selection;
     int returnValue;
@@ -184,34 +162,30 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
             numberOfGames %= 5;
         }
 
-        setCursor(menuX,menuStart + (numberOfGames * 2) + 4);
-        printf("Abbrechen");
+        printfToPosition(menuX, menuStart + (numberOfGames * 2) + 4, "Abbrechen");
 
         //Falls aktuelle Seite der Einträge 10, wird kein "nächste Seite" Knopf mehr benötigt. Setze auch Skip number, damit dieser Eintrag nicht mehr auswählbar ist.
         if (currentPage == 10 || numberAndLeftAmount[1] <= 0) {
-            setCursor(menuX,menuStart + 10);
+            setCursor(menuX, menuStart + 10);
             clearScreen((numberOfGames * 2), 1, menuX, 20);
             skipNumber[0] = menuStart + (numberOfGames * 2);
         } else {
-            setCursor(menuX,menuStart + (numberOfGames * 2) );
-            printf("Naechste Seite");
+            printfToPosition(menuX, menuStart + (numberOfGames * 2), "Naechste Seite");
             skipNumber[0] = -1;
         }
         
         //Falls aktuelle Seite der Einträge 1, wird kein "vorherige Seite" Knopf benötigt. Setze auch Skip number, damit dieser Eintrag nicht mehr auswählbar ist.
         if (currentPage == 1) {  
-            setCursor(menuX,menuStart + 12);
+            setCursor(menuX, menuStart + 12);
             clearScreen((numberOfGames * 2) + 2, 1, menuX, 20);
             skipNumber[1] = menuStart + (numberOfGames * 2) + 2;
         } else {
-            setCursor(menuX,menuStart + (numberOfGames * 2) + 2);
-            printf("Vorherige Seite");
+            printfToPosition(menuX, menuStart + (numberOfGames * 2) + 2, "Vorherige Seite");
             skipNumber[1] = -1;
         }
 
-        setCursor(menuX - 4,menuStart);
-        printf("x");
-        setCursor(menuX - 4,menuStart);
+        printfToPosition(menuX - 4, menuStart, "x");
+        setCursor(menuX - 4, menuStart);
 
         //starte Auswahl
         selection = selectMenu(menuStart, (menuStart + (numberOfGames * 2) + 4), menuX, skipNumber);
@@ -235,13 +209,11 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
         if (selection == menuStart + (numberOfGames * 2)) {
             //Falls nächste Seite: Seite++
             currentPage++;
-            setCursor(menuX - 4,menuStart + 12);
-            printf(" ");
+            printfToPosition(menuX - 4, menuStart + 12, " ");
         } else if (selection == menuStart + (numberOfGames * 2) + 2) {
             //Falls vorherige Seite: Seite--
             currentPage--;
-            setCursor(menuX - 4,menuStart + 12);
-            printf(" ");
+            printfToPosition(menuX - 4, menuStart + 12, " ");
         } else if (selection == menuStart + (numberOfGames * 2) + 4 || selection == -1) {
             returnValue = -2;
         } else {
@@ -277,20 +249,14 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
  */
 int showHelpMenu(int menuY, int menuX) {
     //Anzeige
-    setCursor(menuX, menuY);
-    printf("Wie nutze ich diese wunderschoene App?");
-    setCursor(menuX, menuY + 2);
-    printf("Neues Spiel: Startet ein neues, randomisiertes Spiel mit der ausgewählten Schwierigkeitsstufe.");
-    setCursor(menuX, menuY + 4);
-    printf("Spiel fortsetzen: Das letzte gespielte Spiel wird wieder aufgenommen");
-    setCursor(menuX, menuY + 6);
-    printf("Datei laden: Die ersten 50 Spiele im Ordner werden angezeigt, nach Auswahl wird das entsprechende Spiel gestartet."); //TODO: Den Ordnerpfad angeben
-    setCursor(menuX, menuY + 10);
-    printf("Ok");
+    printfToPosition(menuX, menuY, "Wie nutze ich diese wunderschoene App?");
+    printfToPosition(menuX, menuY + 2, "Neues Spiel: Startet ein neues, randomisiertes Spiel mit der ausgewählten Schwierigkeitsstufe.");
+    printfToPosition(menuX, menuY + 4, "Spiel fortsetzen: Das letzte gespielte Spiel wird wieder aufgenommen");
+    printfToPosition(menuX, menuY + 6, "Datei laden: Die ersten 50 Spiele im Ordner werden angezeigt, nach Auswahl wird das entsprechende Spiel gestartet."); //TODO: Den Ordnerpfad angeben
+    printfToPosition(menuX, menuY + 10, "Ok");
 
+    printfToPosition(menuX - 2, menuY + 10, "x");
     setCursor(menuX - 2, menuY + 10);
-    printf("x");
-    setCursor(menuX - 2,menuY + 10);
 
     //Auswahl
     while (1) {
@@ -317,27 +283,22 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
     int gameSelected = 0;
     do {
         gameSelected = 0;
-        setCursor(menuX,menuY - 2);
-        printf("Moechten Sie ein neues Sudoku erstellen oder ein altes bearbeiten?");
-        setCursor(menuX,menuY);
-        printf("Neu");
-        setCursor(menuX,menuY + 2);
-        printf("Bearbeiten");
-        setCursor(menuX,menuY + 4);
-        printf("Abbrechen");
+        printfToPosition(menuX, menuY - 2, "Moechten Sie ein neues Sudoku erstellen oder ein altes bearbeiten?");
+        printfToPosition(menuX, menuY, "Neu");
+        printfToPosition(menuX, menuY + 2, "Bearbeiten");
+        printfToPosition(menuX, menuY + 4, "Abbrechen");
 
-        setCursor(menuX - 4,menuY);
-        printf("x");
-        setCursor(menuX - 4,menuY);
+        printfToPosition(menuX - 4, menuY, "x");
+        setCursor(menuX - 4, menuY);
 
         int selection = selectMenu(menuY, menuY + 4, menuX, skipFirst);
 
-        if (selection == - 1) {
+        if (selection == -1) {
             returnValue = -2;
         } else {
             returnValue = ((selection - menuY)/2) + 1;
             if (returnValue == 2) {
-                clearScreen(menuY - 2,30, menuX - 6, 80);
+                clearScreen(menuY - 2, 30, menuX - 6, 80);
                 returnValue = showLoadMenu(menuY, menuX, menu);
                 if (returnValue != -2) {
                     gameSelected =1;
@@ -345,7 +306,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
             }
         }
 
-        clearScreen(menuY - 2,30, menuX - 6, 80);
+        clearScreen(menuY - 2, 30, menuX - 6, 80);
     } while (returnValue != 3 && returnValue != 1 && gameSelected != 1);
     
     if (gameSelected == 1) {

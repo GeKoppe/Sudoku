@@ -205,22 +205,22 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
         userSolution[sudokuPosition[0]][sudokuPosition[1]] = number;
         //Falls 0 heißt das, das gelöscht werden soll.
         if(number == 0){
-            printf(".");
+            //printf(".");
+            printfToPosition(playerPosition[0], playerPosition[1], ".");
         } else{
             setColor(0x09);
-            printf("%i", number);
+            //printf("%i", number);
+            printfToPosition(playerPosition[0], playerPosition[1], "%i", number);
             setColor(0x0F);
         }
         //Leere den Hinweis, dass die Zelle nicht editiert werden kann.
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         if(*bottomText){
             clearScreen(sudoku.lowerY + 20, 5, sudoku.lowerX, 45);
             *bottomText = 0;
         }
     } else {
         //Hinweis, dass die Zelle nicht editiert werden kann.
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        wprintf(L"Diese Zelle kann nicht bearbeitet werden.");
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Diese Zelle kann nicht bearbeitet werden.");
         *bottomText = 1;
     }
     setCursor(playerPosition[0], playerPosition[1]);
@@ -254,21 +254,15 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
                 xPlayerPosition += 4;
             }
         }
-        setCursor(xPlayerPosition, yPlayerPosition);
         setColor(0x0C);
-        printf("%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
+        printfToPosition(xPlayerPosition, yPlayerPosition, "%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
         setColor(0x0F);
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        printf("Tipp generiert.");
-        setCursor(sudoku.lowerX + 62,sudoku.lowerY + 5);
-        int hintsLeft = (maxHints - hintsUsed) - 1;
-        printf("%i", hintsLeft);
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Hinweis generiert.");
+        printfToPosition(sudoku.lowerX + 62,sudoku.lowerY + 5, "%i", maxHints - hintsUsed - 1);
 
     } else {
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        printf("Deine Tipps sind alle verbraucht.");
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Deine Hinweise sind alle verbraucht.");
     }
-    setCursor(playerPosition[0], playerPosition[1]);
 }
 
 void* printTime(void* s){
@@ -358,8 +352,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
         //Überprüfe, ob das Sudoku gelöst ist.
         if(compareSudokuToSolution(userSolution, sudokuSolution)){
-            setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-            printf("Das Sudoku wurde geloest!");
+            printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Das Sudoku wurde geloest!");
             break;
         }
         
@@ -396,11 +389,10 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
             } else{
                 cursorX += 4;
             }
-            setCursor(cursorX, cursorY);
             if(generatedSudoku[i][j] == 0){
-                printf(".");
+                continue;
             } else{
-                printf("%i", generatedSudoku[i][j]);
+                printfToPosition(cursorX, cursorY, "%i", generatedSudoku[i][j]);
             }
         }
         cursorX = sudoku.lowerX;

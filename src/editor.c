@@ -13,8 +13,7 @@
 #include "fileHelper.h"
 
 char* inputFileName(SudokuField sudoku) {
-    setCursor(sudoku.lowerX, sudoku.lowerY + 22);
-    printf("Wie soll die Datei heissen? (Ohne Dateiendung bitte und max. 30 Zeichen))");
+    printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Wie soll die Datei heissen? (Ohne Dateiendung bitte und max. 30 Zeichen))");
     setCursor(sudoku.lowerX, sudoku.lowerY + 24);
     char* name = (char*) malloc(30);
     scanf("%30s", name);
@@ -38,14 +37,11 @@ int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], in
 int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstSave, SudokuField sudoku) {
     if (generateSolution(editedSudoku, sudokuSolution, 2) != 1) {
         int skip[5] = {-1,-1,-1,-1,-1};
-        setCursor(sudoku.lowerX, sudoku.lowerY + 22);
-        printf("Das Sudoku ist nicht eindeutig loesbar, trotzdem speichern?");
-        setCursor(sudoku.lowerX, sudoku.lowerY + 24);
-        printf("Ja");
-        setCursor(sudoku.lowerX, sudoku.lowerY + 26);
-        printf("Nein");
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Das Sudoku ist nicht eindeutig loesbar, trotzdem speichern?");
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 24, "Ja");
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 26, "Nein");
+        printfToPosition(sudoku.lowerX - 4, sudoku.lowerY + 24, "x");
         setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
-        printf("x");
         int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, skip);
 
         clearScreen(sudoku.lowerY + 22, 5, sudoku.lowerX - 5, 80);
@@ -55,14 +51,11 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
         int returnValue = selection -39;
 
         if (returnValue == 2) {
-            setCursor(sudoku.lowerX, sudoku.lowerY + 22);
-            printf("Editor beenden?");
-            setCursor(sudoku.lowerX, sudoku.lowerY + 24);
-            printf("Nein");
-            setCursor(sudoku.lowerX, sudoku.lowerY + 26);
-            printf("Ja");
+            printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Editor beenden?");
+            printfToPosition(sudoku.lowerX, sudoku.lowerY + 24, "Nein");
+            printfToPosition(sudoku.lowerX, sudoku.lowerY + 26, "Ja");
+            printfToPosition(sudoku.lowerX - 4, sudoku.lowerY + 24, "x");
             setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
-            printf("x");
             int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, skip);
             int secondReturn = selection - 39;
 

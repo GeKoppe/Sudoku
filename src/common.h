@@ -88,7 +88,7 @@ int outlineFrame(GameLayout layout);
  * @param layout GameLayout Objekt. Die Dimensionen des Spielfensters.
  * @return int 0
  */
-int showFooter(GameLayout layout);
+void showFooter(GameLayout layout);
 
 /**
  * @brief Zeigt die Kopfzeile des Spielfensters an.
@@ -96,7 +96,7 @@ int showFooter(GameLayout layout);
  * @param layout GameLayout Objekt. Die Dimensionen des Spielfensters.
  * @return int 0
  */
-int showHeader(GameLayout layout);
+void showHeader(GameLayout layout);
 
 /**
  * @brief Wrapper, um das Spielfenster zu initialisieren. Prompt für Vollbildmodus, Fenster umranden, Header und Fußzeile anzeigen.
