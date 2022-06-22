@@ -12,6 +12,7 @@
 #define fileHelper_h
 
 #include "timeHelper.h"
+#include "solvingAlgorithm.h"
 
 typedef struct {
     char fileNameList[50][256];
@@ -31,4 +32,6 @@ SudokuDir stripExtensions(SudokuDir dir);
 void buildFilePath(char *pathVariable, char *directory, char *fileName);
 SudokuDir getFilesInFolder(char *directory);
 int checkForFileExtension(char *name);
+int saveBestTimeToFile(difficulty diff, int seconds);
+int readBestTimeFromFile(difficulty diff);
 #endif

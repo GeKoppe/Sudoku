@@ -61,8 +61,8 @@ void printSudoku(int sudokuX, int sudokuY, int isInEditor) {
         printfToPosition(sudokuX - 23, sudokuY + 5, "Hinweis: H");
         printfToPosition(sudokuX - 23, sudokuY + 7, "Loeschen: Backspace");
 
-        printfToPosition(sudokuX + 52, sudokuY + 1, "Minuten: ");
-        printfToPosition(sudokuX + 52, sudokuY + 3, "Sekunden: ");
+        printfToPosition(sudokuX + 52, sudokuY + 1, "Minuten: 0");
+        printfToPosition(sudokuX + 52, sudokuY + 3, "Sekunden: 0");
         printfToPosition(sudokuX + 52, sudokuY + 5, "Hinweise: 3");
     }
 }
@@ -265,14 +265,14 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
     }
 }
 
-void* printTime(void* s){
-    StopWatch timer = startTimer();
-    int lastTime = 0;
-    SudokuField* sudoku = (SudokuField*)s;
+void* printTime(void* t){
+    int seconds = 0;
+    ThreadHelper* th = (ThreadHelper*)t;
     while(1){
-        if(getTimeInSeconds(&timer) >= lastTime + 1){
-            lastTime = getTimeInSeconds(&timer);
-            printfToPosition(sudoku->lowerX + 62, sudoku->lowerY + 3, "%i", lastTime);
+        if(getTimeInSeconds(&(th->timer)) >= seconds + 1){
+            seconds = getTimeInSeconds(&(th->timer));
+            printfToPosition(th->sudoku.lowerX + 61, th->sudoku.lowerY + 1, "%i", seconds/60);
+            printfToPosition(th->sudoku.lowerX + 62, th->sudoku.lowerY + 3, "%i ", seconds%60);
         }
         pthread_testcancel();
     }
@@ -289,6 +289,14 @@ void* printTime(void* s){
  * @return int 0
  */
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
+    printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "Bestzeit (%s):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
+    int bestTime = readBestTimeFromFile(save.difficulty);
+    if(bestTime == -1){
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Nicht vorhanden.");
+    } else {
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Minuten: %i", bestTime/60);
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 17, "Sekunden: %i ", bestTime%60);
+    }
     //Variablen deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
@@ -306,10 +314,13 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
     //Hinweise
     int hintsUsed = 0;
-    int maxHints = 3;
+    int maxHints = 45;
 
+    ThreadHelper t;
+    t.timer = startTimer();
+    t.sudoku = sudoku;
     pthread_t thread_id;
-    pthread_create(&thread_id, NULL, printTime, &sudoku);
+    pthread_create(&thread_id, NULL, printTime, &t);
 
     //Fange User eingaben ab
     while (1) {
@@ -352,19 +363,28 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
         //Überprüfe, ob das Sudoku gelöst ist.
         if(compareSudokuToSolution(userSolution, sudokuSolution)){
-            printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Das Sudoku wurde geloest!");
+            stopTimer(&t.timer);
+            printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Bravo! Das Sudoku wurde geloest!");
+            pthread_cancel(thread_id);
+            if(bestTime == -1 || bestTime > getTimeInSeconds(&t.timer)){
+                saveBestTimeToFile(save.difficulty, getTimeInSeconds(&t.timer));
+                clearScreen(sudoku.lowerY + 15, 3, sudoku.lowerX + 52, 17);
+                printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Minuten: %i", (int)getTimeInSeconds(&t.timer)/60);
+                printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 17, "Sekunden: %i", (int)getTimeInSeconds(&t.timer)%60);
+            }
             break;
         }
         
     }
+    //Das printf soll so statt printfToPosition
     setCursor(sudoku.lowerX, sudoku.lowerY + 22);
-    printf("Weiter mit Enter");
+    printf("Druecke ENTER um ins Menue zurueckzukehren.");
     while(1) {
         if (getch() == 13) {
             break;
         }
     }
-    
+
     pthread_cancel(thread_id);
     return 0;
 }

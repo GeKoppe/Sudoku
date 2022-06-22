@@ -19,7 +19,8 @@
  */
 StopWatch startTimer()
 {
-    StopWatch watch = {clock(), clock(), 0};
+    clock_t currentTime = clock();
+    StopWatch watch = {currentTime, currentTime, 0};
     return watch;
 }
 
@@ -30,8 +31,7 @@ StopWatch startTimer()
  */
 void stopTimer(StopWatch *watch)
 {
-    clock_t currentTime = clock();
-    watch->endTime = currentTime;
+    watch->endTime = clock();
 }
 
 /**
@@ -43,6 +43,10 @@ void stopTimer(StopWatch *watch)
 double getTimeInSeconds(StopWatch *watch)
 {
     // CLOCKS_PER_SEC needs to be converted to a floating point value for accurate division
-    watch->timeInSeconds = (clock() - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
+    if(watch->endTime != watch->startTime){
+        watch->timeInSeconds = (watch->endTime - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
+    } else {
+        watch->timeInSeconds = (clock() - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
+    }
     return watch->timeInSeconds;
 }

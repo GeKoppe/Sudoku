@@ -11,6 +11,11 @@ typedef struct sudokuField {
     int upperY; //RECHTE SCHRANKE
 } SudokuField;
 
+typedef struct threadHelper {
+    SudokuField sudoku;
+    StopWatch timer;
+} ThreadHelper;
+
 void printSudoku(int sudokuX, int sudokuY, int isInEditor);
 SudokuField newSudokuField(int leftX, int rightX, int lowerY, int upperY);
 int crossedLine(int x, int y, int sudokuPosition[2]);

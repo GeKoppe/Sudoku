@@ -163,8 +163,8 @@ int outlineFrame(GameLayout layout) {
  * @return int 0
  */
 void showFooter(GameLayout layout) {
-    printfToPosition(layout.topLeftCorner.X + 2, layout.bottomRightCorner.Y - 2, "Jannik Glane, Thilo Drehlmann, Gerrit Koppe.");
-    printfToPosition(layout.topLeftCorner.X - 13, layout.bottomRightCorner.Y - 2, "Konami Code.");
+    printfToPosition(layout.topLeftCorner.X + 2, layout.bottomRightCorner.Y - 1, "Jannik Glane, Thilo Drehlmann, Gerrit Koppe.");
+    printfToPosition(layout.bottomRightCorner.X - 13, layout.bottomRightCorner.Y - 1, "Konami Code.");
 }
 
 /**

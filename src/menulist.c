@@ -122,7 +122,7 @@ int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[
     int j = 0; 
 
     while (i < 5* currentPage  && i < dir->fileAmount) {
-        printfToPosition(menuX, menuY + 2 * j, dir->fileNameList[i]);
+        printfToPosition(menuX, menuY + 2 * j, "%s", dir->fileNameList[i]);
         i++;
         j++;
     }
