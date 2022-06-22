@@ -39,6 +39,7 @@ int showMainMenu(int menuStart, int menuX) {
     printf("Beenden");
     setCursor(menuX - 4,menuStart);
     printf("x");
+    setCursor(menuX - 4,menuStart);
 
     //Starte die Auswahl.
     int selection = selectMenu(menuStart, menuStart + 10, menuX, skip);
@@ -83,6 +84,7 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
     printf("Abbrechen");
     setCursor(menuX - 4,menuStart);
     printf("x");
+    setCursor(menuX - 4,menuStart);
     
     //Starte die Auswahl
     int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
@@ -115,6 +117,7 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     setCursor(menuX - 4,menuStart);
     printf("x");
+    setCursor(menuX - 4,menuStart);
 
     int selection = selectMenu(menuStart, menuStart + 2, menuX, skip);
     int returnValue;
@@ -165,6 +168,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     setCursor(menuX - 4,menuStart);
     printf("x");
+    setCursor(menuX - 4,menuStart);
     
     int selection;
     int returnValue;
@@ -207,6 +211,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
 
         setCursor(menuX - 4,menuStart);
         printf("x");
+        setCursor(menuX - 4,menuStart);
 
         //starte Auswahl
         selection = selectMenu(menuStart, (menuStart + (numberOfGames * 2) + 4), menuX, skipNumber);
@@ -285,6 +290,7 @@ int showHelpMenu(int menuY, int menuX) {
 
     setCursor(menuX - 2, menuY + 10);
     printf("x");
+    setCursor(menuX - 2,menuY + 10);
 
     //Auswahl
     while (1) {
@@ -322,6 +328,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
 
         setCursor(menuX - 4,menuY);
         printf("x");
+        setCursor(menuX - 4,menuY);
 
         int selection = selectMenu(menuY, menuY + 4, menuX, skipFirst);
 
