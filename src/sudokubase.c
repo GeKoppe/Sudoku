@@ -376,15 +376,16 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
     setCursor(playerPosition[0], playerPosition[1]);
 }
 
-void* printTime(void* t){
+void* printTime(void* s){
     StopWatch timer = startTimer();
     int lastTime = 0;
-    ThreadHelper* tH = (ThreadHelper*)t;
+    SudokuField* sudoku = (SudokuField*)s;
     while(1){
         if(getTimeInSeconds(&timer) >= lastTime + 1){
             lastTime = getTimeInSeconds(&timer);
-            printfToPosition(tH->sudoku.lowerX + 62, tH->sudoku.lowerY + 3, "%i", lastTime);
+            printfToPosition(sudoku->lowerX + 62, sudoku->lowerY + 3, "%i", lastTime);
         }
+        pthread_testcancel();
     }
     return NULL;
 }
@@ -403,8 +404,6 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
-    ThreadHelper t;
-    t.sudoku = sudoku;
 
     //Usersolution
     int userSolution[9][9];
@@ -421,7 +420,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     int maxHints = 3;
 
     pthread_t thread_id;
-    pthread_create(&thread_id, NULL, printTime, &t);
+    pthread_create(&thread_id, NULL, printTime, &sudoku);
 
     //Fange User eingaben ab
     while (1) {
@@ -456,7 +455,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                 }
             }
 
-            pthread_kill(thread_id, SIGTERM);
+            pthread_cancel(thread_id);
             saveToFile(save, fileName);
             return -1; //ESCAPE
             default: break;
@@ -471,7 +470,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
         
     }
     
-    pthread_kill(thread_id, SIGTERM);
+    pthread_cancel(thread_id);
     return 0;
 }
 

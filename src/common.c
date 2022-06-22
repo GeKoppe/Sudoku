@@ -47,7 +47,6 @@ void printfToPosition(int posX, int posY, char* format,...){
     va_start(args, format);
     va_copy(argsCopy, args);
     int length = vsnprintf(NULL, 0, format, args);
-    printf("%i", length);
     char string[length+1];
     va_end(args);
     vsprintf(string, format, argsCopy);
