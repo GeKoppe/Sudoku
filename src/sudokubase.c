@@ -401,7 +401,7 @@ void* printTime(void* s){
  * @param sudokuSolution Die Lösung des Sudokus
  * @return int 0
  */
-int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save, char *fileName) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
     //Variablen deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
@@ -458,7 +458,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             }
 
             pthread_cancel(thread_id);
-            saveToFile(save, fileName);
+            saveToFile(save, "last_save");
             return -1; //ESCAPE
             default: break;
         }
@@ -560,7 +560,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int bottomText = 0;
 
     //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile, fileName);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile);
 
     return returnVal;
 }

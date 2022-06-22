@@ -126,7 +126,7 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
         returnValue = 2;
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
-        strcpy(menu->fileName, "last_save.txt");
+        strcpy(menu->fileName, "last_save");
     }
 
     clearScreen(menuStart - 2,30, menuX - 4, 60);
@@ -378,7 +378,7 @@ MenuSelection menuWrapper(GameLayout layout) {
             case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX, &selection); break;
-            case 5: selection.help = 1; system("start ./Misc/Anleitung.pdf")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
+            case 5: selection.help = 1; system("start ./Misc/Anleitung.html")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
             case 4: selection.editor = showEditorMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 6: finishedSelecting = 1; break;
             default: finishedSelecting = 1;

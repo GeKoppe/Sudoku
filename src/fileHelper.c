@@ -90,7 +90,7 @@ SudokuDir stripExtensions(SudokuDir sdir)
     for (int i = 0; i < sdir.fileAmount; i++)
     {
         int lenOfName = strlen(sdir.fileNameList[i]);
-        char newName[256];
+        //char newName[256];
 
         // Every single character has to be passed individually, otherwise it wouldn't work on windows machines
         for (int j = 0; j < lenOfName - lenExtension; j++)
