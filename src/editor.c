@@ -126,7 +126,6 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
     int sudokuSolution[9][9];
     int saveCheck = -1;
 
-
     while (1) {
         switch (getch()) {
             case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition), sudokuPosition); break; //UP
@@ -152,10 +151,9 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
                     return -1;
                 } else {
                     setCursor(playerPosition[0], playerPosition[1]);
-                    break;
                     firstSave = 0;
                     saveCheck = 0;
-                }; //ESCAPE
+                }; break; //ESCAPE
             default: break;
         }
     }

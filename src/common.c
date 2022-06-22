@@ -43,14 +43,14 @@ void setCursor(int x, int y) {
 
 void printfToPosition(int posX, int posY, char* format,...){
     va_list args;
-    va_list argsCopy;
+    //va_list argsCopy;
     va_start(args, format);
-    va_copy(argsCopy, args);
-    int length = vsnprintf(NULL, 0, format, args);
-    char string[length+1];
+    //va_copy(argsCopy, args);
+    //int length = vsnprintf(NULL, 0, format, args);
+    char string[256];
+    int length = vsprintf(string, format, args);
     va_end(args);
-    vsprintf(string, format, argsCopy);
-    va_end(argsCopy);
+    //va_end(argsCopy);
     COORD coords;
     coords.X = posX;
     coords.Y = posY;
