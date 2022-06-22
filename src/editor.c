@@ -58,9 +58,9 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
             setCursor(sudoku.lowerX, sudoku.lowerY + 22);
             printf("Editor beenden?");
             setCursor(sudoku.lowerX, sudoku.lowerY + 24);
-            printf("Ja");
-            setCursor(sudoku.lowerX, sudoku.lowerY + 26);
             printf("Nein");
+            setCursor(sudoku.lowerX, sudoku.lowerY + 26);
+            printf("Ja");
             setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
             printf("x");
             int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, skip);
@@ -68,13 +68,13 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
 
             clearScreen(sudoku.lowerY + 22, 5, sudoku.lowerX - 5, 80);
             if (selection == -1) {
-                return -1;
+                return 1;
             }
 
             if (secondReturn == 0) {
-                return 1;
-            } else {
                 return -1;
+            } else {
+                return 1;
             }
         } else {
             if(*firstSave){
