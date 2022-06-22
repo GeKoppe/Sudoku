@@ -12,9 +12,6 @@ typedef struct sudokuField {
 } SudokuField;
 
 typedef struct threadHelper {
-    int playerPosition[2];
-    StopWatch timer;
-    int lastTime;
     SudokuField sudoku;
 } ThreadHelper;
 

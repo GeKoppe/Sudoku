@@ -31,6 +31,16 @@ GameLayout newGameLayout(int startX, int startY, int width, int height);
 void setCursor(int x, int y);
 
 /**
+ * @brief Setzt den Cursor an Position X,Y
+ * 
+ * @param posX X-Koordinate
+ * @param posY Y-Koordinate
+ * @param format Das Format was geprintet wird (bspw. %i)
+ * @return int 0
+ */
+void printfToPosition(int posX, int posY, char* format,...);
+
+/**
  * @brief Leert das angegebene Rechteck.
  * 
  * @param y Obere Y-Koordinate des Rechtecks

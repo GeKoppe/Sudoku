@@ -5,7 +5,7 @@
 #include <math.h>
 //#include <pthread.h>
 #include "common.h"
-
+#include <stdarg.h>
 
 /**
  * @brief Constructor für das GameLayout Ovjekt
@@ -39,6 +39,24 @@ void setCursor(int x, int y) {
     koordinaten.X= x;
     koordinaten.Y= y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), koordinaten);
+}
+
+void printfToPosition(int posX, int posY, char* format,...){
+    va_list args;
+    va_list argsCopy;
+    va_start(args, format);
+    va_copy(argsCopy, args);
+    int length = vsnprintf(NULL, 0, format, args);
+    printf("%i", length);
+    char string[length+1];
+    va_end(args);
+    vsprintf(string, format, argsCopy);
+    va_end(argsCopy);
+    COORD coords;
+    coords.X = posX;
+    coords.Y = posY;
+    long unsigned int dummy;
+    WriteConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE), string, length, coords, &dummy);
 }
 
 /**
@@ -92,13 +110,11 @@ int clearScreen(int y, int height, int x, int width) {
     } else {
         //Durch die Koordinaten iterieren und immer ein Leerzeichen drucken.
         for (int i = y; i < y + height; i++) {
-            for (int j = x; j < x + width; j++) {
-                setCursor(j, i);
-                printf(" ");
-            }
+            printfToPosition(x-1, i, "%*c", width, " ");
         }
         return 0;
     }
+    return 0;
 }
 
 /**
