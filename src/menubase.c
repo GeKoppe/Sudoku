@@ -49,6 +49,7 @@ int cursorCallback(int y, int *playerY, int upperY, int lowerY, int menuX) {
     checkBounds(playerY, upperY, lowerY);
     setCursor(menuX - 4, *playerY);
     printf("x");
+    setCursor(menuX - 4, *playerY);
     
     return 0;
 }
