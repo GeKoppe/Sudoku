@@ -41,6 +41,15 @@ void setCursor(int x, int y);
 void printfToPosition(int posX, int posY, char* format,...);
 
 /**
+ * @brief Generiert einen String der c n-mal enthält
+ * 
+ * @param c
+ * @param n
+ * @return char*
+ */
+char* repeatNTimes(char c, int n);
+
+/**
  * @brief Leert das angegebene Rechteck.
  * 
  * @param y Obere Y-Koordinate des Rechtecks
