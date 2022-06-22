@@ -160,6 +160,8 @@ int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
         printf("Beenden: Escape");
         setCursor(sudokuX - 23, sudokuY + 5);
         printf("Hinweis: H");
+        setCursor(sudokuX - 23, sudokuY + 7);
+        printf("Loeschen: Backspace");
 
         setCursor(sudokuX + 52, sudokuY + 1);
         printf("Minuten: ");
