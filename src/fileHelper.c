@@ -21,6 +21,7 @@
  * @brief Checks if a dir exists. Return 1 if it exists, 0 if it doesn't;
  * Code from: https://stackoverflow.com/a/12510903
  * 
+ * @param char *directory
  * @return int 
  */
 int checkDirExists(char *directory)
@@ -57,27 +58,54 @@ void createDir(char *directory)
 }
 
 /**
- * @brief Concats the passed arguments to a relative path. File extension is provided.
+ * @brief Concats the passed directory and fileName to the pathVariable.
+ * File extension is provided.
  * 
  * @param char *fileName 
  * @param char *pathVariable 
  * @param char *directory
  */
-void buildFilePath(char *pathVariable, char *directory, char *fileName, int useExtension)
+void buildFilePath(char *pathVariable, char *directory, char *fileName)
 {
     strcat(pathVariable, directory);
     strcat(pathVariable, fileName);
+    strcat(pathVariable, ".txt");
+}
 
-    if (useExtension)
+/**
+ * @brief Strips the .txt extension from every entry of the fileNameList.
+ * 
+ * @param SudokuDir sdir 
+ * @return SudokuDir 
+ */
+SudokuDir stripExtensions(SudokuDir sdir)
+{
+    // Creation of a new SudokuDir which will be returned
+    SudokuDir newDir;
+    newDir.fileAmount = sdir.fileAmount;
+
+    int lenExtension = strlen(".txt");
+
+    // Loop to iterate over every entry in the fileNameList
+    for (int i = 0; i < sdir.fileAmount; i++)
     {
-        strcat(pathVariable, ".txt");
+        int lenOfName = strlen(sdir.fileNameList[i]);
+        char newName[256];
+
+        // Every single character has to be passed individually, otherwise it wouldn't work on windows machines
+        for (int j = 0; j < lenOfName - lenExtension; j++)
+        {
+            newDir.fileNameList[i][j] = sdir.fileNameList[i][j];
+        }
     }
+    
+    return newDir;
 }
 
 /**
  * @brief Checks if the passed filename has the right extension
  * 
- * @param name 
+ * @param char *name 
  * @return int 
  */
 int checkForFileExtension(char *name)
@@ -167,6 +195,8 @@ SudokuDir getFilesInFolder(char *directory)
         }
         closedir(d);
     }
+
+    sdir = stripExtensions(sdir);
 
     return sdir;
 }

@@ -159,6 +159,8 @@ int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
         printf("Beenden: Escape");
         setCursor(sudokuX - 23, sudokuY + 5);
         printf("Hinweis: H");
+        setCursor(sudokuX - 23, sudokuY + 7);
+        printf("Loeschen: Backspace");
 
         setCursor(sudokuX + 52, sudokuY + 1);
         printf("Minuten: ");
@@ -464,10 +466,17 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
         //Überprüfe, ob das Sudoku gelöst ist.
         if(compareSudokuToSolution(userSolution, sudokuSolution)){
             setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-            printf("Das Sudoku wurde geloest.");
+            printf("Das Sudoku wurde geloest!");
             break;
         }
         
+    }
+    setCursor(sudoku.lowerX, sudoku.lowerY + 22);
+    printf("Weiter mit Enter");
+    while(1) {
+        if (getch() == 13) {
+            break;
+        }
     }
     
     pthread_cancel(thread_id);
