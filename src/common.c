@@ -109,7 +109,7 @@ int clearScreen(int y, int height, int x, int width) {
     } else {
         //Durch die Koordinaten iterieren und immer ein Leerzeichen drucken.
         for (int i = y; i < y + height; i++) {
-            printfToPosition(x-1, i, "%*c", width, " ");
+            printfToPosition(x-1, i, "%*c", width, ' ');
         }
         return 0;
     }

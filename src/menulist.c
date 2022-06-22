@@ -45,7 +45,7 @@ int showMainMenu(int menuStart, int menuX) {
     int selection = selectMenu(menuStart, menuStart + 10, menuX, skip);
 
     //Lösche die gesamte X-Spalte
-    clearScreen(menuStart, 20, menuX- 4, 1);
+    clearScreen(menuStart, 20, menuX- 4, 2);
     
     //Berechne die Auswahl anhand der Koordinaten.
     int returnValue;
@@ -90,7 +90,7 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
     int selection = selectMenu(menuStart, menuStart + 6, menuX, skip);
     
     //Lösche die gesamte X-Spalte
-    clearScreen(menuStart, 20, menuX- 4, 1);
+    clearScreen(menuStart, 20, menuX- 4, 2);
     
     //Berechne die Auswahl anhand der Koordinaten
     int returnValue;
