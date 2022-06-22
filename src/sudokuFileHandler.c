@@ -32,7 +32,7 @@ int saveSudokuToFile(int sudoku[9][9], char *fileName)
     }
 
     char filePath[128] = "";
-    buildFilePath(filePath, "./sudokus/", fileName, 1);
+    buildFilePath(filePath, "./sudokus/", fileName);
 
     FILE *file;
     file = fopen(filePath, "w");
@@ -74,7 +74,7 @@ SaveFile loadSudokuFromFile(char* fileName)
 
     char filePath[128] = "";
 
-    buildFilePath(filePath, "./sudokus/", fileName, 0);
+    buildFilePath(filePath, "./sudokus/", fileName);
 
     FILE *file;
     file = fopen(filePath, "r");
