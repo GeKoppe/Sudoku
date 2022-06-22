@@ -1,5 +1,6 @@
 #ifndef menulist_h
 #define menulist_h
+#include "fileHelper.h"
 /**
  * @brief Zeigt das Hauptmenü des Spiels an. Lässt Auswahl über Pfeiltasten, Enter und Escape zu. 
  * 
@@ -28,7 +29,7 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu);
  * @param menuX X-Wert des ersten Eintrags des Menüs
  * @return int Auswahl
  */
-int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2]);
+int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2], SudokuDir* dir);
 
 /**
  * @brief Zeigt das Hilfemenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Hilfe" gedrückt wurde. Lässt Auswahl über Enter und Escape zu.

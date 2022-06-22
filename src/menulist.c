@@ -108,27 +108,27 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
         returnValue = 2;
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
-        strcpy(menu->fileName, "last_save.txt");
+        strcpy(menu->fileName, "last_save");
     }
 
     clearScreen(menuStart - 2, 30, menuX - 4, 60);
     return returnValue;
 }
 
-int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2]) {
+int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2], SudokuDir* dir) {
     //DEBUGGING PURPOSES
-    SudokuDir dir = getFilesInFolder("./sudokus/");
+    *dir = getFilesInFolder("./sudokus/");
     int i = (5* (currentPage- 1));
     int j = 0; 
 
-    while (i < 5* currentPage  && i < dir.fileAmount) {
-        printfToPosition(menuX, menuY + 2 * j, dir.fileNameList[i]);
+    while (i < 5* currentPage  && i < dir->fileAmount) {
+        printfToPosition(menuX, menuY + 2 * j, dir->fileNameList[i]);
         i++;
         j++;
     }
 
     numberAndLeftAmount[0] = j;
-    numberAndLeftAmount[1] = (dir.fileAmount - i);
+    numberAndLeftAmount[1] = (dir->fileAmount - i);
     return j;
 }
 
@@ -151,11 +151,10 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
     int selection;
     int returnValue;
     int skipNumber[5] = {-1,-1,-1,-1,-1};
-    SudokuDir dir = getFilesInFolder("./sudokus/");
+    SudokuDir dir;
     do {
-        //TODO Zeige die gespeicherten Spiele an
         int numberAndLeftAmount[2] = {-1,-1};
-        int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount);
+        int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount, &dir);
 
         //Helper Variable für dynamische Anzeige
         while (numberOfGames > 5) {
@@ -339,7 +338,7 @@ MenuSelection menuWrapper(GameLayout layout) {
             case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX, &selection); break;
-            case 5: selection.help = 1; system("start ./Misc/Anleitung.pdf")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
+            case 5: selection.help = 1; system("start ./Misc/Anleitung.html")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
             case 4: selection.editor = showEditorMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 6: finishedSelecting = 1; break;
             default: finishedSelecting = 1;
