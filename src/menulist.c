@@ -133,21 +133,21 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
     return returnValue;
 }
 
-int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2]) {
+int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2], SudokuDir* dir) {
     //DEBUGGING PURPOSES
-    SudokuDir dir = getFilesInFolder("./sudokus/");
+    *dir = getFilesInFolder("./sudokus/");
     int i = (5* (currentPage- 1));
     int j = 0; 
 
-    while (i < 5* currentPage  && i < dir.fileAmount) {
+    while (i < 5* currentPage  && i < dir->fileAmount) {
         setCursor(menuX, menuY + (2*j));
-        printf("%s", dir.fileNameList[i]);
+        printf("%s", dir->fileNameList[i]);
         i++;
         j++;
     }
 
     numberAndLeftAmount[0] = j;
-    numberAndLeftAmount[1] = (dir.fileAmount - i);
+    numberAndLeftAmount[1] = (dir->fileAmount - i);
     return j;
 }
 
@@ -173,11 +173,11 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
     int selection;
     int returnValue;
     int skipNumber[5] = {-1,-1,-1,-1,-1};
-    SudokuDir dir = getFilesInFolder("./sudokus/");
+    SudokuDir dir;
     do {
         //TODO Zeige die gespeicherten Spiele an
         int numberAndLeftAmount[2] = {-1,-1};
-        int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount);
+        int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount, &dir);
 
         //Helper Variable für dynamische Anzeige
         while (numberOfGames > 5) {
