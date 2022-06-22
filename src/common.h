@@ -31,17 +31,6 @@ GameLayout newGameLayout(int startX, int startY, int width, int height);
 void setCursor(int x, int y);
 
 /**
- * @brief Schreibt an Position X,Y im Terminal
- * 
- * @param string Das zu printende
- * @param x X-Koordinate
- * @param y Y-Koordinate
- * @param arg_count Zählt die Formatparameter
- * @return int 0
- */
-void printfToPosition( int posX, int posY, char* format, ...);
-
-/**
  * @brief Leert das angegebene Rechteck.
  * 
  * @param y Obere Y-Koordinate des Rechtecks
