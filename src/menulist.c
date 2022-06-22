@@ -215,7 +215,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
 
         //starte Auswahl
         selection = selectMenu(menuStart, (menuStart + (numberOfGames * 2) + 4), menuX, skipNumber);
-        clearScreen(menuStart, 20, menuX- 4, 1); //Cursor löschen
+        clearScreen(menuStart, 20, menuX- 4, 2); //Cursor löschen
         
         if (selection == -1) {
             //Falls ESCAPE abbrechen
