@@ -58,7 +58,8 @@ void createDir(char *directory)
 }
 
 /**
- * @brief Concats the passed arguments to a relative path. File extension is provided.
+ * @brief Concats the passed directory and fileName to the pathVariable.
+ * File extension is provided.
  * 
  * @param char *fileName 
  * @param char *pathVariable 
@@ -91,13 +92,11 @@ SudokuDir stripExtensions(SudokuDir sdir)
         int lenOfName = strlen(sdir.fileNameList[i]);
         char newName[256];
 
+        // Every single character has to be passed individually, otherwise it wouldn't work on windows machines
         for (int j = 0; j < lenOfName - lenExtension; j++)
         {
-            // Writes every single character of the filename to the newName, except the extension
-            newName[j] = sdir.fileNameList[i][j];
+            newDir.fileNameList[i][j] = sdir.fileNameList[i][j];
         }
-
-        strcpy(newDir.fileNameList[i], newName);
     }
     
     return newDir;
