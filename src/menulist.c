@@ -175,7 +175,6 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
     int skipNumber[5] = {-1,-1,-1,-1,-1};
     SudokuDir dir;
     do {
-        //TODO Zeige die gespeicherten Spiele an
         int numberAndLeftAmount[2] = {-1,-1};
         int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount, &dir);
 
@@ -284,7 +283,7 @@ int showHelpMenu(int menuY, int menuX) {
     setCursor(menuX, menuY + 4);
     printf("Spiel fortsetzen: Das letzte gespielte Spiel wird wieder aufgenommen");
     setCursor(menuX, menuY + 6);
-    printf("Datei laden: Die ersten 50 Spiele im Ordner werden angezeigt, nach Auswahl wird das entsprechende Spiel gestartet."); //TODO: Den Ordnerpfad angeben
+    printf("Datei laden: Die ersten 50 Spiele im Ordner ./sudokus werden angezeigt, nach Auswahl wird das entsprechende Spiel gestartet.");
     setCursor(menuX, menuY + 10);
     printf("Ok");
 
