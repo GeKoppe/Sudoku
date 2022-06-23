@@ -17,7 +17,7 @@
  * 
  * @return StopWatch 
  */
-StopWatch startTimer(int seconds)
+StopWatch startTimer()
 {
     clock_t currentTime = clock();
     StopWatch watch = {currentTime, currentTime, 0};
