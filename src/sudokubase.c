@@ -239,7 +239,7 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
  * @param sudoku Koordinaten des Sudokus
  * @param playerPosition Position des Spielers
  */
-void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku, int playerPosition[2]){
+void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku){
     //Generiere den Hint
     Hint hint = generateHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku);
     if(hint.value != -1){
@@ -314,7 +314,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
     //Hinweise
     int hintsUsed = 0;
-    int maxHints = 45;
+    int maxHints = 3;
 
     ThreadHelper t;
     t.timer = startTimer();
@@ -341,7 +341,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             case 57: numberCallback(9, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //9
 
             case 104: //H (Hinweis)
-                getHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku, sudoku, playerPosition); 
+                getHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku, sudoku); 
                 hintsUsed++;
                 *bottomText = 1;
                 break;

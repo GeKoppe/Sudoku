@@ -204,7 +204,6 @@ SudokuDir getFilesInFolder(char *directory)
 int saveBestTimeToFile(difficulty diff, int seconds){
     if (!checkDirExists("./best_times/"))
     {
-        printf("DKLNDSJKSD");
         createDir("./best_times/");
     }
 

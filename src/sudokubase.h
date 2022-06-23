@@ -24,7 +24,7 @@ int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku
 int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9], SudokuField sudoku, int sudokuPosition[2], int userSolution[9][9], int* bottomText);
 int editablePosition(int generatedSudoku[9][9], int playerPosition[2]);
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save);
-void getHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku, int playerPosition[2]);
+void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku);
 void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]);
 int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName, int continueGame);
 void* printTime(void* t);
