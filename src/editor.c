@@ -25,7 +25,9 @@ char* inputFileName(SudokuField sudoku) {
     //Cursor an die korrekte Stelle setzen und Namen einlesen
     setCursor(sudoku.lowerX, sudoku.lowerY + 24);
     char* name = (char*) malloc(30);
-    scanf("%30s", name);
+    if (!scanf("%30s", name)) {
+        setCursor(sudoku.lowerX, sudoku.lowerY + 24);
+    }
     
     //Bildschirm clearen und Namen zurückgeben
     clearScreen(sudoku.lowerY + 20, 10, sudoku.lowerX, 75);
@@ -134,13 +136,20 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
 /**
  * @brief Startet den Editor. Ist effektiv die Main dieser Library
  * 
- * @param layout 
- * @param loadFile 
- * @param fileName 
+ * @param layout Layout des Spielfensters
+ * @param loadFile Boolean: Wurde eine Datei geladen?
+ * @param fileName Name der potentiell geladenen Datei. new_sudoku sonst
  * @return int 
  */
 int buildEditor(GameLayout layout, int loadFile, char* fileName) {
-    int firstSave = 1;
+    //Gibt an, ob die Datei das erste mal gespeichert wird.
+    int firstSave;
+    if (loadFile) {
+        firstSave = 0;
+    } else {
+        firstSave = 1;
+    }
+
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
