@@ -56,6 +56,21 @@ int saveToFile(SaveFile save, char *fileName)
         fprintf(file, "\n");
     }
 
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            if(j >= 8)
+            {
+                fprintf(file, "%d", save.markersForContinuation[i][j]);
+            } else 
+            {
+                fprintf(file, "%d,", save.markersForContinuation[i][j]);
+            }    
+        }
+        fprintf(file, "\n");
+    }
+
     // Prints the name and the difficulty to the file
     fprintf(file ,"%d\n", save.difficulty);
     
