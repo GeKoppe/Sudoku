@@ -20,6 +20,7 @@
  * 
  * @param sudokuX X-Koordinate obere linke Ecke
  * @param sudokuY Y-Koordinate obere linke Ecke
+ * @param isInEditor Gibt an, ob die Methode aus dem Editor heraus aufgerufen wurde.
  * @return int 0
  */
 void printSudoku(int sudokuX, int sudokuY, int isInEditor) {

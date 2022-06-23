@@ -130,7 +130,6 @@ int checkForFileExtension(char *name)
  * 
  * @return SudokuDir struct
  */
-
 SudokuDir getFilesInFolder(char *directory) 
 {
     SudokuDir sdir;
