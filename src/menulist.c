@@ -9,6 +9,8 @@
 #include "menubase.h"
 #include "menulist.h"
 #include "fileHelper.h"
+#include "sudokuFileHandler.h"
+#include "solvingAlgorithm.h"
 
 
 /**
@@ -243,6 +245,11 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
                 terminateCounter++;
             }
             menu->fileName[terminateCounter] = '\0';
+            // int dummyField[9][9];
+            // if (generateSolution(loadSudokuFromFile(menu->fileName).sudoku, dummyField, 2) != 1) {
+            //     printfToPosition(menuX - 4, menuStart + 16, "Das ausgewaehlte Sudoku ist nicht loesbar und kann nicht geladen werden.");
+            //     break;
+            // }
         }
         //Falls eine Auswahl getroffen wurde: Abbrechen.
         if (returnValue != 8 && returnValue != 7 && returnValue != 6) {
