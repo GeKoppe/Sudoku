@@ -239,7 +239,7 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
  * @param sudoku Koordinaten des Sudokus
  * @param playerPosition Position des Spielers
  */
-void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku){
+void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku, int hintPositions[3][2]){
     //Generiere den Hint
     Hint hint = generateHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku);
     if(hint.value != -1){
@@ -257,6 +257,9 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
         setColor(0x0C);
         printfToPosition(xPlayerPosition, yPlayerPosition, "%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
         setColor(0x0F);
+        //Speichere die Position in die Hintposition, damit diese beim Weiterspielen wieder aufgenommen werden können.
+        hintPositions[(hintsUsed - 1)][0] = hint.sudokuY;
+        hintPositions[(hintsUsed - 1)][1] = hint.sudokuX;
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Hinweis generiert.");
         printfToPosition(sudoku.lowerX + 62,sudoku.lowerY + 5, "%i", maxHints - hintsUsed - 1);
 
@@ -321,6 +324,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     t.sudoku = sudoku;
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, printTime, &t);
+    int hintPositions[3][2];
 
     //Fange User eingaben ab
     while (1) {
@@ -341,16 +345,43 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             case 57: numberCallback(9, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //9
 
             case 104: //H (Hinweis)
-                getHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku, sudoku); 
+                getHint(userSolution, sudokuSolution, hintsUsed, maxHints, generatedSudoku, sudoku, hintPositions); 
                 hintsUsed++;
                 *bottomText = 1;
                 break;
 
             case 8: numberCallback(0, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //DELETE
             case 27: 
+            //Schreibe alle wichtigen Randdaten in das SaveFile
             for(int i = 0; i < 9; i++){
                 for(int j = 0; j < 9; j++){
                     save.sudoku[i][j] = userSolution[i][j];
+                }
+            }
+            save.hintsUsed = hintsUsed;
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    for (int k = 0; k < hintsUsed; k++) {
+                        if (hintPositions[k][0] == j && hintPositions[k][1] == i) {
+                            //3: HINT
+                            save.markersForContinuation[i][j] = 3;
+                            break;
+                        }
+                    }
+
+                    if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
+                        //2: USER EINGABE
+                        save.markersForContinuation[i][j] = 2;
+                    } else if (generatedSudoku[i][j] != 0) {
+                        //1: ORIGINAL SUDOKU
+                        save.markersForContinuation[i][j] = 1;
+                    }
+
+                    if (save.markersForContinuation[i][j] != 1 && save.markersForContinuation[i][j] != 2 && save.markersForContinuation[i][j] != 3) {
+                        //0: LEERES FELD
+                        save.markersForContinuation[i][j] = 0;
+                    }
+
                 }
             }
 

@@ -21,6 +21,8 @@ typedef struct {
 
 typedef struct {
     int sudoku[9][9];
+    int markersForContinuation[9][9];
+    int hintsUsed;
     int difficulty;
     StopWatch timer;
     int errorHandler;
