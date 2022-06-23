@@ -56,6 +56,7 @@ int showMainMenu(int menuStart, int menuX) {
  * 
  * @param menuStart Y-Wert des ersten Eintrags des Menüs
  * @param menuX X-Wert des ersten Eintrags des Menüs
+ * @param menu Pointer auf den MenuSelection Struct, mit dem die Menüselektion analysiert und aufgezeichnet wird.
  * @return int Auswahl
  */
 int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
@@ -92,6 +93,14 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
     return returnValue;
 }
 
+/**
+ * @brief Die Methode zeigt das Menü dafür an, ob man mit dem letzten gespeicherten Spiel fortfahren möchte
+ * 
+ * @param menuStart Y-Wert des ersten Eintrags des Menüs
+ * @param menuX X-Wert des ersten Eintrags des Menüs
+ * @param menu Pointer auf den MenuSelection Struct, mit dem die Menüselektion analysiert und aufgezeichnet wird. 
+ * @return int Auswahl
+ */
 int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     int skip[5] = {-1,-1,-1,-1,-1};
@@ -115,6 +124,16 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
     return returnValue;
 }
 
+/**
+ * @brief Zeigt bis zu 50 Spiele in dem ./sudokus Ordner an
+ * 
+ * @param currentPage Aktuelle Seite im Datei laden Menü
+ * @param menuX X-Koordinate
+ * @param menuY Y-Koordinate
+ * @param numberAndLeftAmount Array. 0. Eintrag ist Anzahl der Spiele dieser Seite, 1. Eintrag übrige Spiele 
+ * @param dir Der Struct für das Sudoku Directory
+ * @return int Anzahl der Spiele auf der aktuellen Seite
+ */
 int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2], SudokuDir* dir) {
     //DEBUGGING PURPOSES
     *dir = getFilesInFolder("./sudokus/");
@@ -137,6 +156,7 @@ int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[
  * 
  * @param menuStart Y-Wert des ersten Eintrags des Menüs
  * @param menuX X-Wert des ersten Eintrags des Menüs
+ * @param menu Pointer auf den MenuSelection Struct, mit dem die Menüselektion analysiert und aufgezeichnet wird. 
  * @return int Auswahl
  */
 int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
@@ -270,17 +290,19 @@ int showHelpMenu(int menuY, int menuX) {
 
 /**
  * @brief Dieses Menü fragt ab, ob ein komplett neues Sudoku erstellt werden soll oder ob ein bereits bestehendes bearbeitet werden soll.
- * @author Gerrit
  * 
  * @param menuStart Y-Wert des ersten Eintrags des Menüs
  * @param menuX X-Wert des ersten Eintrags des Menüs
+ * @param menu Pointer auf den MenuSelection Struct, mit dem die Menüselektion analysiert und aufgezeichnet wird. 
  * @return int Auswahl
  */
 int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
+    //Menüeinträge, die übersprungen werden sollen
     int skipFirst[5] = {-1,-1,-1,-1,-1};
     int returnValue;
     int gameSelected = 0;
     do {
+        //Frage, ob ein neues erstellt oder ein altes bearbeitet werden soll.
         gameSelected = 0;
         printfToPosition(menuX, menuY - 2, "Moechten Sie ein neues Sudoku erstellen oder ein altes bearbeiten?");
         printfToPosition(menuX, menuY, "Neu");
@@ -290,19 +312,24 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
         printfToPosition(menuX - 4, menuY, "x");
         setCursor(menuX - 4, menuY);
 
+        //Menüselektion
         int selection = selectMenu(menuY, menuY + 4, menuX, skipFirst);
 
+        //Analysiere die Auswahl
         if (selection == -1) {
+            //ESCAPE
             returnValue = -2;
         } else {
             returnValue = ((selection - menuY)/2) + 1;
             if (returnValue == 2) {
+                //Spiel laden
                 clearScreen(menuY - 2, 30, menuX - 6, 80);
                 returnValue = showLoadMenu(menuY, menuX, menu);
                 if (returnValue != -2) {
                     gameSelected =1;
                 }
             } else {
+                //Neues Spiel
                 strcpy(menu->fileName, "new_sudoku");
             }
         }
@@ -310,6 +337,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
         clearScreen(menuY - 2, 30, menuX - 6, 80);
     } while (returnValue != 3 && returnValue != 1 && gameSelected != 1);
     
+    //Falls spiel selektiert, returne 7, ansonsten den Returnvalue
     if (gameSelected == 1) {
         return 7;
     } else {
@@ -317,6 +345,12 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
     }
 } 
 
+/**
+ * @brief Zusammenfassende Funktion für das Menü. Eine der ersten Funktionen, die in diesem Projekt entstanden ist, dementsprechend etwas ineffizient aber was solls
+ * 
+ * @param layout Layout des Spielfensters
+ * @return MenuSelection Zusammenfassender Struct über die Menü Auswahl
+ */
 MenuSelection menuWrapper(GameLayout layout) {
     MenuSelection selection;
     selection.main = -1;

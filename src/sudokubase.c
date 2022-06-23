@@ -17,7 +17,6 @@
 
 /**
  * @brief Druckt das Sudoku Feld an die angegebenen X und Y-Koordinaten
- * @author Gerrit, Thilo
  * 
  * @param sudokuX X-Koordinate obere linke Ecke
  * @param sudokuY Y-Koordinate obere linke Ecke
@@ -69,7 +68,6 @@ void printSudoku(int sudokuX, int sudokuY, int isInEditor) {
 
 /**
  * @brief Generiert einen Struct anhand dessen das Sudokufeld identifiziert werden kann
- * @author Gerrit
  * 
  * @param leftX linke X-Schranke
  * @param rightX rechte X-Schranke
@@ -89,13 +87,13 @@ SudokuField newSudokuField(int leftX, int rightX, int lowerY, int upperY) {
 
 /**
  * @brief Funktion die getriggert wird, wenn eine Pfeiltaste gedrückt wird
- * @author Gerrit
  * 
  * @param x X-Bewegung. Nur eine der beiden Bewegungen kann gleichzeitig ungleich null sein.
  * @param y Y-Bewegung. Nur eine der beiden Bewegungen kann gleichzeitig ungleich null sein.
  * @param playerPosition Array mit den Spielerkoordinaten 
  * @param sudoku Sudokufeld
  * @param lineCross Boolean: Wird eine Linie innerhalb des Sudokus überschritten?
+ * @param sudokuPosition Position innnerhalb des Sudokus
  * @return int 0
  */
 int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku, int lineCross, int sudokuPosition[2]) {
@@ -140,7 +138,6 @@ int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku
 
 /**
  * @brief Überprüft, ob bei einer Bewegung eine Linie im Sudoku überschritten wird.
- * @author Gerrit
  * 
  * @param x X-Bewegung. Nur eine der beiden Bewegungen kann gleichzeitig ungleich null sein.
  * @param y Y-Bewegung. Nur eine der beiden Bewegungen kann gleichzeitig ungleich null sein.
@@ -172,7 +169,6 @@ int crossedLine(int x, int y, int sudokuPosition[2]) {
 
 /**
  * @brief Überprüft, ob die aktuell ausgewählte Position editierbar ist
- * @author Thilo
  * 
  * @param generatedSudoku Generiertes Sudoku
  * @param sudokuPosition Position im Sudoku
@@ -189,7 +185,6 @@ int editablePosition(int generatedSudoku[9][9], int sudokuPosition[2]){
 
 /**
  * @brief Diese Funktion wird ausgeführt, wenn eine Zahl eingegeben wurde.
- * @author Thilo, Gerrit
  * 
  * @param number eingegebene Zahl oder 0, falls Backspace gedrückt wurde.
  * @param playerPosition Koordinaten des Spielers
@@ -197,6 +192,7 @@ int editablePosition(int generatedSudoku[9][9], int sudokuPosition[2]){
  * @param sudoku Sudoku Feldkoordinaten
  * @param sudokuPosition Koordinaten im Sudoku
  * @param userSolution Das Sudoku bis zu diesem Zeitpunkt
+ * @param bottomText Gibt an, ob aktuell ein Text unter dem Sudoku steht
  * @return int 0
  */
 int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9], SudokuField sudoku, int sudokuPosition[2], int userSolution[9][9], int* bottomText) {
@@ -230,7 +226,6 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
 
 /**
  * @brief Generiere einen Hinweis
- * @author Thilo
  * 
  * @param userSolution Das bisher vom User gelöste Sudoku
  * @param sudokuSolution Die tatsächliche Sudoku Lösung
@@ -238,7 +233,7 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
  * @param maxHints Maximale Hinweise
  * @param generatedSudoku Das generierte Sudoku
  * @param sudoku Koordinaten des Sudokus
- * @param playerPosition Position des Spielers
+ * @param hintPositions Positionen der Hinweise
  */
 void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9], SudokuField sudoku, int hintPositions[3][2]){
     //Generiere den Hint
@@ -293,7 +288,6 @@ void* printTime(void* t){
 
 /**
  * @brief Füllt das gedruckte Sudoku mit den generierten Werten
- * @author Thilo
  *
  * @param sudoku Koordinaten des Sudokufelds 
  * @param generatedSudoku generiertes Sudoku
@@ -322,6 +316,13 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
     }
 }
 
+/**
+ * @brief Die Methode analysiert, welche Zahlen Hinweise waren und speichert dies ab.
+ * 
+ * @param save Das gespeicherte Spiel
+ * @param hintPositions Array mit den Hinweis Positionen
+ * @param hintsUsed Anzahl der genutzten Hinweise
+ */
 void getHintsFromSave(SaveFile *save, int hintPositions[3][2], int *hintsUsed) {
     int hintsFound = 0;
     for (int i = 0; i < 9; i++) {
@@ -336,6 +337,13 @@ void getHintsFromSave(SaveFile *save, int hintPositions[3][2], int *hintsUsed) {
     *hintsUsed = hintsFound;
 }
 
+/**
+ * @brief Fill Methode für fortgesetzte Sudokus
+ * 
+ * @param save Das gespeicherte Spiel
+ * @param systemSudoku Das unausgefüllte Sudoku
+ * @param sudoku Layout des Spiels
+ */
 void fillSavedSudoku(SaveFile *save, int systemSudoku[9][9], SudokuField sudoku) {
     fillSudoku(sudoku, systemSudoku);
     
@@ -364,6 +372,14 @@ void fillSavedSudoku(SaveFile *save, int systemSudoku[9][9], SudokuField sudoku)
     }
 }
 
+/**
+ * @brief Lädt das letzte gespielte (und gespeicherte) Spiel
+ * 
+ * @param save Das gespeicherte Spiel
+ * @param systemSudoku Unausgefülltes Sudoku
+ * @param userSudoku Sudoku mit Spielereingaben
+ * @param sudoku Layout des Spielfelds
+ */
 void loadLastSaved(SaveFile *save, int systemSudoku[9][9], int userSudoku[9][9], SudokuField sudoku) {
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
@@ -382,6 +398,15 @@ void loadLastSaved(SaveFile *save, int systemSudoku[9][9], int userSudoku[9][9],
     fillSavedSudoku(save, systemSudoku, sudoku);
 }
 
+/**
+ * @brief Funktion, die aufgerufen wird, wenn das Spiel beendet wird. Schreibt alle wichtigen Informationen in das SaveFile
+ * 
+ * @param save Pointer auf das SaveFile, das am Anfang initialisiert wurde.
+ * @param generatedSudoku Das Systemsudoku
+ * @param userSolution Das Sudoku, dass der User hat
+ * @param hintPositions Positionen der angewendeten Hinweise
+ * @param hintsUsed Anzahl der genutzten Hinweise
+ */
 void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution[9][9], int hintPositions[3][2], int *hintsUsed) {
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
@@ -425,17 +450,21 @@ void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution
 
 /**
  * @brief Das tatsächliche Spiel
- * @author Gerrit / Thilo
  * 
  * @param sudoku Koordinaten des Sudokufelds
  * @param generatedSudoku das generierte Sudoku
  * @param sudokuSolution Die Lösung des Sudokus
+ * @param userSolution Das, was der Spieler sieht
  * @param bottomText boolean ob Text unter dem Sudokufeld ausgegeben wurde, damit man nicht unnötig cleared (durch printfToPosition quasi obsolet)
  * @param save Das Struct der last_save Datei
+ * @param continueGame wird das Spiel fortgesetzt? 
  * @return int 0
  */
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int userSolution[9][9], int* bottomText, SaveFile save, int continueGame) {
+    //Drucke Bestzeit
     printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "Bestzeit (%s):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
+    
+    //Lese beste Zeit für die aktuelle Schwierigkeit
     int bestTime = readBestTimeFromFile(save.difficulty);
     if(bestTime == -1){
         printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Nicht vorhanden.");
@@ -450,7 +479,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
     //Generated Solution in User Solution kopieren.
 
-    //Hinweise
+    //Hinweise zählen und deren Positionen nullen, falls sie noch nicht
     int hintsUsed = 0;
     int maxHints = 3;
     int hintPositions[3][2];
@@ -460,6 +489,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
         }
     }
 
+    //Falls das Spiel noch nicht geladen wurde, einmal die Usersolution ausfüllen, ansonsten noch die Hints überschreiben.
     if (!continueGame) {
         for(int i = 0; i < 9; i++){
             for(int j = 0; j < 9; j++){
@@ -470,7 +500,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
         getHintsFromSave(&save, hintPositions, &hintsUsed);
     }
 
-
+    //Thread für initialisieren
     ThreadHelper t;
     t.timer = startTimer((int)save.timer.timeInSeconds);
     t.sudoku = sudoku;
@@ -544,12 +574,14 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
 
 /**
- * @brief Zusammenfassende und initialisierende Methode des Spiels
- * @author Gerrit
+ * @brief Zusammenfassende Funktion für die Library. Ruft das Spiel auf, verwaltet es.
  * 
- * @param layout Layout des Spiels
- * @param diff Schwierigkeit. Kann auch ein INT von 0-2 sein.
- * @return int return der playGame Funktion. Wird aktuell noch nicht genutzt, kann potenziell erweitert werden.
+ * @param layout Layout des Spielfensters
+ * @param diff Schwierigkeit des Sudokus
+ * @param loadSudoku Soll ein Sudoku geladen werden?
+ * @param fileName Name der Datei
+ * @param continueGame Soll ein Spiel fortgesetzt werden?
+ * @return int 0
  */
 int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* fileName, int continueGame) {
     //Definiere das Sudokufeld und initialisiere es

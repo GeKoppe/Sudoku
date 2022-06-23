@@ -17,7 +17,7 @@ typedef struct menuSelection {
  * @param upperY Unterer Rand des Menüs (größerer Wert)
  * @param menuX X-Koordinate des Menüs
  * @param skip Menüpunkt, der übersprungen werden soll. -1, falls so ein Punkt nicht existiert.
- * @return int 
+ * @return int Y-Koordinate des Spielers
  */
 int selectMenu(int lowerY, int upperY, int menuX, int skip[5]);
 

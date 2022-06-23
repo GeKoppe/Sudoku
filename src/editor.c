@@ -142,7 +142,7 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
  * @return int 
  */
 int buildEditor(GameLayout layout, int loadFile, char* fileName) {
-    //Gibt an, ob die Datei das erste mal gespeichert wird.
+    //Gibt an, ob die Datei das erste mal gespeichert wird. Mache dies am Loadfile fest
     int firstSave;
     if (loadFile) {
         firstSave = 0;
@@ -150,12 +150,14 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
         firstSave = 1;
     }
 
+    //Generiere das Sudoku Fenster / Layout
     int sudokuX = layout.topLeftCorner.X + 51;
     int sudokuY = layout.topLeftCorner.Y + 10;
     SudokuField sudoku = newSudokuField(sudokuX, sudokuX + 48, sudokuY, sudokuY + 18);
     clearScreen(sudokuY,15, sudokuX-36, 40);
     printSudoku(sudoku.lowerX, sudoku.lowerY, 1);
     
+    //Leeres Sudoku und SaveFile erstellen. Sudoku laden / mit 0en füllen, jenachdem, ob neu oder bearbeiten.
     int generatedSudoku[9][9];
     SaveFile saveFile;
     if (loadFile) {
@@ -174,21 +176,23 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
         }        
     }
 
-
+    // Variablen für die Navigation im Sudoku deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
     int sudokuSolution[9][9];
     int saveCheck = -1;
 
+    //User Eingaben abfangen
     while (1) {
         switch (getch()) {
+            //Falls Pfeiltaste: Cursor bewegen
             case 72: sudokuCursorCallback(0, -2, playerPosition, sudoku, crossedLine(0,-1,sudokuPosition), sudokuPosition); break; //UP
             case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition), sudokuPosition); break; //DOWN
             case 75: sudokuCursorCallback(-4, 0, playerPosition, sudoku, crossedLine(-1,0,sudokuPosition), sudokuPosition); break;//LEFT
             case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition), sudokuPosition); break;//RIGHT
             
-
+            //Falls Zahl: Zahl printen / Sudoku updaten etc.
             case 49: printNumber(1, sudokuPosition, generatedSudoku, playerPosition); break; //1 
             case 50: printNumber(2, sudokuPosition, generatedSudoku, playerPosition); break; //2
             case 51: printNumber(3, sudokuPosition, generatedSudoku, playerPosition); break; //3
@@ -199,6 +203,7 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
             case 56: printNumber(8, sudokuPosition, generatedSudoku, playerPosition); break; //8
             case 57: printNumber(9, sudokuPosition, generatedSudoku, playerPosition); break; //9
 
+            //Löschen und escape (beenden)
             case 8: printNumber(0, sudokuPosition, generatedSudoku, playerPosition); break; //DELETE
             case 27:
                 saveCheck = escapeCallback(generatedSudoku, sudokuSolution, &firstSave, sudoku, fileName);

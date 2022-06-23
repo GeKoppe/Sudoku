@@ -95,7 +95,6 @@ int surprise(int *supriseCounter, int input) {
 
 /**
  * @brief Überprüft, wie viele Menüeinträge übersprungen werden müssen.
- * @author Gerrit
  * 
  * @param skipNumbers[5] Array von Integern: Die Koordinaten der zu überpringenden Menüeinträge 
  * @param playerY Aktuelle Y-Position des Spielers
@@ -160,7 +159,7 @@ int howManySkipped(int skipNumbers[5], int playerY, int up) {
  * @param upperY Unterer Rand des Menüs (größerer Wert)
  * @param menuX X-Koordinate des Menüs
  * @param skip Menüpunkt, der übersprungen werden soll. -1, falls so ein Punkt nicht existiert.
- * @return int 
+ * @return int Y-Koordinate des Spielers
  */
 int selectMenu(int lowerY, int upperY, int menuX, int skip[5]) {
     //Setze Spielerkoordinate auf den höchsten Y-Wert des Menüs
