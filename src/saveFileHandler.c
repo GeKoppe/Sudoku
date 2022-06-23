@@ -47,13 +47,9 @@ int saveToFile(SaveFile save, char *fileName)
     {
         for (int j = 0; j < 9; j++)
         {
-            if(j >= 8)
-            {
-                fprintf(file, "%d", save.sudoku[i][j]);
-
-            } else 
-            {
-                fprintf(file, "%d,", save.sudoku[i][j]);
+            fprintf(file, "%d", save.sudoku[i][j]);
+            if(j != 8){
+                fprintf(file, ",", save.sudoku[i][j]);
             }    
         }
         fprintf(file, "\n");

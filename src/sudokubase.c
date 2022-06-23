@@ -265,6 +265,12 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
     }
 }
 
+/**
+ * @brief Druckt jede Sekunde die vergangenen Sekunden und Minuten
+ * 
+ * @param t Das ThreadHelper Struct, wo sich bspw. das Sudoku drin befindet
+ * @return void* 
+ */
 void* printTime(void* t){
     int seconds = 0;
     ThreadHelper* th = (ThreadHelper*)t;
@@ -286,6 +292,8 @@ void* printTime(void* t){
  * @param sudoku Koordinaten des Sudokufelds
  * @param generatedSudoku das generierte Sudoku
  * @param sudokuSolution Die Lösung des Sudokus
+ * @param bottomText boolean ob Text unter dem Sudokufeld ausgegeben wurde, damit man nicht unnötig cleared (durch printfToPosition quasi obsolet)
+ * @param save Das Struct der last_save Datei
  * @return int 0
  */
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {

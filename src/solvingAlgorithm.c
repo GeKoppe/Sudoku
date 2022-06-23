@@ -3,6 +3,15 @@
 #include <time.h>
 #include <stdlib.h>
 
+/**
+ * @brief Prüft, ob eine Zahl num an PosX und PosY nach Sudokuregeln eingefügt werden kann. Wichtig für das generieren einer Lösung.
+ * 
+ * @param field Das Sudokufeld in dem etwas eingefügt werdne soll
+ * @param num Die einzufügende Zahl
+ * @param posY Y-Position
+ * @param posX X-Position
+ * @return 1 falls die Zahl an der Stelle eingefügt werden darf, sonst 0.
+ */
 int checkInsertionValid(int field[9][9], int num, int posY, int posX){
     int lowerBoundRow = 0;
     int upperBoundRow = 0;
@@ -53,6 +62,14 @@ int checkInsertionValid(int field[9][9], int num, int posY, int posX){
     return 1;
 }
 
+/**
+ * @brief Generiert eine eindeutige Lösung solution für das übergebene Sudoku field. Methode bricht nach numberOfSolutionsAskedFor gefundenen Lösungen ab.
+ * 
+ * @param field Das Sudoku, für das eine Lösung generiert werden soll.
+ * @param solution Das 2D-Array, in das die Solution von field reingeschrieben wird.
+ * @param numberOfSolutionsAskedFor Nach vielen Lösungen für ein Sudoku geschaut werden soll.
+ * @return Anzahl der gefundenen Lösungen für ein übergebenes Sudoku
+ */
 int generateSolution(int field[9][9], int solution[9][9], int numberOfSolutionsAskedFor){
     int tmpSolution[9][9];
     int insertedPositionsX[81];
@@ -139,15 +156,12 @@ int generateSolution(int field[9][9], int solution[9][9], int numberOfSolutionsA
     return foundSolutions;
 }
 
-// void printSudoku(int field[9][9]){
-//     for(int i = 0; i < 9; i++){
-//         for(int j = 0; j < 9; j++){
-//             printf("%i ", field[i][j]);
-//         }
-//         printf("\n");
-//     }
-// }
-
+/**
+ * @brief Generiert ein eindeutig lösbares Sudoku der Schwierigkeit diff in das 2D-Array field.
+ * 
+ * @param field Das zu bearbeitende Array.
+ * @param diff Die Schwierigkeit des Sudokus.
+ */
 void generateSudoku(int field[9][9], difficulty diff){
     srand(time(NULL));
     int tmpSudoku[9][9];
@@ -203,8 +217,6 @@ void generateSudoku(int field[9][9], difficulty diff){
         }
     }
 
-    
-
     int cellsToDelete = 0;
 
     switch(diff){
@@ -246,6 +258,16 @@ void generateSudoku(int field[9][9], difficulty diff){
     }
 }
 
+/**
+ * @brief Gibt eine korrekte Sudokuzahl an einer zufälligen Stelle vor, solange der Nutzer nicht schon die richtige Zahl eingegeben hat.
+ * 
+ * @param userSolution Das 2D-Array, welches den momentanenen bearbeitbaren Spielstand enthält.
+ * @param sudokuSolution Die Lösung des Sudokus.
+ * @param hintsUsed Anzahl an Hinweisen, die der Nutzer momentan zur Verfügung hat.
+ * @param maxHints Anzahl an Hinweisen, die der Nutzer maximal zur Verfügung hat.
+ * @param generatedSudoku Das 2D-Array, welches die vom System generierten Zahlen enthält. Hier werden die Hinweise zudem auch hineingeschrieben.
+ * @return Hint 
+ */
 Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUsed, int maxHints, int generatedSudoku[9][9]){
     int posXOfUnsolvedCell[81];
     int posYOfUnsolvedCell[81];
@@ -279,6 +301,13 @@ Hint generateHint(int userSolution[9][9], int sudokuSolution[9][9], int hintsUse
     return hint;
 }
 
+/**
+ * @brief Prüft, ob ein übergebenes Sudoku der Lösung für dieses entspricht.
+ * 
+ * @param generatedSudoku Die Nutzerlösung.
+ * @param sudokuSolution Die offizielle Lösung.
+ * @return 1 falls ja, 0 falls nein.
+ */
 int compareSudokuToSolution(int generatedSudoku[9][9], int sudokuSolution[9][9]){
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
