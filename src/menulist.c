@@ -300,6 +300,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
                 clearScreen(menuY - 2, 30, menuX - 6, 80);
                 returnValue = showLoadMenu(menuY, menuX, menu);
                 if (returnValue != -2) {
+                    strcpy(menu->fileName, "new_sudoku");
                     gameSelected =1;
                 }
             }

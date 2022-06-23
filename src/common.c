@@ -155,6 +155,7 @@ int outlineFrame(GameLayout layout) {
     //Konsole einmal komplett leer machen.
     clearScreen(-1,-1,0,0);
 
+    //Schreibe an die entsprechenden Stellen die entsprechenden ASCII Characters
     printfToPosition(layout.topLeftCorner.X, layout.topLeftCorner.Y, "\xC9");
     printfToPosition(layout.topLeftCorner.X, layout.bottomRightCorner.Y, "\xC8");
     printfToPosition(layout.bottomRightCorner.X, layout.topLeftCorner.Y, "\xBB");

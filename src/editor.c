@@ -12,29 +12,62 @@
 #include "sudokuFileHandler.h"
 #include "fileHelper.h"
 
+/**
+ * @brief Fragt vom User einen Namen für das soeben erstellte Sudoku ab und gibt diesen zurück.
+ * 
+ * @param sudoku Das aktuelle SudokuFled 
+ * @return char* Name der Datei
+ */
 char* inputFileName(SudokuField sudoku) {
+    //User Prompt
     printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Wie soll die Datei heissen? (Ohne Dateiendung bitte und max. 30 Zeichen))");
+    
+    //Cursor an die korrekte Stelle setzen und Namen einlesen
     setCursor(sudoku.lowerX, sudoku.lowerY + 24);
     char* name = (char*) malloc(30);
     scanf("%30s", name);
+    
+    //Bildschirm clearen und Namen zurückgeben
     clearScreen(sudoku.lowerY + 20, 10, sudoku.lowerX, 75);
     return name;
 }
 
+/**
+ * @brief Druckt die übergebene Zahl
+ * 
+ * @param number Zahl, die gedruckt werden soll
+ * @param sudokuPosition Aktuelle Position im Sudoku
+ * @param generatedSudoku Das generierte Sudoku
+ * @param playerPosition Position in der Konsole
+ * @return int 0
+ */
 int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], int playerPosition[2]) {
-
+    //Wenn die Zahl ungleich 0 (Backspace) ist
     if(number == 0){
         printf(".");
     } else{
         printf("%i", number);
     }
+
+    //Sudoku updaten und Cursor setzen
     generatedSudoku[sudokuPosition[0]][sudokuPosition[1]] = number;
     setCursor(playerPosition[0], playerPosition[1]);
 
     return 0;
 }
 
-int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstSave, SudokuField sudoku) {
+/**
+ * @brief Funktion die aufgerufen wird, wenn der User escape drückt
+ * 
+ * @param editedSudoku Sudoku inklusive User Eingaben
+ * @param sudokuSolution Die Lösung des Sudokus
+ * @param firstSave Wird das erste mal gespeichert?
+ * @param sudoku Outline des Screens
+ * @param fileName Name des Sudokus. Falls eines bearbeitet wird: Dieser Name, ansonsten bis hierhin new_sudoku
+ * @return int 1, falls der Editor nicht beendet werden soll, -1 sonst.
+ */
+int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstSave, SudokuField sudoku, char* fileName) {
+    //Falls das Sudoku keine eindeutige Lösung hat, frage ab, ob es trotzdem gespeichert werden soll
     if (generateSolution(editedSudoku, sudokuSolution, 2) != 1) {
         int skip[5] = {-1,-1,-1,-1,-1};
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Das Sudoku ist nicht eindeutig loesbar, trotzdem speichern?");
@@ -44,12 +77,14 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
         setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
         int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, skip);
 
+        //Bildschirm clearen, um den zweiten Teil des Menüs zu zeigen
         clearScreen(sudoku.lowerY + 22, 5, sudoku.lowerX - 5, 80);
         if (selection == -1) {
             return -1;
         }        
         int returnValue = selection -39;
 
+        //Falls Nein, frage ab, ob der Editor beendet werden soll
         if (returnValue == 2) {
             printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Editor beenden?");
             printfToPosition(sudoku.lowerX, sudoku.lowerY + 24, "Nein");
@@ -69,23 +104,41 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
             } else {
                 return 1;
             }
+        //Ansonsten Speichern beginnen
         } else {
+            //Falls das erste mal gespeichert wird: Frage einen Namen ab. Ansonsten soll der alte Dateiname verwendet werden.
             if(*firstSave){
                 saveSudokuToFile(editedSudoku, inputFileName(sudoku));
                 *firstSave = 0;
                 return 1;
+            } else {
+                saveSudokuToFile(editedSudoku, fileName);
+                return 1;
             }
         }
+    //Ansonsten speichern beginnen
     } else {
+        //Falls das erste mal gespeichert wird: Frage einen Namen ab. Ansonsten soll der alte Dateiname verwendet werden.
         if(*firstSave){
             saveSudokuToFile(editedSudoku, inputFileName(sudoku));
             *firstSave = 0;
+            return 1;
+        } else {
+            saveSudokuToFile(editedSudoku, fileName);
             return 1;
         }
     }
     return 1;
 }
 
+/**
+ * @brief Startet den Editor. Ist effektiv die Main dieser Library
+ * 
+ * @param layout 
+ * @param loadFile 
+ * @param fileName 
+ * @return int 
+ */
 int buildEditor(GameLayout layout, int loadFile, char* fileName) {
     int firstSave = 1;
     int sudokuX = layout.topLeftCorner.X + 51;
@@ -139,7 +192,7 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
 
             case 8: printNumber(0, sudokuPosition, generatedSudoku, playerPosition); break; //DELETE
             case 27:
-                saveCheck = escapeCallback(generatedSudoku, sudokuSolution, &firstSave, sudoku);
+                saveCheck = escapeCallback(generatedSudoku, sudokuSolution, &firstSave, sudoku, fileName);
                 if (saveCheck == 1) {
                     return -1;
                 } else {
