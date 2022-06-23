@@ -41,6 +41,15 @@ void setCursor(int x, int y);
 void printfToPosition(int posX, int posY, char* format,...);
 
 /**
+ * @brief Generiert einen String der c n-mal enthält
+ * 
+ * @param c
+ * @param n
+ * @return char*
+ */
+char* repeatNTimes(char c, int n);
+
+/**
  * @brief Leert das angegebene Rechteck.
  * 
  * @param y Obere Y-Koordinate des Rechtecks
@@ -79,7 +88,7 @@ int outlineFrame(GameLayout layout);
  * @param layout GameLayout Objekt. Die Dimensionen des Spielfensters.
  * @return int 0
  */
-int showFooter(GameLayout layout);
+void showFooter(GameLayout layout);
 
 /**
  * @brief Zeigt die Kopfzeile des Spielfensters an.
@@ -87,7 +96,7 @@ int showFooter(GameLayout layout);
  * @param layout GameLayout Objekt. Die Dimensionen des Spielfensters.
  * @return int 0
  */
-int showHeader(GameLayout layout);
+void showHeader(GameLayout layout);
 
 /**
  * @brief Wrapper, um das Spielfenster zu initialisieren. Prompt für Vollbildmodus, Fenster umranden, Header und Fußzeile anzeigen.

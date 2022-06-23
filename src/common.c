@@ -41,21 +41,38 @@ void setCursor(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), koordinaten);
 }
 
+char* repeatNTimes(char c, int n){
+    char* string = malloc((n + 1)*sizeof(char));
+    for(int i = 0; i < n; i++){
+        string[i] = c;
+    }
+    string[n] = '\0';
+    return string;
+}
+
 void printfToPosition(int posX, int posY, char* format,...){
+
+    HANDLE hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+	GetConsoleScreenBufferInfo(hstdout, &csbi);
+
     va_list args;
-    //va_list argsCopy;
     va_start(args, format);
-    //va_copy(argsCopy, args);
-    //int length = vsnprintf(NULL, 0, format, args);
     char string[256];
-    int length = vsprintf(string, format, args);
+    int length = _vsprintf_p(string, 256, format, args);
     va_end(args);
-    //va_end(argsCopy);
+
+    WORD colours[256];
+    for(int i = 0; i < length; i++){
+        colours[i] = csbi.wAttributes;
+    }
+
     COORD coords;
     coords.X = posX;
     coords.Y = posY;
     long unsigned int dummy;
-    WriteConsoleOutputCharacter(GetStdHandle(STD_OUTPUT_HANDLE), string, length, coords, &dummy);
+    WriteConsoleOutputCharacter(hstdout, string, length, coords, &dummy);
+    WriteConsoleOutputAttribute(hstdout, colours, length, coords, &dummy);
 }
 
 /**
@@ -85,9 +102,6 @@ void setColor(char color) {
     */
     HANDLE hstdout = GetStdHandle( STD_OUTPUT_HANDLE );
 
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	GetConsoleScreenBufferInfo( hstdout, &csbi );
-
     SetConsoleTextAttribute( hstdout, color );
 }
 
@@ -109,7 +123,7 @@ int clearScreen(int y, int height, int x, int width) {
     } else {
         //Durch die Koordinaten iterieren und immer ein Leerzeichen drucken.
         for (int i = y; i < y + height; i++) {
-            printfToPosition(x-1, i, "%*c", width, ' ');
+            printfToPosition(x-1, i, repeatNTimes(' ', width));
         }
         return 0;
     }
@@ -126,23 +140,18 @@ int outlineFrame(GameLayout layout) {
     //Konsole einmal komplett leer machen.
     clearScreen(-1,-1,0,0);
 
+    printfToPosition(layout.topLeftCorner.X, layout.topLeftCorner.Y, "\xC9");
+    printfToPosition(layout.topLeftCorner.X, layout.bottomRightCorner.Y, "\xC8");
+    printfToPosition(layout.bottomRightCorner.X, layout.topLeftCorner.Y, "\xBB");
+    printfToPosition(layout.bottomRightCorner.X, layout.bottomRightCorner.Y, "\xBC");
+
+    int width = layout.bottomRightCorner.X - layout.topLeftCorner.X - 1;
+    printfToPosition(layout.topLeftCorner.X+1, layout.topLeftCorner.Y, repeatNTimes('\xCD', width));
+    printfToPosition(layout.topLeftCorner.X+1, layout.bottomRightCorner.Y, repeatNTimes('\xCD', width));
     //Durch alle Koordinaten des GameLayouts iterieren und die entsprechenden Characters drucken.
-    for (int i = layout.topLeftCorner.Y; i <= layout.bottomRightCorner.Y; i++) {
-        for (int j = layout.topLeftCorner.X; j <= layout.bottomRightCorner.X; j++) {
-            setCursor(j,i);
-            if (i == layout.topLeftCorner.Y && j == layout.topLeftCorner.X)
-                printf("\xC9");
-            else if (i == layout.topLeftCorner.Y && j == layout.bottomRightCorner.X)
-                printf("\xBB");
-            else if (i == layout.bottomRightCorner.Y && j == layout.topLeftCorner.X)
-                printf("\xC8");
-            else if (i == layout.bottomRightCorner.Y && j == layout.bottomRightCorner.X)
-                printf("\xBC");
-            else if (i == layout.topLeftCorner.Y || i == layout.bottomRightCorner.Y)
-                printf("\xCD");
-            else if (j == layout.topLeftCorner.X || j == layout.bottomRightCorner.X)
-                printf("\xBA");
-        }
+    for (int i = layout.topLeftCorner.Y+1; i < layout.bottomRightCorner.Y; i++) {
+        printfToPosition(layout.topLeftCorner.X, i, "\xBA");
+        printfToPosition(layout.bottomRightCorner.X, i, "\xBA");
     }
     return 0;
 }
@@ -153,12 +162,9 @@ int outlineFrame(GameLayout layout) {
  * @param layout GameLayout Objekt. Die Dimensionen des Spielfensters.
  * @return int 0
  */
-int showFooter(GameLayout layout) {
-    setCursor(layout.topLeftCorner.X + 2, layout.bottomRightCorner.Y + -2);
-    printf("Jannik Glane, Thilo Drehlmann, Gerrit Koppe.");
-    setCursor(layout.bottomRightCorner.X - 13, layout.bottomRightCorner.Y + -2);
-    printf("Konami Code.");
-    return 0;
+void showFooter(GameLayout layout) {
+    printfToPosition(layout.topLeftCorner.X + 2, layout.bottomRightCorner.Y - 1, "Jannik Glane, Thilo Drehlmann, Gerrit Koppe.");
+    printfToPosition(layout.bottomRightCorner.X - 13, layout.bottomRightCorner.Y - 1, "Konami Code.");
 }
 
 /**
@@ -167,12 +173,10 @@ int showFooter(GameLayout layout) {
  * @param layout GameLayout Objekt. Die Dimensionen des Spielfensters.
  * @return int 0
  */
-int showHeader(GameLayout layout) {
+void showHeader(GameLayout layout) {
     int width = layout.bottomRightCorner.X - layout.topLeftCorner.X;
     int startX = floor(width / 2);
-    setCursor(startX+3, layout.topLeftCorner.Y + 4);
-    printf("\xb0\xb1\xb2 Sudoku \xb2\xb1\xb0");
-    return 0;
+    printfToPosition(startX + 3, layout.topLeftCorner.Y + 4, "\xb0\xb1\xb2 Sudoku \xb2\xb1\xb0");
 }
 
 /**

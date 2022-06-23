@@ -50,10 +50,10 @@ void createDir(char *directory)
     }
     // Check if current system is Windows
     #if defined(_WIN32)
-    mkdir("./saves/");
+    mkdir(directory);
     #else 
     // S_IRWXU allows read and write to the owner; UNIX ONLY
-    mkdir("./saves/", S_IRWXU);
+    mkdir(directory, S_IRWXU);
     #endif
 }
 
@@ -131,7 +131,7 @@ int checkForFileExtension(char *name)
  * @return SudokuDir struct
  */
 
-SudokuDir getFilesInFolder(char *directory)
+SudokuDir getFilesInFolder(char *directory) 
 {
     SudokuDir sdir;
     sdir.fileAmount = 0;
@@ -199,4 +199,53 @@ SudokuDir getFilesInFolder(char *directory)
     sdir = stripExtensions(sdir);
 
     return sdir;
+}
+
+int saveBestTimeToFile(difficulty diff, int seconds){
+    if (!checkDirExists("./best_times/"))
+    {
+        printf("DKLNDSJKSD");
+        createDir("./best_times/");
+    }
+
+    char filePath[128] = "";
+    buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht" : diff == MEDIUM ? "mittel" : "schwer");
+
+    FILE *file;
+    file = fopen(filePath, "w");
+
+    // Exits when file cannot be opened
+    if(file == NULL)
+    {
+        return 0;
+    } else {
+        fprintf(file, "%i", seconds);
+    }
+    
+    fclose(file);
+
+    return 1;
+}
+
+int readBestTimeFromFile(difficulty diff){
+
+    char filePath[128] = "";
+
+    buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht" : diff == MEDIUM ? "mittel" : "schwer");
+
+    FILE *file;
+    file = fopen(filePath, "r");
+
+    if (file == NULL)
+    {
+        return -1;
+    }
+
+    int seconds;
+
+    fscanf(file, "%i", &seconds);
+
+    fclose(file);
+
+    return seconds;
 }

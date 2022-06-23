@@ -3,8 +3,6 @@
 #include <string.h>
 #include "sudokubase.h"
 #include "common.h"
-#include <fcntl.h>
-#include <io.h>
 //#include <pthread.h>
 #include "timeHelper.h"
 // #include <windows.h>
@@ -25,153 +23,48 @@
  * @param sudokuY Y-Koordinate obere linke Ecke
  * @return int 0
  */
-int printSudoku(int sudokuX, int sudokuY, int isInEditor) {
-    //STDOUT auf Unicode umstellen
-    _setmode(_fileno(stdout), 0x00020000);
-    setCursor(sudokuX, sudokuY);
-    wprintf(L"\x2554\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2566\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2566\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2557");
-    setCursor(sudokuX, sudokuY + 1);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 2);
-    wprintf(L"\x2551               \x2551               \x2551               \x2551");
-    setCursor(sudokuX, sudokuY + 3);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 4);
-    wprintf(L"\x2551               \x2551               \x2551               \x2551");
-    setCursor(sudokuX, sudokuY + 5);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 6);
-    wprintf(L"\x2560\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x256C\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x256C\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2563");
-    setCursor(sudokuX, sudokuY + 7);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 8);
-    wprintf(L"\x2551               \x2551               \x2551               \x2551");
-    setCursor(sudokuX, sudokuY + 9);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 10);
-    wprintf(L"\x2551               \x2551               \x2551               \x2551");
-    setCursor(sudokuX, sudokuY + 11);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 12);
-    wprintf(L"\x2560\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x256C\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x256C\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2563");
-    setCursor(sudokuX, sudokuY + 13);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 14);
-    wprintf(L"\x2551               \x2551               \x2551               \x2551");
-    setCursor(sudokuX, sudokuY + 15);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 16);
-    wprintf(L"\x2551               \x2551               \x2551               \x2551");
-    setCursor(sudokuX, sudokuY + 17);
-    wprintf(L"\x2551   .   .   .   \x2551   .   .   .   \x2551   .   .   .   \x2551");
-    setCursor(sudokuX, sudokuY + 18);
-    wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2569\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
-    //STDOUT zurück auf Standard stellen
+void printSudoku(int sudokuX, int sudokuY, int isInEditor) {
 
-    if (!isInEditor) {
-        setCursor(sudokuX - 25, sudokuY);
-        wprintf(L"\x2554\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2557");
-        setCursor(sudokuX - 25, sudokuY + 1);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 2);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 3);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 4);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 5);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 6);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 7);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 8);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 9);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 10);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 11);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 12);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 13);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 14);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 15);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 16);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 17);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX - 25, sudokuY + 18);
-        wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
+    char* longHorizontalLine = repeatNTimes('\xCD', 15);
+    char* shortHorizontalLine = repeatNTimes('\xCD', 22);
 
-        //Spieldaten
-        setCursor(sudokuX + 50, sudokuY);
-        wprintf(L"\x2554\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2557");
-        setCursor(sudokuX + 50, sudokuY + 1);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 2);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 3);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 4);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 5);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 6);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 7);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 8);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 9);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 10);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 11);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 12);   
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 13);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 14);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 15);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 16);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 17);
-        wprintf(L"\x2551                      \x2551");
-        setCursor(sudokuX + 50, sudokuY + 18);
-        wprintf(L"\x255A\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x2550\x255D");
+    for(int i = 0; i < 19; i++){
+        if(i == 0){
+            printfToPosition(sudokuX, sudokuY+i, "\xC9%1$s\xCB%1$s\xCB%1$s\xBB", longHorizontalLine);
+        } else if (i == 6 || i == 12){
+            printfToPosition(sudokuX, sudokuY+i, "\xCC%1$s\xCE%1$s\xCE%1$s\xB9", longHorizontalLine);
+        } else if (i == 18) {
+            printfToPosition(sudokuX, sudokuY+i, "\xC8%1$s\xCA%1$s\xCA%1$s\xBC", longHorizontalLine);
+        } else if (i % 2) {
+            printfToPosition(sudokuX, sudokuY+i, "\xBA   .   .   .   \xBA   .   .   .   \xBA   .   .   .   \xBA");
+        } else {
+            printfToPosition(sudokuX, sudokuY+i, "\xBA               \xBA               \xBA               \xBA");
+        }
+
+        if(!isInEditor){
+            if(i == 0){
+                printfToPosition(sudokuX - 25, sudokuY+i, "\xC9%s\xBB", shortHorizontalLine);
+                printfToPosition(sudokuX + 50, sudokuY+i, "\xC9%s\xBB", shortHorizontalLine);
+            } else if (i == 18){
+                printfToPosition(sudokuX - 25, sudokuY+i, "\xC8%s\xBC", shortHorizontalLine);
+                printfToPosition(sudokuX + 50, sudokuY+i, "\xC8%s\xBC", shortHorizontalLine);
+            } else {
+                printfToPosition(sudokuX - 25, sudokuY+i, "\xBA%23c", '\xBA');
+                printfToPosition(sudokuX + 50, sudokuY+i, "\xBA%23c", '\xBA');
+            }
+        }
     }
-
-    //STDOUT zurück auf Standard stellen
-    _setmode(_fileno(stdout), _O_TEXT);
 
     if(!isInEditor){
-        setCursor(sudokuX - 23, sudokuY + 1);
-        printf("Bewegen: Pfeiltasten");
-        setCursor(sudokuX - 23, sudokuY + 3);
-        printf("Beenden: Escape");
-        setCursor(sudokuX - 23, sudokuY + 5);
-        printf("Hinweis: H");
-        setCursor(sudokuX - 23, sudokuY + 7);
-        printf("Loeschen: Backspace");
+        printfToPosition(sudokuX - 23, sudokuY + 1, "Bewegen: Pfeiltasten");
+        printfToPosition(sudokuX - 23, sudokuY + 3, "Beenden: Escape");
+        printfToPosition(sudokuX - 23, sudokuY + 5, "Hinweis: H");
+        printfToPosition(sudokuX - 23, sudokuY + 7, "Loeschen: Backspace");
 
-        setCursor(sudokuX + 52, sudokuY + 1);
-        printf("Minuten: ");
-
-        setCursor(sudokuX + 52,sudokuY + 3);
-        printf("Sekunden: ");
-
-        setCursor(sudokuX + 52,sudokuY + 5);
-        printf("Hinweise: 3");
+        printfToPosition(sudokuX + 52, sudokuY + 1, "Minuten: 0");
+        printfToPosition(sudokuX + 52, sudokuY + 3, "Sekunden: 0");
+        printfToPosition(sudokuX + 52, sudokuY + 5, "Hinweise: 3");
     }
-    return 0;
 }
 
 /**
@@ -312,22 +205,22 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
         userSolution[sudokuPosition[0]][sudokuPosition[1]] = number;
         //Falls 0 heißt das, das gelöscht werden soll.
         if(number == 0){
-            printf(".");
+            //printf(".");
+            printfToPosition(playerPosition[0], playerPosition[1], ".");
         } else{
             setColor(0x09);
-            printf("%i", number);
+            //printf("%i", number);
+            printfToPosition(playerPosition[0], playerPosition[1], "%i", number);
             setColor(0x0F);
         }
         //Leere den Hinweis, dass die Zelle nicht editiert werden kann.
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
         if(*bottomText){
             clearScreen(sudoku.lowerY + 20, 5, sudoku.lowerX, 45);
             *bottomText = 0;
         }
     } else {
         //Hinweis, dass die Zelle nicht editiert werden kann.
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        wprintf(L"Diese Zelle kann nicht bearbeitet werden.");
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Diese Zelle kann nicht bearbeitet werden.");
         *bottomText = 1;
     }
     setCursor(playerPosition[0], playerPosition[1]);
@@ -361,35 +254,25 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
                 xPlayerPosition += 4;
             }
         }
-        setCursor(xPlayerPosition, yPlayerPosition);
         setColor(0x0C);
-        printf("%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
+        printfToPosition(xPlayerPosition, yPlayerPosition, "%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
         setColor(0x0F);
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        printf("Tipp generiert.");
-        setCursor(sudoku.lowerX + 62,sudoku.lowerY + 5);
-        int hintsLeft = (maxHints - hintsUsed) - 1;
-        printf("%i", hintsLeft);
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Hinweis generiert.");
+        printfToPosition(sudoku.lowerX + 62,sudoku.lowerY + 5, "%i", maxHints - hintsUsed - 1);
 
     } else {
-        setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-        printf("Deine Tipps sind alle verbraucht.");
+        printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Deine Hinweise sind alle verbraucht.");
     }
-    setCursor(playerPosition[0], playerPosition[1]);
 }
 
-void* printTime(void* s){
-    int lastTime = 0;
-    ThreadHelper* helper = (ThreadHelper*)s;
-    if (helper->continueGame) {
-        helper->timer = startTimer((int)getTimeInSeconds(&(helper->timer)));
-    } else {
-        helper->timer = startTimer(0);
-    }
+void* printTime(void* t){
+    int seconds = 0;
+    ThreadHelper* th = (ThreadHelper*)t;
     while(1){
-        if(getTimeInSeconds(&helper->timer) >= lastTime + 1){
-            lastTime = getTimeInSeconds(&(helper->timer));
-            printfToPosition(helper->sudoku.lowerX + 62, helper->sudoku.lowerY + 3, "%i", lastTime);
+        if(getTimeInSeconds(&(th->timer)) >= seconds + 1){
+            seconds = getTimeInSeconds(&(th->timer));
+            printfToPosition(th->sudoku.lowerX + 61, th->sudoku.lowerY + 1, "%i", seconds/60);
+            printfToPosition(th->sudoku.lowerX + 62, th->sudoku.lowerY + 3, "%i ", seconds%60);
         }
         pthread_testcancel();
     }
@@ -405,7 +288,15 @@ void* printTime(void* s){
  * @param sudokuSolution Die Lösung des Sudokus
  * @return int 0
  */
-int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save, int continueGame) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
+    printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "Bestzeit (%s):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
+    int bestTime = readBestTimeFromFile(save.difficulty);
+    if(bestTime == -1){
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Nicht vorhanden.");
+    } else {
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Minuten: %i", bestTime/60);
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 17, "Sekunden: %i ", bestTime%60);
+    }
     //Variablen deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
@@ -423,14 +314,13 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
     //Hinweise
     int hintsUsed = 0;
-    int maxHints = 3;
+    int maxHints = 45;
 
+    ThreadHelper t;
+    t.timer = startTimer();
+    t.sudoku = sudoku;
     pthread_t thread_id;
-    ThreadHelper helper;
-    helper.sudoku = sudoku;
-    helper.timer = save.timer;
-    helper.continueGame = continueGame;
-    pthread_create(&thread_id, NULL, printTime, &helper);
+    pthread_create(&thread_id, NULL, printTime, &t);
 
     //Fange User eingaben ab
     while (1) {
@@ -472,20 +362,28 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
         //Überprüfe, ob das Sudoku gelöst ist.
         if(compareSudokuToSolution(userSolution, sudokuSolution)){
-            setCursor(sudoku.lowerX, sudoku.lowerY + 20);
-            printf("Das Sudoku wurde geloest!");
+            stopTimer(&t.timer);
+            printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Bravo! Das Sudoku wurde geloest!");
+            pthread_cancel(thread_id);
+            if(bestTime == -1 || bestTime > getTimeInSeconds(&t.timer)){
+                saveBestTimeToFile(save.difficulty, getTimeInSeconds(&t.timer));
+                clearScreen(sudoku.lowerY + 15, 3, sudoku.lowerX + 52, 17);
+                printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Minuten: %i", (int)getTimeInSeconds(&t.timer)/60);
+                printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 17, "Sekunden: %i", (int)getTimeInSeconds(&t.timer)%60);
+            }
             break;
         }
         
     }
+    //Das printf soll so statt printfToPosition
     setCursor(sudoku.lowerX, sudoku.lowerY + 22);
-    printf("Weiter mit Enter");
+    printf("Druecke ENTER um ins Menue zurueckzukehren.");
     while(1) {
         if (getch() == 13) {
             break;
         }
     }
-    
+
     pthread_cancel(thread_id);
     return 0;
 }
@@ -510,11 +408,10 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
             } else{
                 cursorX += 4;
             }
-            setCursor(cursorX, cursorY);
             if(generatedSudoku[i][j] == 0){
-                printf(".");
+                continue;
             } else{
-                printf("%i", generatedSudoku[i][j]);
+                printfToPosition(cursorX, cursorY, "%i", generatedSudoku[i][j]);
             }
         }
         cursorX = sudoku.lowerX;
@@ -566,7 +463,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int bottomText = 0;
 
     //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile, continueGame);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile);
 
     return returnVal;
 }
