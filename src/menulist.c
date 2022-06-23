@@ -68,7 +68,7 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     printfToPosition(menuX, menuStart, "Leicht");
     printfToPosition(menuX, menuStart + 2, "Mittel");
-    printfToPosition(menuX, menuStart + 4, "Schwierig");
+    printfToPosition(menuX, menuStart + 4, "Schwer");
     printfToPosition(menuX, menuStart + 6, "Abbrechen");
     printfToPosition(menuX - 4, menuStart, "x");
     setCursor(menuX - 4, menuStart);

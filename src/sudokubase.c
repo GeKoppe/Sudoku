@@ -314,10 +314,10 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
 
     //Hinweise
     int hintsUsed = 0;
-    int maxHints = 45;
+    int maxHints = 3;
 
     ThreadHelper t;
-    t.timer = startTimer();
+    t.timer = startTimer((int)save.timer.timeInSeconds);
     t.sudoku = sudoku;
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, printTime, &t);
@@ -354,7 +354,8 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                     save.sudoku[i][j] = userSolution[i][j];
                 }
             }
-
+            stopTimer(&t.timer);
+            save.timer = t.timer;
             pthread_cancel(thread_id);
             saveToFile(save, "last_save");
             return -1; //ESCAPE
@@ -384,7 +385,6 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             break;
         }
     }
-
     pthread_cancel(thread_id);
     return 0;
 }
@@ -442,6 +442,8 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int sudokuSolution[9][9];
     SaveFile saveFile;
     saveFile.difficulty = diff;
+    saveFile.timer.timeInSeconds = 0;
+    int seconds = 0;
     if (loadSudoku) {
         saveFile = loadSudokuFromFile(fileName);
         for (int i = 0; i < 9; i++) {
