@@ -220,6 +220,7 @@ int numberCallback(int number, int playerPosition[2], int generatedSudoku[9][9],
         }
     } else {
         //Hinweis, dass die Zelle nicht editiert werden kann.
+        clearScreen(sudoku.lowerY + 20, 5, sudoku.lowerX, 45);
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Diese Zelle kann nicht bearbeitet werden.");
         *bottomText = 1;
     }
@@ -260,10 +261,12 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
         //Speichere die Position in die Hintposition, damit diese beim Weiterspielen wieder aufgenommen werden können.
         hintPositions[hintsUsed][0] = hint.sudokuY;
         hintPositions[hintsUsed][1] = hint.sudokuX;
+        clearScreen(sudoku.lowerY + 20, 5, sudoku.lowerX, 45);
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Hinweis generiert.");
         printfToPosition(sudoku.lowerX + 62,sudoku.lowerY + 5, "%i", maxHints - hintsUsed - 1);
 
     } else {
+        clearScreen(sudoku.lowerY + 20, 5, sudoku.lowerX, 45);
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Deine Hinweise sind alle verbraucht.");
     }
 }
@@ -325,7 +328,7 @@ void getHintsFromSave(SaveFile *save, int hintPositions[3][2], int *hintsUsed) {
         for (int j = 0; j < 9; j++) {
             if (save->markersForContinuation[i][j] == 3) {
                 hintPositions[hintsFound][0] = i;
-                hintPositions[hintsFound][0] = j;
+                hintPositions[hintsFound][1] = j;
                 hintsFound++;
             }
         }
@@ -377,6 +380,47 @@ void loadLastSaved(SaveFile *save, int systemSudoku[9][9], int userSudoku[9][9],
         }
     }
     fillSavedSudoku(save, systemSudoku, sudoku);
+}
+
+void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution[9][9], int hintPositions[3][2], int *hintsUsed) {
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            save->sudoku[i][j] = userSolution[i][j];
+        }
+    }
+    save->hintsUsed = *hintsUsed;
+    for (int i = 0; i < 9; i++) { //Y
+        for (int j = 0; j < 9; j++) { //X
+            int hint = 0;
+            for (int k = 0; k < *hintsUsed; k++) {
+                if (hintPositions[k][0] == i && hintPositions[k][1] == j) {
+                    //3: HINT
+                    save->markersForContinuation[i][j] = 3;
+                    hint = 1;
+                    break;
+                }
+            }
+
+            if (hint) {
+                hint = 0;
+                continue;
+            }
+
+            if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
+                //2: USER EINGABE
+                save->markersForContinuation[i][j] = 2;
+            } else if (generatedSudoku[i][j] != 0) {
+                //1: ORIGINAL SUDOKU
+                save->markersForContinuation[i][j] = 1;
+            }
+
+            if (save->markersForContinuation[i][j] != 1 && save->markersForContinuation[i][j] != 2 && save->markersForContinuation[i][j] != 3) {
+                //0: LEERES FELD
+                save->markersForContinuation[i][j] = 0;
+            }
+
+        }
+    }
 }
 
 /**
@@ -459,46 +503,8 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                 break;
 
             case 8: numberCallback(0, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //DELETE
-            case 27: 
+            case 27: endGameCallback(&save, generatedSudoku, userSolution, hintPositions, &hintsUsed);
             //Schreibe alle wichtigen Randdaten in das SaveFile
-            for(int i = 0; i < 9; i++){
-                for(int j = 0; j < 9; j++){
-                    save.sudoku[i][j] = userSolution[i][j];
-                }
-            }
-            save.hintsUsed = hintsUsed;
-            for (int i = 0; i < 9; i++) { //Y
-                for (int j = 0; j < 9; j++) { //X
-                    int hint = 0;
-                    for (int k = 0; k < hintsUsed; k++) {
-                        if (hintPositions[k][0] == i && hintPositions[k][1] == j) {
-                            //3: HINT
-                            save.markersForContinuation[i][j] = 3;
-                            break;
-                            hint = 1;
-                        }
-                    }
-
-                    if (hint) {
-                        hint = 0;
-                        continue;
-                    }
-
-                    if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
-                        //2: USER EINGABE
-                        save.markersForContinuation[i][j] = 2;
-                    } else if (generatedSudoku[i][j] != 0) {
-                        //1: ORIGINAL SUDOKU
-                        save.markersForContinuation[i][j] = 1;
-                    }
-
-                    if (save.markersForContinuation[i][j] != 1 && save.markersForContinuation[i][j] != 2 && save.markersForContinuation[i][j] != 3) {
-                        //0: LEERES FELD
-                        save.markersForContinuation[i][j] = 0;
-                    }
-
-                }
-            }
 
             stopTimer(&t.timer);
             save.timer = t.timer;
