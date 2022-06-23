@@ -121,6 +121,21 @@ SaveFile loadSaveFromFile(char *fileName)
         }
     }
 
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {   
+            // Checks for the end of line
+            if (j == 8)
+            {
+                entriesRead += fscanf(file, "%d\n", &saveFile.markersForContinuation[i][j]);
+                continue;
+            } 
+
+            entriesRead += fscanf(file, "%d,", &saveFile.markersForContinuation[i][j]);
+        }
+    }
+
     // Loads the player name and the choosen difficulty into the saveFile struct
     entriesRead += fscanf(file, "%d\n", &saveFile.difficulty);
 

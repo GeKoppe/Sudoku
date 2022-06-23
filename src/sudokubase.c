@@ -362,7 +362,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
                     for (int k = 0; k < hintsUsed; k++) {
-                        if (hintPositions[k][0] == j && hintPositions[k][1] == i) {
+                        if (hintPositions[k][0] == i && hintPositions[k][1] == j) {
                             //3: HINT
                             save.markersForContinuation[i][j] = 3;
                             break;
