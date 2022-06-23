@@ -49,7 +49,7 @@ int saveToFile(SaveFile save, char *fileName)
         {
             fprintf(file, "%d", save.sudoku[i][j]);
             if(j != 8){
-                fprintf(file, ",", save.sudoku[i][j]);
+                fprintf(file, "%c", ',');
             }    
         }
         fprintf(file, "\n");

@@ -258,8 +258,8 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
         printfToPosition(xPlayerPosition, yPlayerPosition, "%i", sudokuSolution[hint.sudokuY][hint.sudokuX]);
         setColor(0x0F);
         //Speichere die Position in die Hintposition, damit diese beim Weiterspielen wieder aufgenommen werden können.
-        hintPositions[(hintsUsed - 1)][0] = hint.sudokuY;
-        hintPositions[(hintsUsed - 1)][1] = hint.sudokuX;
+        hintPositions[hintsUsed][0] = hint.sudokuY;
+        hintPositions[hintsUsed][1] = hint.sudokuX;
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Hinweis generiert.");
         printfToPosition(sudoku.lowerX + 62,sudoku.lowerY + 5, "%i", maxHints - hintsUsed - 1);
 
@@ -366,24 +366,21 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                     save.sudoku[i][j] = userSolution[i][j];
                 }
             }
-<<<<<<< HEAD
             save.hintsUsed = hintsUsed;
-            for (int i = 0; i < 9; i++) {
-                for (int j = 0; j < 9; j++) {
+            for (int i = 0; i < 9; i++) { //Y
+                for (int j = 0; j < 9; j++) { //X
                     for (int k = 0; k < hintsUsed; k++) {
                         if (hintPositions[k][0] == i && hintPositions[k][1] == j) {
                             //3: HINT
                             save.markersForContinuation[i][j] = 3;
                             break;
-                        }
-                    }
-
-                    if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
+                        } else if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
                         //2: USER EINGABE
-                        save.markersForContinuation[i][j] = 2;
-                    } else if (generatedSudoku[i][j] != 0) {
-                        //1: ORIGINAL SUDOKU
-                        save.markersForContinuation[i][j] = 1;
+                            save.markersForContinuation[i][j] = 2;
+                        } else if (generatedSudoku[i][j] != 0) {
+                            //1: ORIGINAL SUDOKU
+                            save.markersForContinuation[i][j] = 1;
+                        }
                     }
 
                     if (save.markersForContinuation[i][j] != 1 && save.markersForContinuation[i][j] != 2 && save.markersForContinuation[i][j] != 3) {
@@ -394,10 +391,8 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                 }
             }
 
-=======
             stopTimer(&t.timer);
             save.timer = t.timer;
->>>>>>> thilo
             pthread_cancel(thread_id);
             saveToFile(save, "last_save");
             return -1; //ESCAPE
@@ -485,7 +480,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     SaveFile saveFile;
     saveFile.difficulty = diff;
     saveFile.timer.timeInSeconds = 0;
-    int seconds = 0;
+    //int seconds = 0;
     if (loadSudoku) {
         saveFile = loadSudokuFromFile(fileName);
         for (int i = 0; i < 9; i++) {
