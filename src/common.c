@@ -41,6 +41,13 @@ void setCursor(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), koordinaten);
 }
 
+/**
+ * @brief Generiert einen String bestehend aus n-mal c
+ * 
+ * @param c Der Character, der n mal ausgegeben werden soll
+ * @param n Wie oft c ausgegeben werden soll
+ * @return Den String
+ */
 char* repeatNTimes(char c, int n){
     char* string = malloc((n + 1)*sizeof(char));
     for(int i = 0; i < n; i++){
@@ -50,6 +57,14 @@ char* repeatNTimes(char c, int n){
     return string;
 }
 
+/**
+ * @brief Funktioniert genau wie printf, nur dass es Koordinaten bekommt und druckt ohne den Cursor zu bewegen
+ * 
+ * @param posX Die X Koordinate
+ * @param posY Die Y koordinate
+ * @param format Das Format wie bei printf (bspw. %i oder auch direkt der String)
+ * @param ... Alle restlichen Parameter, die printf verarbeiten kann
+ */
 void printfToPosition(int posX, int posY, char* format,...){
 
     HANDLE hstdout = GetStdHandle(STD_OUTPUT_HANDLE);

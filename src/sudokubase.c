@@ -268,6 +268,12 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
     }
 }
 
+/**
+ * @brief Druckt jede Sekunde die vergangenen Sekunden und Minuten
+ * 
+ * @param t Das ThreadHelper Struct, wo sich bspw. das Sudoku drin befindet
+ * @return void* 
+ */
 void* printTime(void* t){
     int seconds = 0;
     ThreadHelper* th = (ThreadHelper*)t;
@@ -289,6 +295,8 @@ void* printTime(void* t){
  * @param sudoku Koordinaten des Sudokufelds
  * @param generatedSudoku das generierte Sudoku
  * @param sudokuSolution Die Lösung des Sudokus
+ * @param bottomText boolean ob Text unter dem Sudokufeld ausgegeben wurde, damit man nicht unnötig cleared (durch printfToPosition quasi obsolet)
+ * @param save Das Struct der last_save Datei
  * @return int 0
  */
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
@@ -320,7 +328,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     int maxHints = 3;
 
     ThreadHelper t;
-    t.timer = startTimer();
+    t.timer = startTimer((int)save.timer.timeInSeconds);
     t.sudoku = sudoku;
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, printTime, &t);
@@ -358,6 +366,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                     save.sudoku[i][j] = userSolution[i][j];
                 }
             }
+<<<<<<< HEAD
             save.hintsUsed = hintsUsed;
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
@@ -385,6 +394,10 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                 }
             }
 
+=======
+            stopTimer(&t.timer);
+            save.timer = t.timer;
+>>>>>>> thilo
             pthread_cancel(thread_id);
             saveToFile(save, "last_save");
             return -1; //ESCAPE
@@ -414,7 +427,6 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             break;
         }
     }
-
     pthread_cancel(thread_id);
     return 0;
 }
@@ -472,6 +484,8 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int sudokuSolution[9][9];
     SaveFile saveFile;
     saveFile.difficulty = diff;
+    saveFile.timer.timeInSeconds = 0;
+    int seconds = 0;
     if (loadSudoku) {
         saveFile = loadSudokuFromFile(fileName);
         for (int i = 0; i < 9; i++) {

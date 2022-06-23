@@ -13,6 +13,8 @@
 #include <string.h>
 #include "saveFileHandler.h"
 #include "fileHelper.h"
+#include "sudokubase.h"
+#include "timeHelper.h"
 
 /**
  * @brief Saves passed struct into a file.
@@ -45,12 +47,9 @@ int saveToFile(SaveFile save, char *fileName)
     {
         for (int j = 0; j < 9; j++)
         {
-            if(j >= 8)
-            {
-                fprintf(file, "%d", save.sudoku[i][j]);
-            } else 
-            {
-                fprintf(file, "%d,", save.sudoku[i][j]);
+            fprintf(file, "%d", save.sudoku[i][j]);
+            if(j != 8){
+                fprintf(file, ",", save.sudoku[i][j]);
             }    
         }
         fprintf(file, "\n");
@@ -72,10 +71,10 @@ int saveToFile(SaveFile save, char *fileName)
     }
 
     // Prints the name and the difficulty to the file
-    fprintf(file ,"%d\n", save.difficulty);
+    fprintf(file ,"%i\n", save.difficulty);
     
     // Prints the StopWatch to the file
-    fprintf(file, "%lf,%lf,%lf\n", (double)save.timer.startTime, (double)save.timer.endTime, save.timer.timeInSeconds);
+    fprintf(file, "%i", (int)getTimeInSeconds(&save.timer));
 
     fclose(file);
 
@@ -140,12 +139,11 @@ SaveFile loadSaveFromFile(char *fileName)
     entriesRead += fscanf(file, "%d\n", &saveFile.difficulty);
 
     // Loads the StopWatch struct into the saveFile struct
-    double start,end;
 
-    entriesRead += fscanf(file, "%lf,%lf,%lf\n", &start, &end, &saveFile.timer.timeInSeconds);
+    entriesRead += fscanf(file, "%i\n", &saveFile.timer.timeInSeconds);
     
-    saveFile.timer.startTime = (clock_t) start;
-    saveFile.timer.endTime = (clock_t) end;
+    // saveFile.timer.startTime = (clock_t) start;
+    // saveFile.timer.endTime = (clock_t) end;
 
     // Exactly 86 entries should be read from a save
     if (entriesRead != 86 || ferror(file))

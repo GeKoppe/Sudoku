@@ -201,6 +201,13 @@ SudokuDir getFilesInFolder(char *directory)
     return sdir;
 }
 
+/**
+ * @brief Speichert die beste Zeit pro Schwierigkeit.
+ * 
+ * @param diff Die Schwierigkeit
+ * @param seconds Die Zeit
+ * @return int 
+ */
 int saveBestTimeToFile(difficulty diff, int seconds){
     if (!checkDirExists("./best_times/"))
     {
@@ -226,6 +233,12 @@ int saveBestTimeToFile(difficulty diff, int seconds){
     return 1;
 }
 
+/**
+ * @brief Lädt die beste Zeit für die angegebene Schwierigkeit.
+ * 
+ * @param diff Die Schwierigkeit
+ * @return Die Sekundenanzahl
+ */
 int readBestTimeFromFile(difficulty diff){
 
     char filePath[128] = "";

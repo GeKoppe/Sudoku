@@ -16,7 +16,7 @@
 typedef struct stopWatch {
     clock_t startTime;
     clock_t endTime;
-    double timeInSeconds;
+    int timeInSeconds;
 } StopWatch;
 
 StopWatch startTimer();

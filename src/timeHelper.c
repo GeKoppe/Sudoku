@@ -11,16 +11,18 @@
 
 #include <time.h>
 #include "timeHelper.h"
+#include "common.h"
 
 /**
- * @brief Sets the startTime as the current CPU-Clock
+ * @brief Ersellt einen Timer, welcher bei den übergebenen Sekunden beginnt
  * 
- * @return StopWatch 
+ * @param seconds Die Sekundenzahl, wie lange der Timer bei der Erstellung schon gelaufen seien soll
+ * @return Das StopWatch Struct mit entsprechenden Werten
  */
-StopWatch startTimer()
+StopWatch startTimer(int seconds)
 {
-    clock_t currentTime = clock();
-    StopWatch watch = {currentTime, currentTime, 0};
+    clock_t currentTime = clock() - seconds*(CLOCKS_PER_SEC * 1.0);
+    StopWatch watch = {currentTime, currentTime, seconds};
     return watch;
 }
 
