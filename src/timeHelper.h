@@ -23,6 +23,6 @@ StopWatch startTimer();
 
 void stopTimer(StopWatch *watch);
 
-double getTimeInSeconds(StopWatch *watch);
+int getTimeInSeconds(StopWatch *watch);
 
 #endif

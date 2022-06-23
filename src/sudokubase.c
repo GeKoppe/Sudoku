@@ -379,13 +379,17 @@ void getHint(int userSolution[9][9],int sudokuSolution[9][9], int hintsUsed, int
 }
 
 void* printTime(void* s){
-    StopWatch timer = startTimer();
     int lastTime = 0;
-    SudokuField* sudoku = (SudokuField*)s;
+    ThreadHelper* helper = (ThreadHelper*)s;
+    if (helper->continueGame) {
+        helper->timer = startTimer((int)getTimeInSeconds(&(helper->timer)));
+    } else {
+        helper->timer = startTimer(0);
+    }
     while(1){
-        if(getTimeInSeconds(&timer) >= lastTime + 1){
-            lastTime = getTimeInSeconds(&timer);
-            printfToPosition(sudoku->lowerX + 62, sudoku->lowerY + 3, "%i", lastTime);
+        if(getTimeInSeconds(&helper->timer) >= lastTime + 1){
+            lastTime = getTimeInSeconds(&(helper->timer));
+            printfToPosition(helper->sudoku.lowerX + 62, helper->sudoku.lowerY + 3, "%i", lastTime);
         }
         pthread_testcancel();
     }
@@ -401,7 +405,7 @@ void* printTime(void* s){
  * @param sudokuSolution Die Lösung des Sudokus
  * @return int 0
  */
-int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save, int continueGame) {
     //Variablen deklarieren
     int sudokuPosition[2] = {0,0}; //{y,x}
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
@@ -422,7 +426,11 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     int maxHints = 3;
 
     pthread_t thread_id;
-    pthread_create(&thread_id, NULL, printTime, &sudoku);
+    ThreadHelper helper;
+    helper.sudoku = sudoku;
+    helper.timer = save.timer;
+    helper.continueGame = continueGame;
+    pthread_create(&thread_id, NULL, printTime, &helper);
 
     //Fange User eingaben ab
     while (1) {
@@ -431,7 +439,6 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             case 80: sudokuCursorCallback(0, 2, playerPosition, sudoku, crossedLine(0,1,sudokuPosition), sudokuPosition); break; //DOWN
             case 75: sudokuCursorCallback(-4, 0, playerPosition, sudoku, crossedLine(-1,0,sudokuPosition), sudokuPosition); break;//LEFT
             case 77: sudokuCursorCallback(4, 0, playerPosition, sudoku, crossedLine(1,0,sudokuPosition), sudokuPosition); break;//RIGHT
-            
 
             case 49: numberCallback(1, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //1 
             case 50: numberCallback(2, playerPosition, generatedSudoku, sudoku, sudokuPosition, userSolution, bottomText); break; //2
@@ -556,11 +563,10 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     }
     generateSolution(generatedSudoku, sudokuSolution, 1);
     fillSudoku(sudoku, generatedSudoku);
-
     int bottomText = 0;
 
     //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile, continueGame);
 
     return returnVal;
 }

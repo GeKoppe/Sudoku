@@ -17,9 +17,10 @@
  * 
  * @return StopWatch 
  */
-StopWatch startTimer()
+StopWatch startTimer(int seconds)
 {
-    StopWatch watch = {clock(), clock(), 0};
+    clock_t start = clock() - (seconds * CLOCKS_PER_SEC);
+    StopWatch watch = {start, clock(), seconds};
     return watch;
 }
 
@@ -40,9 +41,9 @@ void stopTimer(StopWatch *watch)
  * @param watch 
  * @return double 
  */
-double getTimeInSeconds(StopWatch *watch)
+int getTimeInSeconds(StopWatch *watch)
 {
     // CLOCKS_PER_SEC needs to be converted to a floating point value for accurate division
     watch->timeInSeconds = (clock() - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
-    return watch->timeInSeconds;
+    return (int)(watch->timeInSeconds);
 }
