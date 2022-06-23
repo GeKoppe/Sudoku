@@ -54,7 +54,6 @@ int saveToFile(SaveFile save, char *fileName)
         }
         fprintf(file, "\n");
     }
-
     for (int i = 0; i < 9; i++)
     {
         for (int j = 0; j < 9; j++)
@@ -119,7 +118,6 @@ SaveFile loadSaveFromFile(char *fileName)
             entriesRead += fscanf(file, "%d,", &saveFile.sudoku[i][j]);
         }
     }
-
     for (int i = 0; i < 9; i++)
     {
         for (int j = 0; j < 9; j++)
@@ -146,7 +144,7 @@ SaveFile loadSaveFromFile(char *fileName)
     // saveFile.timer.endTime = (clock_t) end;
 
     // Exactly 86 entries should be read from a save
-    if (entriesRead != 86 || ferror(file))
+    if (entriesRead != 164 || ferror(file))
     {
         saveFile.errorHandler = 0;
         return saveFile;

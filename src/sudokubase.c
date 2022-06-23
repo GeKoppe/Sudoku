@@ -289,6 +289,97 @@ void* printTime(void* t){
 }
 
 /**
+ * @brief Füllt das gedruckte Sudoku mit den generierten Werten
+ * @author Thilo
+ *
+ * @param sudoku Koordinaten des Sudokufelds 
+ * @param generatedSudoku generiertes Sudoku
+ */
+void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
+    //Setze Cursor Variablen
+    int cursorX = sudoku.lowerX;
+    int cursorY = sudoku.lowerY + 1;
+
+    //Iteriere durch das Sudoku und drucke die Zahlen
+    for(int i = 0; i < 9; i++){
+        for(int j = 0; j < 9; j++){
+            if(j == 3 || j == 6){
+                cursorX += 8;
+            } else{
+                cursorX += 4;
+            }
+            if(generatedSudoku[i][j] == 0){
+                continue;
+            } else{
+                printfToPosition(cursorX, cursorY, "%i", generatedSudoku[i][j]);
+            }
+        }
+        cursorX = sudoku.lowerX;
+        cursorY += 2;
+    }
+}
+
+void getHintsFromSave(SaveFile *save, int hintPositions[3][2], int *hintsUsed) {
+    int hintsFound = 0;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (save->markersForContinuation[i][j] == 3) {
+                hintPositions[hintsFound][0] = i;
+                hintPositions[hintsFound][0] = j;
+                hintsFound++;
+            }
+        }
+    }
+    *hintsUsed = hintsFound;
+}
+
+void fillSavedSudoku(SaveFile *save, int systemSudoku[9][9], SudokuField sudoku) {
+    fillSudoku(sudoku, systemSudoku);
+    
+    int cursorX = sudoku.lowerX;
+    int cursorY = sudoku.lowerY + 1;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if(j == 3 || j == 6){
+                cursorX += 8;
+            } else{
+                cursorX += 4;
+            }
+            if (save->markersForContinuation[i][j] == 3) {
+                setColor(0x0C);
+                printfToPosition(cursorX, cursorY, "%i", save->sudoku[i][j]);
+                setColor(0x0F);
+            } else if (save->markersForContinuation[i][j] == 2) {
+                setColor(0x09);
+
+                printfToPosition(cursorX, cursorY, "%i", save->sudoku[i][j]);
+                setColor(0x0F);
+            }
+        }
+        cursorX = sudoku.lowerX;
+        cursorY += 2;
+    }
+}
+
+void loadLastSaved(SaveFile *save, int systemSudoku[9][9], int userSudoku[9][9], SudokuField sudoku) {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (save->markersForContinuation[i][j] == 0) {
+                systemSudoku[i][j] = 0;
+                userSudoku[i][j] = 0;
+            } else if (save->markersForContinuation[i][j] == 1 || save->markersForContinuation[i][j] == 3) {
+                systemSudoku[i][j] = save->sudoku[i][j];
+                userSudoku[i][j] = save->sudoku[i][j];
+            } else {
+                systemSudoku[i][j] = 0;
+                userSudoku[i][j] = save->sudoku[i][j];
+            }
+        }
+    }
+    fillSavedSudoku(save, systemSudoku, sudoku);
+}
+
+/**
  * @brief Das tatsächliche Spiel
  * @author Gerrit / Thilo
  * 
@@ -299,7 +390,7 @@ void* printTime(void* t){
  * @param save Das Struct der last_save Datei
  * @return int 0
  */
-int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int* bottomText, SaveFile save) {
+int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int userSolution[9][9], int* bottomText, SaveFile save, int continueGame) {
     printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "Bestzeit (%s):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
     int bestTime = readBestTimeFromFile(save.difficulty);
     if(bestTime == -1){
@@ -313,26 +404,35 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     setCursor(sudoku.lowerX + 4, sudoku.lowerY + 1);
     int playerPosition[2] = {sudoku.lowerX + 4, sudoku.lowerY + 1};
 
-    //Usersolution
-    int userSolution[9][9];
-
     //Generated Solution in User Solution kopieren.
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j++){
-            userSolution[i][j] = generatedSudoku[i][j];
-        }
-    }
 
     //Hinweise
     int hintsUsed = 0;
     int maxHints = 3;
+    int hintPositions[3][2];
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 2; j++) {
+            hintPositions[3][2] = -1;
+        }
+    }
+
+    if (!continueGame) {
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                userSolution[i][j] = generatedSudoku[i][j];
+            }
+        }
+    } else {
+        getHintsFromSave(&save, hintPositions, &hintsUsed);
+    }
+
 
     ThreadHelper t;
     t.timer = startTimer((int)save.timer.timeInSeconds);
     t.sudoku = sudoku;
     pthread_t thread_id;
     pthread_create(&thread_id, NULL, printTime, &t);
-    int hintPositions[3][2];
+
 
     //Fange User eingaben ab
     while (1) {
@@ -369,18 +469,27 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             save.hintsUsed = hintsUsed;
             for (int i = 0; i < 9; i++) { //Y
                 for (int j = 0; j < 9; j++) { //X
+                    int hint = 0;
                     for (int k = 0; k < hintsUsed; k++) {
                         if (hintPositions[k][0] == i && hintPositions[k][1] == j) {
                             //3: HINT
                             save.markersForContinuation[i][j] = 3;
                             break;
-                        } else if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
-                        //2: USER EINGABE
-                            save.markersForContinuation[i][j] = 2;
-                        } else if (generatedSudoku[i][j] != 0) {
-                            //1: ORIGINAL SUDOKU
-                            save.markersForContinuation[i][j] = 1;
+                            hint = 1;
                         }
+                    }
+
+                    if (hint) {
+                        hint = 0;
+                        continue;
+                    }
+
+                    if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
+                        //2: USER EINGABE
+                        save.markersForContinuation[i][j] = 2;
+                    } else if (generatedSudoku[i][j] != 0) {
+                        //1: ORIGINAL SUDOKU
+                        save.markersForContinuation[i][j] = 1;
                     }
 
                     if (save.markersForContinuation[i][j] != 1 && save.markersForContinuation[i][j] != 2 && save.markersForContinuation[i][j] != 3) {
@@ -426,36 +535,6 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     return 0;
 }
 
-/**
- * @brief Füllt das gedruckte Sudoku mit den generierten Werten
- * @author Thilo
- *
- * @param sudoku Koordinaten des Sudokufelds 
- * @param generatedSudoku generiertes Sudoku
- */
-void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
-    //Setze Cursor Variablen
-    int cursorX = sudoku.lowerX;
-    int cursorY = sudoku.lowerY + 1;
-
-    //Iteriere durch das Sudoku und drucke die Zahlen
-    for(int i = 0; i < 9; i++){
-        for(int j = 0; j < 9; j++){
-            if(j == 3 || j == 6){
-                cursorX += 8;
-            } else{
-                cursorX += 4;
-            }
-            if(generatedSudoku[i][j] == 0){
-                continue;
-            } else{
-                printfToPosition(cursorX, cursorY, "%i", generatedSudoku[i][j]);
-            }
-        }
-        cursorX = sudoku.lowerX;
-        cursorY += 2;
-    }
-}
 
 
 /**
@@ -477,6 +556,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     //Generiere Sudoku und die Lösung dazu
     int generatedSudoku[9][9];
     int sudokuSolution[9][9];
+    int userSolution[9][9];
     SaveFile saveFile;
     saveFile.difficulty = diff;
     saveFile.timer.timeInSeconds = 0;
@@ -490,20 +570,19 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
         }
     } else if(continueGame) {
         saveFile = loadSaveFromFile(fileName);
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                generatedSudoku[i][j] = saveFile.sudoku[i][j];
-            }
-        }
+        loadLastSaved(&saveFile, generatedSudoku, userSolution, sudoku);
     } else {
         generateSudoku(generatedSudoku, diff);
     }
     generateSolution(generatedSudoku, sudokuSolution, 1);
-    fillSudoku(sudoku, generatedSudoku);
+
+    if (!continueGame) {
+        fillSudoku(sudoku, generatedSudoku);
+    }
     int bottomText = 0;
 
     //Spiele das Sudoku
-    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, &bottomText, saveFile);
+    int returnVal = playGame(sudoku, generatedSudoku, sudokuSolution, userSolution, &bottomText, saveFile, continueGame);
 
     return returnVal;
 }
