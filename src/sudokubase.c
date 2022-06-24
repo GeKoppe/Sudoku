@@ -572,6 +572,33 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     return 0;
 }
 
+/**
+ * @brief Entscheidet, welche Schwierigkeit ein Sudoku besitzt. Wird angewendet, wenn es aus einer Datei geladen wird.
+ * 
+ * @param sudoku Das geladene Sudoku
+ * @return difficulty 
+ */
+difficulty determineDifficultyOfLoadedSudoku(int sudoku[9][9]) {
+    int emptyCellCounter = 0;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if (sudoku[i][j] == 0) {
+                emptyCellCounter++;
+            }
+        }
+    }
+
+    if (emptyCellCounter > 21) {
+        if (emptyCellCounter > 36) {
+            return HARD;
+        } else {
+            return MEDIUM;
+        }
+    } else {
+        return EASY;
+    }
+}
+
 
 
 /**
@@ -607,6 +634,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
                 generatedSudoku[i][j] = saveFile.sudoku[i][j];
             }
         }
+        saveFile.difficulty = determineDifficultyOfLoadedSudoku(saveFile.sudoku);
     } else if(continueGame) {
         saveFile = loadSaveFromFile(fileName);
         loadLastSaved(&saveFile, generatedSudoku, userSolution, sudoku);
