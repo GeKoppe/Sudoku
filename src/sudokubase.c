@@ -608,11 +608,13 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
                 generatedSudoku[i][j] = saveFile.sudoku[i][j];
             }
         }
+        saveFile.timer.timeInSeconds = 0;
     } else if(continueGame) {
         saveFile = loadSaveFromFile(fileName);
         loadLastSaved(&saveFile, generatedSudoku, userSolution, sudoku);
     } else {
         generateSudoku(generatedSudoku, diff);
+        saveFile.timer.timeInSeconds = 0;
     }
     generateSolution(generatedSudoku, sudokuSolution, 1);
 
