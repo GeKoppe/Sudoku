@@ -463,10 +463,15 @@ void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution
  */
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int userSolution[9][9], int* bottomText, SaveFile save, int continueGame) {
     //Drucke Bestzeit
-    printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "Bestzeit (%s):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
+    if (save.custom) {
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 11, "%s\n", "Bestzeit");
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "(%s, Custom):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
+    } else {
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "Bestzeit (%s):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
+    }
     
     //Lese beste Zeit für die aktuelle Schwierigkeit
-    int bestTime = readBestTimeFromFile(save.difficulty);
+    int bestTime = readBestTimeFromFile(save.difficulty, save.custom);
     if(bestTime == -1){
         printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Nicht vorhanden.");
     } else {
@@ -551,7 +556,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
             printfToPosition(sudoku.lowerX, sudoku.lowerY + 20, "Bravo! Das Sudoku wurde geloest!");
             pthread_cancel(thread_id);
             if(bestTime == -1 || bestTime > getTimeInSeconds(&t.timer)){
-                saveBestTimeToFile(save.difficulty, getTimeInSeconds(&t.timer));
+                saveBestTimeToFile(save.difficulty, getTimeInSeconds(&t.timer), save.custom);
                 clearScreen(sudoku.lowerY + 15, 3, sudoku.lowerX + 52, 17);
                 printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Minuten: %i", (int)getTimeInSeconds(&t.timer)/60);
                 printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 17, "Sekunden: %i", (int)getTimeInSeconds(&t.timer)%60);
@@ -636,6 +641,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
             }
         }
         saveFile.timer.timeInSeconds = 0;
+        saveFile.custom = 1;
         saveFile.difficulty = determineDifficultyOfLoadedSudoku(saveFile.sudoku);
     } else if(continueGame) {
         saveFile = loadSaveFromFile(fileName);
@@ -643,6 +649,7 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     } else {
         generateSudoku(generatedSudoku, diff);
         saveFile.timer.timeInSeconds = 0;
+        saveFile.custom = 0;
     }
     generateSolution(generatedSudoku, sudokuSolution, 1);
 

@@ -73,7 +73,9 @@ int saveToFile(SaveFile save, char *fileName)
     fprintf(file ,"%i\n", save.difficulty);
     
     // Prints the StopWatch to the file
-    fprintf(file, "%i", (int)getTimeInSeconds(&save.timer));
+    fprintf(file, "%i\n", (int)getTimeInSeconds(&save.timer));
+
+    fprintf(file, "%i", save.custom);
 
     fclose(file);
 
@@ -139,12 +141,13 @@ SaveFile loadSaveFromFile(char *fileName)
     // Loads the StopWatch struct into the saveFile struct
 
     entriesRead += fscanf(file, "%i\n", &saveFile.timer.timeInSeconds);
+    entriesRead += fscanf(file, "%i\n", &saveFile.custom);
     
     // saveFile.timer.startTime = (clock_t) start;
     // saveFile.timer.endTime = (clock_t) end;
 
-    // Exactly 86 entries should be read from a save
-    if (entriesRead != 164 || ferror(file))
+    // Exactly 165 entries should be read from a save
+    if (entriesRead != 165 || ferror(file))
     {
         saveFile.errorHandler = 0;
         return saveFile;

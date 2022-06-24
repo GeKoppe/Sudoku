@@ -207,14 +207,19 @@ SudokuDir getFilesInFolder(char *directory)
  * @param seconds Die Zeit
  * @return int 
  */
-int saveBestTimeToFile(difficulty diff, int seconds){
+int saveBestTimeToFile(difficulty diff, int seconds, int custom){
     if (!checkDirExists("./best_times/"))
     {
         createDir("./best_times/");
     }
 
     char filePath[128] = "";
-    buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht" : diff == MEDIUM ? "mittel" : "schwer");
+    // buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht" : diff == MEDIUM ? "mittel" : "schwer");
+    if (custom) {
+        buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht_custom" : diff == MEDIUM ? "mittel_custom" : "schwer_custom");
+    } else {
+        buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht" : diff == MEDIUM ? "mittel" : "schwer");
+    }
 
     FILE *file;
     file = fopen(filePath, "w");
@@ -224,7 +229,8 @@ int saveBestTimeToFile(difficulty diff, int seconds){
     {
         return 0;
     } else {
-        fprintf(file, "%i", seconds);
+        fprintf(file, "%i\n", seconds);
+        fprintf(file, "%i", custom);
     }
     
     fclose(file);
@@ -238,12 +244,14 @@ int saveBestTimeToFile(difficulty diff, int seconds){
  * @param diff Die Schwierigkeit
  * @return Die Sekundenanzahl
  */
-int readBestTimeFromFile(difficulty diff){
+int readBestTimeFromFile(difficulty diff, int custom){
 
     char filePath[128] = "";
-
-    buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht" : diff == MEDIUM ? "mittel" : "schwer");
-
+    if (custom) {
+        buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht_custom" : diff == MEDIUM ? "mittel_custom" : "schwer_custom");
+    } else {
+        buildFilePath(filePath, "./best_times/", diff == EASY ? "leicht" : diff == MEDIUM ? "mittel" : "schwer");
+    }
     FILE *file;
     file = fopen(filePath, "r");
 

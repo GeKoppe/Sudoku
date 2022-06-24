@@ -24,6 +24,7 @@ typedef struct {
     int markersForContinuation[9][9];
     int hintsUsed;
     int difficulty;
+    int custom;
     StopWatch timer;
     int errorHandler;
 } SaveFile;
@@ -77,7 +78,7 @@ int checkForFileExtension(char *name);
  * @param seconds Die Zeit
  * @return int 
  */
-int saveBestTimeToFile(difficulty diff, int seconds);
+int saveBestTimeToFile(difficulty diff, int seconds, int custom);
 
 /**
  * @brief Lädt die beste Zeit für die angegebene Schwierigkeit.
@@ -85,5 +86,5 @@ int saveBestTimeToFile(difficulty diff, int seconds);
  * @param diff Die Schwierigkeit
  * @return Die Sekundenanzahl
  */
-int readBestTimeFromFile(difficulty diff);
+int readBestTimeFromFile(difficulty diff, int custom);
 #endif
