@@ -245,14 +245,15 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
                 terminateCounter++;
             }
             menu->fileName[terminateCounter] = '\0';
-            // int dummyField[9][9];
-            // if (generateSolution(loadSudokuFromFile(menu->fileName).sudoku, dummyField, 2) != 1) {
-            //     printfToPosition(menuX - 4, menuStart + 16, "Das ausgewaehlte Sudoku ist nicht loesbar und kann nicht geladen werden.");
-            //     break;
-            // }
+            SaveFile file = loadSudokuFromFile(menu->fileName);
+            int dummyField[9][9];
+            if (generateSolution(file.sudoku, dummyField, 2) != 1) {
+                printfToPosition(menuX - 4, menuStart + 16, "Das ausgewaehlte Sudoku ist nicht loesbar und kann nicht geladen werden.");
+                menu->fileName[0] = '\0';
+            }
         }
         //Falls eine Auswahl getroffen wurde: Abbrechen.
-        if (returnValue != 8 && returnValue != 7 && returnValue != 6) {
+        if (returnValue != 8 && returnValue != 7 && returnValue != 6 && menu->fileName[0] != '\0') {
             break;
         }
     } while (returnValue != -2 && menu->fileName[0] == '\0');
@@ -262,7 +263,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
         returnValue = returnValue + (currentPage * 5);
     }
 
-    clearScreen(menuStart - 2,30, menuX - 4, 60);
+    clearScreen(menuStart - 2,30, menuX - 4, 90);
     return returnValue;
 }
 
