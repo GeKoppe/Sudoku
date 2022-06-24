@@ -179,8 +179,8 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     //Anzeige
     printfToPosition(menuX, menuStart - 2, "Bitte waehlen sie ein gespeichertes Spiel aus:");
-    printfToPosition(menuX - 4, menuStart, "x");
-    setCursor(menuX - 4, menuStart);
+    // printfToPosition(menuX - 4, menuStart, "x");
+    // setCursor(menuX - 4, menuStart);
     
     int selection;
     int returnValue;
@@ -189,6 +189,21 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
     do {
         int numberAndLeftAmount[2] = {-1,-1};
         int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount, &dir);
+        if (dir.fileAmount == 0) {
+            clearScreen(menuStart + 2,2, menuX - 4, 90);
+            printfToPosition(menuX, menuStart, "Keine Dateien gefunden.");
+            printfToPosition(menuX, menuStart + 2, "Weiter mit ENTER.");
+            printfToPosition(menuX - 4, menuStart + 2, "x");
+            setCursor(menuX - 4, menuStart + 2);
+            while (1) {
+                switch (getch()) {
+                    case 13: clearScreen(menuStart - 2,30, menuX - 4, 90); return -2;
+                    default: break;
+                }
+            }
+        }
+        printfToPosition(menuX - 4, menuStart, "x");
+        setCursor(menuX - 4, menuStart);
 
         //Helper Variable für dynamische Anzeige
         while (numberOfGames > 5) {
