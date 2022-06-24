@@ -556,6 +556,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
                 printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 15, "Minuten: %i", (int)getTimeInSeconds(&t.timer)/60);
                 printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 17, "Sekunden: %i", (int)getTimeInSeconds(&t.timer)%60);
             }
+            remove("./saves/last_save.txt");
             break;
         }
         
