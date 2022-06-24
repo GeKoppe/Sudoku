@@ -491,7 +491,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
     int hintPositions[3][2];
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 2; j++) {
-            hintPositions[3][2] = -1;
+            hintPositions[i][j] = -1;
         }
     }
 
@@ -504,6 +504,7 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
         }
     } else {
         getHintsFromSave(&save, hintPositions, &hintsUsed);
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 5, "Hinweise: %i", (3-hintsUsed));
     }
 
     //Thread für initialisieren
