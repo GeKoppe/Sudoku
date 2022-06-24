@@ -190,7 +190,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
         int numberAndLeftAmount[2] = {-1,-1};
         int numberOfGames = displayGames(currentPage, menuX, menuStart, numberAndLeftAmount, &dir);
         if (dir.fileAmount == 0) {
-            clearScreen(menuStart + 2,2, menuX - 4, 90);
+            clearScreen(menuStart -2 ,2, menuX - 4, 90);
             printfToPosition(menuX, menuStart, "Keine Dateien gefunden.");
             printfToPosition(menuX, menuStart + 2, "Weiter mit ENTER.");
             printfToPosition(menuX - 4, menuStart + 2, "x");
