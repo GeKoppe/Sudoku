@@ -140,11 +140,9 @@ int howManySkipped(int skipNumbers[5], int playerY, int up) {
             } else {
                 tempPlayer += 2;
             }
-
             if (tempPlayer == skipNumbers[0] || tempPlayer == skipNumbers[1] || tempPlayer == skipNumbers[2] || tempPlayer == skipNumbers[3] || tempPlayer == skipNumbers[4]) {
                 skipCounter++;
             }
-            
         }
     }
 

@@ -11,6 +11,7 @@
 #include "fileHelper.h"
 #include "sudokuFileHandler.h"
 #include "solvingAlgorithm.h"
+#include "saveFileHandler.h"
 
 
 /**
@@ -104,7 +105,17 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
  * @return int Auswahl
  */
 int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
-
+    //Überprüfung, ob ein SaveFile existiert. Falls nein: Kurzer Hinweis und zurück zum Hauptmenü.
+    if (loadSaveFromFile("last_save").errorHandler == 0) {
+        printfToPosition(menuX, menuStart, "Es existiert kein gespeichertes Spiel.");
+        printfToPosition(menuX, menuStart + 2, "Weiter mit Enter.");
+        while (1) {
+            switch (getch()) {
+                case 13: clearScreen(menuStart - 2, 30, menuX - 4, 60); return 2;
+                default: break;
+            }
+        }
+    }
     int skip[5] = {-1,-1,-1,-1,-1};
     printfToPosition(menuX, menuStart - 2, "Moechten sie das letzte Spiel fortsetzen?");
     printfToPosition(menuX, menuStart, "Ja");
@@ -120,6 +131,7 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
         strcpy(menu->fileName, "last_save");
+
     }
 
     clearScreen(menuStart - 2, 30, menuX - 4, 60);
@@ -248,7 +260,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
             SaveFile file = loadSudokuFromFile(menu->fileName);
             int dummyField[9][9];
             if (generateSolution(file.sudoku, dummyField, 2) != 1) {
-                printfToPosition(menuX - 4, menuStart + 16, "Das ausgewaehlte Sudoku ist nicht loesbar und kann nicht geladen werden.");
+                printfToPosition(menuX, menuStart + 16, "Das ausgewaehlte Sudoku ist nicht loesbar und kann nicht geladen werden.");
                 menu->fileName[0] = '\0';
             }
         }
