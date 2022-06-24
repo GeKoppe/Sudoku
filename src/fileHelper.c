@@ -147,20 +147,20 @@ SudokuDir getFilesInFolder(char *directory)
     }
 
     // Deklaration von structs in denen man Informationen von Verzeichnisse speichern kann
-    DIR *directory;
+    DIR *dir;
     struct dirent *dirEntry;
 
     // Variable die die anzahl der gelesenen Dateien speichert
     int readFiles = 0;
 
     // Öffnet das Verzeichnis
-    directory = opendir(directory);
+    dir = opendir(directory);
 
     // Prüft ob das Verzeichnis korrekt geöffnet wurde
-    if (directory)
+    if (dir)
     {
         // Schleife die über jeden Eintrag des Verzeichnisses iteriert
-        while ((dirEntry = readdir(directory)) != NULL)
+        while ((dirEntry = readdir(dir)) != NULL)
         {
             // Prüft ob die Datei die korrekte Endung hat
             if (!checkForFileExtension(dirEntry->d_name))
@@ -172,7 +172,7 @@ SudokuDir getFilesInFolder(char *directory)
             readFiles++;
         }
         // Das Verzeichnis muss geschlossen werden wurde es komplett gelesen
-        closedir(directory);
+        closedir(dir);
     }
 
     // Es sollen nur die ersten 50 Einträge gelesen werden
@@ -186,13 +186,13 @@ SudokuDir getFilesInFolder(char *directory)
     }
 
     // Zweiter durchgang der die Dateinamen ausliest
-    directory = opendir(directory);
-    if (directory)
+    dir = opendir(directory);
+    if (dir)
     {
         // Index des Dateinames im fileNameList-Array
         int position = 0;
 
-        while ((dirEntry = readdir(directory)) != NULL && position <= sdir.fileAmount)
+        while ((dirEntry = readdir(dir)) != NULL && position <= sdir.fileAmount)
         {
             if (!checkForFileExtension(dirEntry->d_name))
             {
@@ -208,7 +208,7 @@ SudokuDir getFilesInFolder(char *directory)
             // Wurde eine Datei erfolgreich geschrieben erhöht sich der positions-Index
             position++;
         }
-        closedir(directory);
+        closedir(dir);
     }
 
     // Entfernt von jedem Eintrag die Dateiendung
