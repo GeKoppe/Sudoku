@@ -431,6 +431,12 @@ void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution
         }
     }
 
+    //Falls öfter als 3 mal H gedrückt wurde, ist dieser Wert potenziell zu hoch, wodurch auf nicht initialisierten Speicher zugegriffen wird.
+    //Schreibe also manuell wieder 3 rein
+    if (*hintsUsed > 3) {
+        *hintsUsed = 3;
+    }
+
     //Speichere Hints in SaveFile
     save->hintsUsed = *hintsUsed;
     for (int i = 0; i < 9; i++) { //Y
