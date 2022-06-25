@@ -57,7 +57,7 @@ int crossedLine(int x, int y, int sudokuPosition[2]);
  * @param sudoku Sudokufeld
  * @param lineCross Boolean: Wird eine Linie innerhalb des Sudokus überschritten?
  * @param sudokuPosition Position innnerhalb des Sudokus
- * @return int 0
+ * @return int 1
  */
 int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku, int lineCross, int sudokuPosition[2]);
 

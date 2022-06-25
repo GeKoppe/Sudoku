@@ -24,10 +24,11 @@
  * @return int 0
  */
 void printSudoku(int sudokuX, int sudokuY, int isInEditor) {
-
+    //Die Zeilen für den Frame des Sudokus
     char* longHorizontalLine = repeatNTimes('\xCD', 15);
     char* shortHorizontalLine = repeatNTimes('\xCD', 22);
 
+    //Printe das Sudoku
     for(int i = 0; i < 19; i++){
         if(i == 0){
             printfToPosition(sudokuX, sudokuY+i, "\xC9%1$s\xCB%1$s\xCB%1$s\xBB", longHorizontalLine);
@@ -41,6 +42,7 @@ void printSudoku(int sudokuX, int sudokuY, int isInEditor) {
             printfToPosition(sudokuX, sudokuY+i, "\xBA               \xBA               \xBA               \xBA");
         }
 
+        //Falls es nicht im Editor ist, müssen die beiden Extra Kästen gedruckt werden-
         if(!isInEditor){
             if(i == 0){
                 printfToPosition(sudokuX - 25, sudokuY+i, "\xC9%s\xBB", shortHorizontalLine);
@@ -56,6 +58,7 @@ void printSudoku(int sudokuX, int sudokuY, int isInEditor) {
     }
 
     if(!isInEditor){
+        //Kleines Tutorial und Zusammenfassung der Stats, falls nicht im Editor
         printfToPosition(sudokuX - 23, sudokuY + 1, "Bewegen: Pfeiltasten");
         printfToPosition(sudokuX - 23, sudokuY + 3, "Beenden: Escape");
         printfToPosition(sudokuX - 23, sudokuY + 5, "Hinweis: H");
@@ -95,7 +98,7 @@ SudokuField newSudokuField(int leftX, int rightX, int lowerY, int upperY) {
  * @param sudoku Sudokufeld
  * @param lineCross Boolean: Wird eine Linie innerhalb des Sudokus überschritten?
  * @param sudokuPosition Position innnerhalb des Sudokus
- * @return int 0
+ * @return int 1
  */
 int sudokuCursorCallback(int x, int y, int playerPosition[2], SudokuField sudoku, int lineCross, int sudokuPosition[2]) {
     //Aktion für X-Bewegung
@@ -325,16 +328,19 @@ void fillSudoku(SudokuField sudoku, int generatedSudoku[9][9]){
  * @param hintsUsed Anzahl der genutzten Hinweise
  */
 void getHintsFromSave(SaveFile *save, int hintPositions[3][2], int *hintsUsed) {
+    //Counter für Hints
     int hintsFound = 0;
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             if (save->markersForContinuation[i][j] == 3) {
+                //Falls im SaveFileStruct eine 3 an dieser Stelle steht, war hier ein Hint. Schreibe die Position in den Array und inkrementiere hintsFound counter.
                 hintPositions[hintsFound][0] = i;
                 hintPositions[hintsFound][1] = j;
                 hintsFound++;
             }
         }
     }
+    //Schreibe hintsFound weg.
     *hintsUsed = hintsFound;
 }
 
@@ -346,10 +352,13 @@ void getHintsFromSave(SaveFile *save, int hintPositions[3][2], int *hintsUsed) {
  * @param sudoku Layout des Spiels
  */
 void fillSavedSudoku(SaveFile *save, int systemSudoku[9][9], SudokuField sudoku) {
+    //Fülle Sudoku mit dem originalsudoku
     fillSudoku(sudoku, systemSudoku);
     
     int cursorX = sudoku.lowerX;
     int cursorY = sudoku.lowerY + 1;
+
+    //Fülle mit Usereingaben und Hinweisen
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             if(j == 3 || j == 6){
@@ -357,13 +366,14 @@ void fillSavedSudoku(SaveFile *save, int systemSudoku[9][9], SudokuField sudoku)
             } else{
                 cursorX += 4;
             }
+            //Falls Hint: Rot printen
             if (save->markersForContinuation[i][j] == 3) {
                 setColor(0x0C);
                 printfToPosition(cursorX, cursorY, "%i", save->sudoku[i][j]);
                 setColor(0x0F);
             } else if (save->markersForContinuation[i][j] == 2) {
+                //Falls User Eingabe: Blau printen
                 setColor(0x09);
-
                 printfToPosition(cursorX, cursorY, "%i", save->sudoku[i][j]);
                 setColor(0x0F);
             }
@@ -382,20 +392,25 @@ void fillSavedSudoku(SaveFile *save, int systemSudoku[9][9], SudokuField sudoku)
  * @param sudoku Layout des Spielfelds
  */
 void loadLastSaved(SaveFile *save, int systemSudoku[9][9], int userSudoku[9][9], SudokuField sudoku) {
+    //Schreibe das fortgesetzte Spiel entsprechend in Sudoku Arrays
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             if (save->markersForContinuation[i][j] == 0) {
+                //Falls 0: Zelle wurde noch nicht gefüllt, dementsprechend in UserSolution und Original eine 0 schreiben
                 systemSudoku[i][j] = 0;
                 userSudoku[i][j] = 0;
             } else if (save->markersForContinuation[i][j] == 1 || save->markersForContinuation[i][j] == 3) {
+                //Falls Hint: Oder schon Systemzelle: Schreibe in beide 
                 systemSudoku[i][j] = save->sudoku[i][j];
                 userSudoku[i][j] = save->sudoku[i][j];
             } else {
+                //Falls User Eingabe: schreibe nur in User, damit diese Zelle weiterhin bearbeitbar ist.
                 systemSudoku[i][j] = 0;
                 userSudoku[i][j] = save->sudoku[i][j];
             }
         }
     }
+    //Fülle das Sudokufeld
     fillSavedSudoku(save, systemSudoku, sudoku);
 }
 
@@ -409,14 +424,18 @@ void loadLastSaved(SaveFile *save, int systemSudoku[9][9], int userSudoku[9][9],
  * @param hintsUsed Anzahl der genutzten Hinweise
  */
 void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution[9][9], int hintPositions[3][2], int *hintsUsed) {
+    //Schreibe die User Solution in das Savefile
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
             save->sudoku[i][j] = userSolution[i][j];
         }
     }
+
+    //Speichere Hints in SaveFile
     save->hintsUsed = *hintsUsed;
     for (int i = 0; i < 9; i++) { //Y
         for (int j = 0; j < 9; j++) { //X
+            //Überprüfe, ob position y,x ein Hinweis ist. Falls ja, schreibe eine 3 in das Marker Sudoku im SaveFile
             int hint = 0;
             for (int k = 0; k < *hintsUsed; k++) {
                 if (hintPositions[k][0] == i && hintPositions[k][1] == j) {
@@ -427,11 +446,13 @@ void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution
                 }
             }
 
+            //Falls es ein Hint war: Nächste iteration der Schleife
             if (hint) {
                 hint = 0;
                 continue;
             }
 
+            //Schreibe alle weitern Marker in das Feld
             if (generatedSudoku[i][j] == 0 && userSolution[i][j] != 0) {
                 //2: USER EINGABE
                 save->markersForContinuation[i][j] = 2;
@@ -586,7 +607,10 @@ int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9
  * @return difficulty 
  */
 difficulty determineDifficultyOfLoadedSudoku(int sudoku[9][9]) {
+    //Counter für die leeren Zellen
     int emptyCellCounter = 0;
+
+    //Zähle jede 0
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             if (sudoku[i][j] == 0) {
@@ -595,13 +619,17 @@ difficulty determineDifficultyOfLoadedSudoku(int sudoku[9][9]) {
         }
     }
 
+
     if (emptyCellCounter > 21) {
         if (emptyCellCounter > 36) {
+            //Falls mehr als 36 0en: Schwieriges Sudoku
             return HARD;
         } else {
+            //Falls mehr als 21: mittleres Sudoku
             return MEDIUM;
         }
     } else {
+        //Ansonsten leichtes Sudoku
         return EASY;
     }
 }
@@ -630,10 +658,13 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
     int generatedSudoku[9][9];
     int sudokuSolution[9][9];
     int userSolution[9][9];
+
+    //Instanziiere SaveFile Struct, um alle Wichtigen Daten wegzuspeichern
     SaveFile saveFile;
     saveFile.difficulty = diff;
     saveFile.timer.timeInSeconds = 0;
-    //int seconds = 0;
+
+    //Analysiere, ob ein Sudoku geladen, fortgesetzt oder ein neues gestartet wurde und schreibe entsprechend Werte in SaveFile
     if (loadSudoku) {
         saveFile = loadSudokuFromFile(fileName);
         for (int i = 0; i < 9; i++) {
@@ -643,17 +674,22 @@ int sudokuWrapper(GameLayout layout, difficulty diff, int loadSudoku, char* file
         }
         saveFile.timer.timeInSeconds = 0;
         saveFile.custom = 1;
+
+        //Entscheide, wie schwierig das aktuelle Sudoku ist.
         saveFile.difficulty = determineDifficultyOfLoadedSudoku(saveFile.sudoku);
     } else if(continueGame) {
+        //Lade das letzte Sudoku
         saveFile = loadSaveFromFile(fileName);
         loadLastSaved(&saveFile, generatedSudoku, userSolution, sudoku);
     } else {
+        //generiere ein neues Sudoku
         generateSudoku(generatedSudoku, diff);
         saveFile.timer.timeInSeconds = 0;
         saveFile.custom = 0;
     }
     generateSolution(generatedSudoku, sudokuSolution, 1);
 
+    //Falls nicht forgesetzt: Fülle das Sudoku, ansonsten wird das später getan.
     if (!continueGame) {
         fillSudoku(sudoku, generatedSudoku);
     }
