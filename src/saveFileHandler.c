@@ -17,32 +17,35 @@
 #include "timeHelper.h"
 
 /**
- * @brief Saves passed struct into a file.
+ * @brief Speichert das SaveFile in eine Datei
  * 
- * @param save SaveFile-struct of the data to be saved
- * @param fileName
- * @return int 1 if successfull, 0 if an error occured
+ * @param save SaveFile-struct welches gespeichert wird
+ * @param fileName Namer der Datei
+ * @return int Gibt 1 zurück wenn die Datei korrekt gespeichert wurde, 0 wenn nicht
  */
 int saveToFile(SaveFile save, char *fileName)
 {
+    // Prüft ob das Verzeichnis existiert
     if (!checkDirExists("./saves/"))
     {
         createDir("./saves/");
     }
 
+    // Setzt den kompletten Pfad zur Datei zusammen
     char filePath[128] = "";
     buildFilePath(filePath, "./saves/", fileName);
 
+    // Öffnet die Datei im schreib-Modus
     FILE *file;
     file = fopen(filePath, "w");
 
-    // Exits when file cannot be opened
+    // Prüft ob die Datei geöffnet werden konnte
     if(file == NULL)
     {
         return 0;
     }
 
-    // Prints sudoku to file
+    // Schreibt das Sudoku in die Datei
     for (int i = 0; i < 9; i++)
     {
         for (int j = 0; j < 9; j++)
@@ -54,6 +57,9 @@ int saveToFile(SaveFile save, char *fileName)
         }
         fprintf(file, "\n");
     }
+
+    // Schreibt das zweite Array in die Datei
+    // Damit wird bestimmt welche Zahlen System- oder Nutzereingaben sind
     for (int i = 0; i < 9; i++)
     {
         for (int j = 0; j < 9; j++)
@@ -69,43 +75,66 @@ int saveToFile(SaveFile save, char *fileName)
         fprintf(file, "\n");
     }
 
-    // Prints the name and the difficulty to the file
+    // Schreibt die Schwierigkeit in die Datei
     fprintf(file ,"%i\n", save.difficulty);
     
-    // Prints the StopWatch to the file
+    // Schreibt die vergangene Zeit in die Datei
     fprintf(file, "%i\n", (int)getTimeInSeconds(&save.timer));
 
+    // Schreibt den Wert zur überprüfung von generierten/erstellten Sudokus in die Datei
     fprintf(file, "%i", save.custom);
 
+    // Datei muss nach dem Schreiben geschlossen werden
     fclose(file);
 
     return 1;
 }
 
 /**
- * @brief Loads the file and returns a SaveFile struct with the data.
+ * @brief Lädt eine Speicherdatei
  * 
- * @param fileName
- * @return SaveFile, NULL if file couldn't be loaded
+ * @param fileName Name der Datei
+ * @return SaveFile Enhält im errorHandler eine 1 wenn die Datei korrekt gelesen wurde, 1 wenn nicht
  */
 SaveFile loadSaveFromFile(char *fileName)
 {
+    // Deklaration eines leeren struct in den die Werte aus der Datei geschrieben werden
     SaveFile saveFile;
 
+    // Setzt den kompletten Pfad zur Datei zusammen
     char filePath[128] = "";
     buildFilePath(filePath, "./saves/", fileName);
 
+    // Öffnet die Datei im lese-Modus
     FILE *file;
     file = fopen(filePath, "r");
-    int entriesRead = 0;
 
+    // Prüft ob die Datei geöffnet wurde
     if (file == NULL)
     {
         saveFile.errorHandler = 0;
         return saveFile;
     }
 
-    // Loads the sudoku from the file into the struct
+    // Variable zum zählen der gelesenen Einträge
+    int readEntries = 0;
+
+    // Liest das Sudoku aus der Datei
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {   
+            if (j == 8)
+            {
+                readEntries += fscanf(file, "%d\n", &saveFile.sudoku[i][j]);
+                continue;
+            } 
+
+            readEntries += fscanf(file, "%d,", &saveFile.sudoku[i][j]);
+        }
+    }
+
+    // Liest das zweite Array aus der Datei
     for (int i = 0; i < 9; i++)
     {
         for (int j = 0; j < 9; j++)
@@ -113,46 +142,32 @@ SaveFile loadSaveFromFile(char *fileName)
             // Checks for the end of line
             if (j == 8)
             {
-                entriesRead += fscanf(file, "%d\n", &saveFile.sudoku[i][j]);
+                readEntries += fscanf(file, "%d\n", &saveFile.markersForContinuation[i][j]);
                 continue;
             } 
 
-            entriesRead += fscanf(file, "%d,", &saveFile.sudoku[i][j]);
-        }
-    }
-    for (int i = 0; i < 9; i++)
-    {
-        for (int j = 0; j < 9; j++)
-        {   
-            // Checks for the end of line
-            if (j == 8)
-            {
-                entriesRead += fscanf(file, "%d\n", &saveFile.markersForContinuation[i][j]);
-                continue;
-            } 
-
-            entriesRead += fscanf(file, "%d,", &saveFile.markersForContinuation[i][j]);
+            readEntries += fscanf(file, "%d,", &saveFile.markersForContinuation[i][j]);
         }
     }
 
-    // Loads the player name and the choosen difficulty into the saveFile struct
-    entriesRead += fscanf(file, "%d\n", &saveFile.difficulty);
+    // Liest die Schwierigkeit aus der Datei
+    readEntries += fscanf(file, "%d\n", &saveFile.difficulty);
 
-    // Loads the StopWatch struct into the saveFile struct
-
-    entriesRead += fscanf(file, "%i\n", &saveFile.timer.timeInSeconds);
-    entriesRead += fscanf(file, "%i\n", &saveFile.custom);
+    // Liest die vergangene Zeit aus der Datei
+    readEntries += fscanf(file, "%i\n", &saveFile.timer.timeInSeconds);
     
-    // saveFile.timer.startTime = (clock_t) start;
-    // saveFile.timer.endTime = (clock_t) end;
+    // Liest den Wert zur überprüfung von generierten/erstellten Sudokus aus der Datei
+    readEntries += fscanf(file, "%i\n", &saveFile.custom);
 
-    // Exactly 165 entries should be read from a save
-    if (entriesRead != 165 || ferror(file))
+    // Prüft ob die Datei korrekt gelesen wurde
+    // Es müssen exakt 165 Einträge gelesen wreden
+    if (readEntries != 165 || ferror(file))
     {
         saveFile.errorHandler = 0;
         return saveFile;
     }
 
+    // Die Datei muss nach dem lesen geschlossen werden
     fclose(file);
 
     saveFile.errorHandler = 1;

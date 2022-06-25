@@ -21,15 +21,16 @@
  */
 StopWatch startTimer(int seconds)
 {
+    // Schreibt die aktuelle Zeit in das struct
     clock_t currentTime = clock() - seconds*(CLOCKS_PER_SEC * 1.0);
     StopWatch watch = {currentTime, currentTime, seconds};
     return watch;
 }
 
 /**
- * @brief Sets the endTime in the passed StopWatch struct
+ * @brief Setzt die jetzige Zeit in die endTime Variable
  * 
- * @param watch 
+ * @param StopWatch *watch Pointer zum StopWatch struct
  */
 void stopTimer(StopWatch *watch)
 {
@@ -37,18 +38,18 @@ void stopTimer(StopWatch *watch)
 }
 
 /**
- * @brief Returns the time passed in seconds. Uses startTime and endTime from StopWatch struct. Also sets the time in the struct.
+ * @brief Gibt die vergange Zeit in Sekunden zurück
  * 
- * @param watch 
- * @return double 
+ * @param StopWatch *watch Pointer zum StopWatch struct 
+ * @return int Zeit in vollen Sekunden
  */
 int getTimeInSeconds(StopWatch *watch)
 {
-    // CLOCKS_PER_SEC needs to be converted to a floating point value for accurate division
+    // Berechnet die vergange Zeit mit den startTime und endTime werten des structs
     if(watch->endTime != watch->startTime){
-        watch->timeInSeconds = (watch->endTime - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
+        watch->timeInSeconds = (watch->endTime - watch->startTime) / CLOCKS_PER_SEC;
     } else {
-        watch->timeInSeconds = (clock() - watch->startTime) / (CLOCKS_PER_SEC * 1.0);
+        watch->timeInSeconds = (clock() - watch->startTime) / CLOCKS_PER_SEC;
     }
     return watch->timeInSeconds;
 }
