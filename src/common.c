@@ -202,7 +202,7 @@ void showHeader(GameLayout layout) {
  * @return int 1, falls angenommen wurde, 0 sonst.
  */
 int askForFullscreen() {
-    printf("Bitte schalten sie den Vollbildmodus ein, die Darstellung ist sonst... Schlecht.\n");
+    printf("Bitte schalten Sie den Vollbildmodus ein, die Darstellung ist sonst... Schlecht.\n");
     printf("Mit ENTER bestaetigen, mit ESCAPE abbrechen...");
     while (1) {
         //ENTER oder ESCAPE erwarten.

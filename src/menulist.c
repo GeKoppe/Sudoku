@@ -85,7 +85,7 @@ int showDifficultyMenu(int menuStart, int menuX, MenuSelection *menu) {
     int skip[5] = {-1,-1,-1,-1,-1};
 
     //Anzeige
-    printfToPosition(menuX, menuStart - 2, "Bitte waehlen sie eine Schwierigkeit aus.");
+    printfToPosition(menuX, menuStart - 2, "Bitte waehlen Sie eine Schwierigkeit aus.");
 
     printfToPosition(menuX, menuStart, "Leicht");
     printfToPosition(menuX, menuStart + 2, "Mittel");
@@ -136,7 +136,7 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
 
     //Anzeige. Der Skip Array sagt, welche Menüeinträge übersprungen werden sollen.
     int skip[5] = {-1,-1,-1,-1,-1};
-    printfToPosition(menuX, menuStart - 2, "Moechten sie das letzte Spiel fortsetzen?");
+    printfToPosition(menuX, menuStart - 2, "Moechten Sie das letzte Spiel fortsetzen?");
     printfToPosition(menuX, menuStart, "Ja");
     printfToPosition(menuX, menuStart + 2, "Nein");
     printfToPosition(menuX - 4, menuStart, "x");
@@ -208,7 +208,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu, int fromEditor) 
     int currentPage = 1;
 
     //Anzeige
-    printfToPosition(menuX, menuStart - 2, "Bitte waehlen sie ein gespeichertes Spiel aus:");
+    printfToPosition(menuX, menuStart - 2, "Bitte waehlen Sie ein gespeichertes Spiel aus:");
     // printfToPosition(menuX - 4, menuStart, "x");
     // setCursor(menuX - 4, menuStart);
     
@@ -385,9 +385,9 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
         int selection = selectMenu(menuY, menuY + 4, menuX, skipFirst);
 
         //Analysiere die Auswahl
-        if (selection == -1) {
+        if (selection == -1 || ((selection - menuY)/2) + 1 == 3) {
             //ESCAPE
-            returnValue = -2;
+            returnValue = -3;
         } else {
             returnValue = ((selection - menuY)/2) + 1;
             if (returnValue == 2) {
@@ -404,7 +404,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
         }
 
         clearScreen(menuY - 2, 30, menuX - 6, 80);
-    } while (returnValue != 3 && returnValue != 1 && gameSelected != 1);
+    } while (returnValue != -3 && returnValue != 1 && gameSelected != 1);
     
     //Falls spiel selektiert, returne 7, ansonsten den Returnvalue
     if (gameSelected == 1) {
@@ -455,7 +455,7 @@ MenuSelection menuWrapper(GameLayout layout) {
         }
 
         //Auswahl, falls im zweiten ausgewählten Menü Abbruch gewählt wurde.
-        if (selection.difficulty == 4 || selection.help == 1 || selection.load == -2 || selection.cont == 2 || selection.editor == -2) {
+        if (selection.difficulty == 4 || selection.help == 1 || selection.load == -2 || selection.cont == 2 || selection.editor == -3) {
             for (int j = 0; j < (int)strlen(selection.fileName); j++) {
                 selection.fileName[j] = '\0';
             }
