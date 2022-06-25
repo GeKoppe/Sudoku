@@ -13,6 +13,22 @@
 #include "solvingAlgorithm.h"
 #include "saveFileHandler.h"
 
+/**
+ * Zusammenfassung der Menüführung (allgemein):
+ * 
+ * 1. Es wird die MenuWrapper Methode aufgerufen, die alle Überprüfungsparameter, sowie die Position der Menüs auf dem Bildschirm, deklariert.
+ * 2. Das Main Menu wird aufgerufen. 
+ * 3. Die Analyse der Auswahl geschieht wie folgt:
+ *      3.1 Die SelectMenu Methode wird aufgerufen, die weiß, wo (y-Koordinate) das Menü beginnt und wo es endet und die Navigation per Pfeiltasten erlaubt.
+ *      3.2 Die Methode gibt die Y-Koordinate des Cursors in der Konsole zurück, wenn Enter gedrückt wurde oder -1, falls Escape gedrückt wurde.
+ *      3.3 Die Y-Koordinate wird zur Nummer des Menüeintrags geparsed (((Y-Koordinate - Höchster Y-Punkt des Menüs) / 2)) + 1). Diese wird zurückgegeben.
+ * 4. Anhand der zurückgegebenen Nummer, wird das nächste Menü (bspw. Neues Spiel) gestartet
+ * 5. Hier funktioniert die Auswahl identisch wie in den Punkten 3.1-3.3
+ * 6. Nachdem eine Auswahl im Untermenü getroffen wurde, wird überprüft, ob diese Auswahl aus dem Menü ausbrechen soll (bspw. um ein neues Spiel zu starten)
+ * 7. Falls ja, wird der Auswahl Struct zurück in die Main gegeben, wo weiter analysiert wird.
+ * 8. Falls nein, wird der Auswahl Struct wieder zurückgesetzt und es geht von vorne los.
+ */
+
 
 /**
  * @brief Zeigt das Hauptmenü des Spiels an. Lässt Auswahl über Pfeiltasten, Enter und Escape zu. 
@@ -46,6 +62,7 @@ int showMainMenu(int menuStart, int menuX) {
     //Berechne die Auswahl anhand der Koordinaten.
     int returnValue;
     if (selection == -1) {
+        //selection = -1 bedeutet Escape
         returnValue = 6;
     } else {
         returnValue = ((selection - menuStart)/2) + 1;
@@ -116,6 +133,8 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
             }
         }
     }
+
+    //Anzeige. Der Skip Array sagt, welche Menüeinträge übersprungen werden sollen.
     int skip[5] = {-1,-1,-1,-1,-1};
     printfToPosition(menuX, menuStart - 2, "Moechten sie das letzte Spiel fortsetzen?");
     printfToPosition(menuX, menuStart, "Ja");
@@ -123,12 +142,15 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
     printfToPosition(menuX - 4, menuStart, "x");
     setCursor(menuX - 4, menuStart);
 
+    //Starte Auswahl
     int selection = selectMenu(menuStart, menuStart + 2, menuX, skip);
     int returnValue;
 
+    //Falls Escape
     if (selection == - 1) {
         returnValue = 2;
     } else {
+        //Falls nicht escape: Parse Auswahl und schreibe den Standardnamen für Save-Files in den Filename des Menustructs
         returnValue = ((selection - menuStart)/2) + 1;
         strcpy(menu->fileName, "last_save");
 
@@ -149,19 +171,27 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
  * @return int Anzahl der Spiele auf der aktuellen Seite
  */
 int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[2], SudokuDir* dir) {
-    //DEBUGGING PURPOSES
+    //Lade alle Dateien im Ordner in den Directory struct, der Übergeben wurde
     *dir = getFilesInFolder("./sudokus/");
+
+    //Variable, um die Exakte Nummer des Dateinamens zu speichern (da nur 5 pro Seite angezeigt werden)
     int i = (5* (currentPage- 1));
+
+    //Variable, um zu speichern, wie viele Einträge auf dieser Seite existieren
     int j = 0; 
 
     while (i < 5* currentPage  && i < dir->fileAmount) {
+        //Einträge printen und mitzählen
         printfToPosition(menuX, menuY + 2 * j, "%s", dir->fileNameList[i]);
         i++;
         j++;
     }
 
+    //Array zur überprüfung bearbeiten
     numberAndLeftAmount[0] = j;
     numberAndLeftAmount[1] = (dir->fileAmount - i);
+    
+    //Anzahl auf dieser Seite zurückgeben. Eigentlich überflüssig, ist aber historisch gewachsen
     return j;
 }
 
@@ -298,6 +328,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu, int fromEditor) 
 }
 
 /**
+ * @deprecated Da jetzt eine HTML / PDF angezeigt wird.
  * @brief Zeigt das Hilfemenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Hilfe" gedrückt wurde. Lässt Auswahl über Enter und Escape zu.
  * 
  * @param menuStart Y-Wert des ersten Eintrags des Menüs
@@ -309,7 +340,7 @@ int showHelpMenu(int menuY, int menuX) {
     printfToPosition(menuX, menuY, "Wie nutze ich diese wunderschoene App?");
     printfToPosition(menuX, menuY + 2, "Neues Spiel: Startet ein neues, randomisiertes Spiel mit der ausgewählten Schwierigkeitsstufe.");
     printfToPosition(menuX, menuY + 4, "Spiel fortsetzen: Das letzte gespielte Spiel wird wieder aufgenommen");
-    printfToPosition(menuX, menuY + 6, "Datei laden: Die ersten 50 Spiele im Ordner werden angezeigt, nach Auswahl wird das entsprechende Spiel gestartet."); //TODO: Den Ordnerpfad angeben
+    printfToPosition(menuX, menuY + 6, "Datei laden: Die ersten 50 Spiele im Ordner werden angezeigt, nach Auswahl wird das entsprechende Spiel gestartet.");
     printfToPosition(menuX, menuY + 10, "Ok");
 
     printfToPosition(menuX - 2, menuY + 10, "x");
@@ -390,6 +421,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
  * @return MenuSelection Zusammenfassender Struct über die Menü Auswahl
  */
 MenuSelection menuWrapper(GameLayout layout) {
+    //Menuselection aufbauen und speicher initialisieren, damit nicht zufällig ein auswählbarer Int im Speicher steht
     MenuSelection selection;
     selection.main = -1;
     selection.difficulty = -1;
@@ -398,16 +430,20 @@ MenuSelection menuWrapper(GameLayout layout) {
     selection.editor= -1; 
     selection.help = -1;
     
+    //Koordinaten der Menüs festlegen und Screen bereinigen
     int firstLevelX = layout.topLeftCorner.X + 15;
     int firstLevelY = layout.topLeftCorner.Y + 10;
-    clearScreen(layout.topLeftCorner.Y + 8, 25, layout.topLeftCorner.X + 10, 120);
-
     int secondLevelX = firstLevelX + 40;
     int secondLevelY = firstLevelY;
-    //_setcursortype(_NOCURSOR);
+    clearScreen(layout.topLeftCorner.Y + 8, 25, layout.topLeftCorner.X + 10, 120);
+    
+    //Main Menu starten
     selection.main = showMainMenu(floor(firstLevelY), firstLevelX);
+    
+    //Überprüfungsvariable, um zu checken, ob eine Auswahl getroffen wurde, mit der aus der Menubase ausgebrochen werden soll (Schwierigkeit ausgewählt, Spiel beenden etc.)
     int finishedSelecting = 0;
     do {
+        //Analysiere, was im Main Menu ausgewählt wurde
         switch(selection.main) {
             case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX, &selection); break;
@@ -418,6 +454,7 @@ MenuSelection menuWrapper(GameLayout layout) {
             default: finishedSelecting = 1;
         }
 
+        //Auswahl, falls im zweiten ausgewählten Menü Abbruch gewählt wurde.
         if (selection.difficulty == 4 || selection.help == 1 || selection.load == -2 || selection.cont == 2 || selection.editor == -2) {
             for (int j = 0; j < (int)strlen(selection.fileName); j++) {
                 selection.fileName[j] = '\0';
@@ -429,9 +466,10 @@ MenuSelection menuWrapper(GameLayout layout) {
             selection.editor = -1;
             selection.main = showMainMenu(floor(firstLevelY), firstLevelX);
         } else {
+            //Falls eine Auswahl getroffen wurde, mit der man nicht wieder ins Main Menu will
             finishedSelecting = 1;
         }
-
+        //Ausbrechen, falls finishedSelecting ungleich 0
     } while (finishedSelecting == 0);
 
     return selection;

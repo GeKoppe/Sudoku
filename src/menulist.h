@@ -64,6 +64,7 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu, int fromEditor);
 int showEditorMenu(int menuY, int menuX, MenuSelection *selection);
 
 /**
+ * @deprecated Da jetzt eine HTML / PDF angezeigt wird.
  * @brief Zeigt das Hilfemenü des Spiels an. Wird angezeigt, wenn im Hauptmenü "Hilfe" gedrückt wurde. Lässt Auswahl über Enter und Escape zu.
  * 
  * @param menuStart Y-Wert des ersten Eintrags des Menüs
