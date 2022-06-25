@@ -51,7 +51,7 @@ int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[
  * @param menu Pointer auf den MenuSelection Struct, mit dem die Menüselektion analysiert und aufgezeichnet wird. 
  * @return int Auswahl
  */
-int showLoadMenu(int menuStart, int menuX, MenuSelection *selection);
+int showLoadMenu(int menuStart, int menuX, MenuSelection *menu, int fromEditor);
 
 /**
  * @brief Dieses Menü fragt ab, ob ein komplett neues Sudoku erstellt werden soll oder ob ein bereits bestehendes bearbeitet werden soll.

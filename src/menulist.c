@@ -173,7 +173,7 @@ int displayGames(int currentPage, int menuX, int menuY, int numberAndLeftAmount[
  * @param menu Pointer auf den MenuSelection Struct, mit dem die Menüselektion analysiert und aufgezeichnet wird. 
  * @return int Auswahl
  */
-int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
+int showLoadMenu(int menuStart, int menuX, MenuSelection *menu, int fromEditor) {
     menu->fileName[0] = '\0';
     int currentPage = 1;
 
@@ -274,10 +274,13 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu) {
             menu->fileName[terminateCounter] = '\0';
             SaveFile file = loadSudokuFromFile(menu->fileName);
             int dummyField[9][9];
-            if (generateSolution(file.sudoku, dummyField, 2) != 1) {
-                printfToPosition(menuX, menuStart + 16, "Das ausgewaehlte Sudoku ist nicht loesbar und kann nicht geladen werden.");
-                menu->fileName[0] = '\0';
+            if (!fromEditor) {
+                if (generateSolution(file.sudoku, dummyField, 2) != 1) {
+                    printfToPosition(menuX, menuStart + 16, "Das ausgewaehlte Sudoku ist nicht loesbar und kann nicht geladen werden.");
+                    menu->fileName[0] = '\0';
+                }
             }
+
         }
         //Falls eine Auswahl getroffen wurde: Abbrechen.
         if (returnValue != 8 && returnValue != 7 && returnValue != 6 && menu->fileName[0] != '\0') {
@@ -359,7 +362,7 @@ int showEditorMenu(int menuY, int menuX, MenuSelection *menu) {
             if (returnValue == 2) {
                 //Spiel laden
                 clearScreen(menuY - 2, 30, menuX - 6, 80);
-                returnValue = showLoadMenu(menuY, menuX, menu);
+                returnValue = showLoadMenu(menuY, menuX, menu, 1);
                 if (returnValue != -2) {
                     gameSelected =1;
                 }
@@ -408,7 +411,7 @@ MenuSelection menuWrapper(GameLayout layout) {
         switch(selection.main) {
             case 1: selection.difficulty = showDifficultyMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 2: selection.cont = showContinuationMenu(floor(secondLevelY), secondLevelX, &selection); break;
-            case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX, &selection); break;
+            case 3: selection.load = showLoadMenu(floor(secondLevelY), secondLevelX, &selection, 0); break;
             case 5: selection.help = 1; system("start ./Misc/Anleitung.html")/**showHelpMenu(floor(firstLevelY), firstLevelX)*/; break;
             case 4: selection.editor = showEditorMenu(floor(secondLevelY), secondLevelX, &selection); break;
             case 6: finishedSelecting = 1; break;
