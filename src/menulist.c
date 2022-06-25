@@ -126,6 +126,7 @@ int showContinuationMenu(int menuStart, int menuX, MenuSelection *menu) {
     if (loadSaveFromFile("last_save").errorHandler == 0) {
         printfToPosition(menuX, menuStart, "Es existiert kein gespeichertes Spiel.");
         printfToPosition(menuX, menuStart + 2, "Weiter mit Enter.");
+        setCursor(menuX - 4, menuStart + 2);
         while (1) {
             switch (getch()) {
                 case 13: clearScreen(menuStart - 2, 30, menuX - 4, 60); return 2;

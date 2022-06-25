@@ -491,7 +491,7 @@ void endGameCallback(SaveFile *save, int generatedSudoku[9][9], int userSolution
 int playGame(SudokuField sudoku, int generatedSudoku[9][9], int sudokuSolution[9][9], int userSolution[9][9], int* bottomText, SaveFile save, int continueGame) {
     //Drucke Bestzeit
     if (save.custom) {
-        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 11, "%s\n", "Bestzeit");
+        printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 11, "Bestzeit");
         printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "(%s, Custom):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
     } else {
         printfToPosition(sudoku.lowerX + 52, sudoku.lowerY + 13, "Bestzeit (%s):", save.difficulty == EASY ? "Leicht" : save.difficulty == MEDIUM ? "Mittel" : "Schwer");
