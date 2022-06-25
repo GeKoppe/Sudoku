@@ -120,8 +120,7 @@ int checkForFileExtension(char *name)
     }
 
     // Vergleicht den buffer mit der Dateiendung
-    // strcmp gibt bei gleichen strings eine 0 zurück
-    if (strcmp(buffer, ".txt") != 0)
+    if (buffer[0] != '.' || (buffer[1] != 't' && buffer[1] != 'T') || (buffer[2] != 'x' && buffer[2] != 'X') || (buffer[3] != 't' && buffer[3] != 'T'))
     {
         return 0;
     }
