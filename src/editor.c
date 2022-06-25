@@ -71,12 +71,17 @@ int printNumber(int number, int sudokuPosition[2], int generatedSudoku[9][9], in
 int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstSave, SudokuField sudoku, char* fileName) {
     //Falls das Sudoku keine eindeutige Lösung hat, frage ab, ob es trotzdem gespeichert werden soll
     if (generateSolution(editedSudoku, sudokuSolution, 2) != 1) {
+        //Es sollen keine Menüeinträge übersprungen werden.
         int skip[5] = {-1,-1,-1,-1,-1};
+
+        //Anzeige, ob das Sudoku, trotz Nichtlösbarkeit, gespeichert werden soll
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Das Sudoku ist nicht eindeutig loesbar, trotzdem speichern?");
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 24, "Ja");
         printfToPosition(sudoku.lowerX, sudoku.lowerY + 26, "Nein");
         printfToPosition(sudoku.lowerX - 4, sudoku.lowerY + 24, "x");
         setCursor(sudoku.lowerX - 4, sudoku.lowerY + 24);
+
+        //Auswahl
         int selection = selectMenu(sudoku.lowerY + 24, sudoku.lowerY + 26, sudoku.lowerX, skip);
 
         //Bildschirm clearen, um den zweiten Teil des Menüs zu zeigen
@@ -88,6 +93,7 @@ int escapeCallback(int editedSudoku[9][9], int sudokuSolution[9][9], int *firstS
 
         //Falls Nein, frage ab, ob der Editor beendet werden soll
         if (returnValue == 2) {
+            //Falls Sudoku nicht gespeichert werden soll.
             printfToPosition(sudoku.lowerX, sudoku.lowerY + 22, "Editor beenden?");
             printfToPosition(sudoku.lowerX, sudoku.lowerY + 24, "Nein");
             printfToPosition(sudoku.lowerX, sudoku.lowerY + 26, "Ja");
@@ -206,10 +212,13 @@ int buildEditor(GameLayout layout, int loadFile, char* fileName) {
             //Löschen und escape (beenden)
             case 8: printNumber(0, sudokuPosition, generatedSudoku, playerPosition); break; //DELETE
             case 27:
+                //Callback um zu speichern
                 saveCheck = escapeCallback(generatedSudoku, sudokuSolution, &firstSave, sudoku, fileName);
+                //Falls nicht gespeichert werden soll
                 if (saveCheck == 1) {
                     return -1;
                 } else {
+                    //Falls gespeichert werden soll.
                     setCursor(playerPosition[0], playerPosition[1]);
                     firstSave = 0;
                     saveCheck = 0;

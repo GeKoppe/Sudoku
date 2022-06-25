@@ -17,6 +17,7 @@
  * @return GameLayout das initialisierte Objekt.
  */
 GameLayout newGameLayout(int startX, int startY, int width, int height) {
+    //Speichere die Koordinaten des Fensters in einem Objekt für leichtere Accessibility
     GameLayout layout;
     layout.topLeftCorner.X = startX;
     layout.topLeftCorner.Y = startY;
@@ -220,12 +221,18 @@ int askForFullscreen() {
  * @return int 1, falls der initiale Prompt angenommen wurde, 0 falls abgebrochen.
  */
 int initializeFrame(GameLayout layout) {
+    //Prompt, dass auf Vollbild geschaltet werden soll.
     int returnValue = askForFullscreen();
     if (returnValue == 0) {
         return 0;
     }
+    //Fenster printen
     outlineFrame(layout);
+
+    //Header printen
     showHeader(layout);
+
+    //Footer printen
     showFooter(layout);
     return 1;
 }

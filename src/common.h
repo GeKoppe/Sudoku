@@ -1,10 +1,19 @@
 #ifndef common_h
 #define common_h
+
+/**
+ * @brief COORD hat irgendwie versagt, also habe existiert hier ein neuer Struct
+ * 
+ */
 typedef struct coordinates {
     int X;
     int Y;
 } Coordinates;
 
+/**
+ * @brief Fasst die Koordinaten des Spiels in einem einzigen Struct zusammen.
+ * 
+ */
 typedef struct layout {
     Coordinates topLeftCorner;
     Coordinates bottomRightCorner;
