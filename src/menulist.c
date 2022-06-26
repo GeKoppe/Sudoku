@@ -288,10 +288,12 @@ int showLoadMenu(int menuStart, int menuX, MenuSelection *menu, int fromEditor) 
         if (selection == menuStart + (numberOfGames * 2)) {
             //Falls nächste Seite: Seite++
             currentPage++;
+            clearScreen(menuStart + 16,2, menuX-2,80);
             printfToPosition(menuX - 4, menuStart + 12, " ");
         } else if (selection == menuStart + (numberOfGames * 2) + 2) {
             //Falls vorherige Seite: Seite--
             currentPage--;
+            clearScreen(menuStart + 16,2, menuX-2,80);
             printfToPosition(menuX - 4, menuStart + 12, " ");
         } else if (selection == menuStart + (numberOfGames * 2) + 4 || selection == -1) {
             returnValue = -2;
