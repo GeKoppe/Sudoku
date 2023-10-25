@@ -5,8 +5,6 @@
 #include "menubase.h"
 #include "common.h"
 #include "menulist.h"
-#include "sudokubase.h"
-#include "editor.h"
 
 int main() {
     SMALL_RECT windowSize = {0 , 0 , 500 , 500}; //change the values
